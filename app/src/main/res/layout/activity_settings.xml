@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:id="@+id/settings_layout"
+    tools:context="dev.corruptedark.openchaoschess.SettingsActivity">
+
+
+<ScrollView
+    android:layout_above="@+id/bottom_buttons"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:id="@+id/background_color_label"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="30sp"
+                    android:text="@string/background_color"
+                    android:layout_weight=".99"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="?android:attr/textColorPrimary" />
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="1sp"
+                    android:background="#000000">
+                    <ImageButton
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:id="@+id/background_color_button"
+                        android:background="?android:attr/colorBackground"
+
+                        android:layout_gravity="center_vertical"
+                        android:onClick="colorBoxClicked" />
+                </FrameLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal"
+                android:weightSum="1">
+                <TextView
+                    android:id="@+id/bar_color_label"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="30sp"
+                    android:text="@string/bar_color"
+                    android:layout_weight=".99"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="?android:attr/textColorPrimary" />
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="1sp"
+                    android:background="#000000">
+                    <ImageButton
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:id="@+id/bar_color_button"
+                        android:background="@color/colorPrimaryDark"
+
+                        android:layout_gravity="center_vertical"
+                        android:onClick="colorBoxClicked" />
+                </FrameLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:id="@+id/secondary_color_label"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="30sp"
+                    android:text="@string/secondary_color"
+                    android:layout_weight=".99"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="?android:attr/textColorPrimary" />
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="1sp"
+                    android:background="#000000">
+                    <ImageButton
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:id="@+id/secondary_color_button"
+                        android:background="@color/colorPrimary"
+                        android:layout_gravity="center_vertical"
+                        android:onClick="colorBoxClicked" />
+                </FrameLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:id="@+id/board_color1_label"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="30sp"
+                    android:text="@string/board_color_1"
+                    android:layout_weight=".99"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="?android:attr/textColorPrimary" />
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="1sp"
+                    android:background="#000000">
+                    <ImageButton
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:id="@+id/board_color1_button"
+                        android:background="@color/colorAccent"
+                        android:layout_gravity="center_vertical"
+                        android:onClick="colorBoxClicked" />
+                </FrameLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal"
+                android:weightSum="1">
+                <TextView
+                    android:id="@+id/board_color2_label"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="30sp"
+                    android:text="@string/board_color_2"
+                    android:layout_weight=".99"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="?android:attr/textColorPrimary" />
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="1sp"
+                    android:background="#000000">
+                    <ImageButton
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:id="@+id/board_color2_button"
+                        android:background="@android:color/black"
+                        android:layout_gravity="center_vertical"
+                        android:onClick="colorBoxClicked" />
+                </FrameLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal"
+                android:weightSum="1">
+                <TextView
+                    android:id="@+id/piece_color_label"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="30sp"
+                    android:text="@string/piece_color"
+                    android:layout_weight=".99"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="?android:attr/textColorPrimary" />
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="1sp"
+                    android:background="#000000">
+
+                    <ImageButton
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:id="@+id/piece_color_button"
+                        android:background="@android:color/white"
+                        android:layout_gravity="center_vertical"
+                        android:onClick="colorBoxClicked" />
+                </FrameLayout>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:id="@+id/selection_color_label"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="30sp"
+                    android:text="@string/selection_color"
+                    android:layout_weight=".99"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="?android:attr/textColorPrimary" />
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="1sp"
+                    android:background="#000000">
+                    <ImageButton
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:id="@+id/selection_color_button"
+                        android:background="#ff888888"
+                        android:layout_gravity="center_vertical"
+                        android:onClick="colorBoxClicked" />
+                </FrameLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:id="@+id/text_color_label"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="30sp"
+                    android:text="@string/text_color"
+                    android:layout_weight=".99"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="?android:attr/textColorPrimary" />
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="1sp"
+                    android:background="#000000">
+                    <ImageButton
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:id="@+id/text_color_button"
+                        android:background="#ffffffff"
+                        android:layout_gravity="center_vertical"
+                        android:onClick="colorBoxClicked" />
+                </FrameLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/bottom_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <Button
+            android:text="@string/set_to_defaults"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5"
+            android:id="@+id/set_defaults_button"
+            android:onClick="setDefaultsButtonClicked"
+            android:background="@color/colorAccent"
+            android:layout_marginRight="5dp"/>
+
+        <Button
+            android:text="@string/save_colors"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5"
+            android:id="@+id/save_color_button"
+            android:onClick="saveColorsButtonClicked"
+            android:background="@color/colorAccent"
+            android:layout_marginLeft="5dp"/>
+    </LinearLayout>
+
+</RelativeLayout>

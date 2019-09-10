@@ -1,0 +1,42 @@
+<resources>
+    <string name="app_name">Chaos Chess</string>
+    <string name="new_game">New Game</string>
+    <string name="player_points">Player Points:   </string>
+    <string name="computer_points">Computer Points:   </string>
+    <string name="you_won">Noice dude! You Won!</string>
+    <string name="you_lost">Dang dude, you lost!</string>
+    <string name="cant_move_that_bruh">Can\'t move that, bruh!</string>
+    <string name="not_your_turn_stupid">It\'s not your turn, bruh!</string>
+    <string name="game_over_bruh">Game\'s over, bruh!</string>
+    <string name="that_sucks">Aw dang dude, that sucks!</string>
+    <string name="about">About</string>
+    <string name="credits">v1.4.0 by Noah Stanford (aka CorruptedArk)
+                           \n originally for CIS 175 Fall 2016 at MCCC
+                           \n Credit for the color picker dialog goes to Simone Pessotto (aka Pes8)
+                           \n Credit for the idea of color settings goes to Jonas Lowe
+                            </string>
+    <string name="descript">Chaos Chess is a variation of chess where you can pick the piece that moves, but the moves are random. As such, you no longer win by checkmates. Instead, you win by eliminating your opponent\'s pieces. Have fun, and may the RNG be ever in your favor.</string>
+    <string name="contact">Facebook: Noah James Stanford\nTwitter: @CorruptedArk\nGithub: CorruptedArk\n\nMy Website: corruptedark.wordpress.com\n\nEmail: noahstandingford@gmail.com</string>
+    <string name="tied_bro">OOOH IT\'S TIED, BRO!</string>
+    <string name="noice">Noice!</string>
+    <string name="quit">Quit</string>
+    <string name="play">Solo Play</string>
+    <string name="quick_match">Quick Match</string>
+    <string name="create_game">Send Invite</string>
+    <string name="check_invites">Check Invites</string>
+    <string name="opponent_points">Opponent Points:   </string>
+    <string name="your_points">Your Points:   </string>
+    <string name="sign_out">Sign Out</string>
+    <string name="slogan">You pick the piece, not the move</string>
+    <string name="secret_hello">Hello, I\'m not sure how you figured out how to get here. But, since you\'re here, may I ask your name?</string>
+    <string name="background_color">Background Color:</string>
+    <string name="bar_color">Bar Color:</string>
+    <string name="secondary_color">Secondary Color:</string>
+    <string name="board_color_1">Board Color 1:</string>
+    <string name="board_color_2">Board Color 2:</string>
+    <string name="piece_color">Piece Color:</string>
+    <string name="selection_color">Selection Color:</string>
+    <string name="set_to_defaults">Set to defaults</string>
+    <string name="save_colors">Save Colors</string>
+    <string name="text_color">Text Color:</string>
+</resources>

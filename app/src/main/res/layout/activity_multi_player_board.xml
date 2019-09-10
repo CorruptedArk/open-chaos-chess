@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/multiplay_board_layout"
+    tools:context="dev.corruptedark.openchaoschess.MultiPlayerBoard"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="0dp"
+    android:paddingLeft="0dp"
+    android:paddingRight="0dp"
+    android:paddingTop="0dp"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
+    android:clipChildren="false"
+    tools:context=".MultiPlayerBoard">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/multiplay_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"/>
+
+    <TextView
+        android:text="@string/your_points"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/multiplay_toolbar"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="30dp"
+        android:id="@+id/your_points"
+        android:textColor="#FFFFFFFF"
+        />
+
+    <TextView
+        android:text="@string/opponent_points"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/multiplay_toolbar"
+        android:layout_marginTop="50dp"
+        android:layout_marginRight="36dp"
+        android:id="@+id/opponent_points"
+        android:textColor="#FFFFFFFF"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/you_won"
+        android:textStyle="bold"
+        android:textSize="25sp"
+        android:id="@+id/multiplay_won_label"
+        android:visibility="invisible"
+        android:textColor="#FFFFFFFF"
+        android:layout_below="@+id/multiplay_game_over_label"
+        android:layout_alignRight="@+id/multiplay_that_sucks_label"
+        android:layout_alignEnd="@+id/multiplay_that_sucks_label"
+        android:background="#ff3c3c3c" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/you_lost"
+        android:textStyle="bold"
+        android:textSize="25sp"
+        android:id="@+id/multiplay_lost_label"
+        android:visibility="invisible"
+        android:textColor="#FFFFFFFF"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:background="#ff3c3c3c" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cant_move_that_bruh"
+        android:id="@+id/multiplay_cant_move_that_label"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        android:textColor="#FFFFFFFF"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="30dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/not_your_turn_stupid"
+        android:textStyle="bold"
+        android:textSize="25sp"
+        android:id="@+id/multiplay_not_your_turn_label"
+        android:visibility="invisible"
+        android:textColor="#FFFFFFFF"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/game_over_bruh"
+        android:textStyle="bold"
+        android:textSize="25sp"
+        android:id="@+id/multiplay_game_over_label"
+        android:layout_marginBottom="84dp"
+        android:visibility="invisible"
+        android:layout_above="@+id/multiplay_lost_label"
+        android:layout_centerHorizontal="true"
+        android:textColor="#FFFFFFFF"
+        android:background="#ff3c3c3c" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/noice"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:id="@+id/multiplay_noice_label"
+        android:visibility="invisible"
+        android:textColor="#FFFFFFFF"
+        android:layout_below="@+id/multiplay_toolbar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/that_sucks"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:id="@+id/multiplay_that_sucks_label"
+        android:visibility="invisible"
+        android:textColor="#FFFFFFFF"
+        android:layout_below="@+id/multiplay_toolbar"
+        android:layout_alignLeft="@+id/multiplay_lost_label"
+        android:layout_alignStart="@+id/multiplay_lost_label"
+        android:layout_marginTop="20dp"/>
+
+    <TextView
+        android:text="@string/tied_bro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/multiplay_won_label"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/tie_label"
+        android:textSize="25sp"
+        android:textColor="#FFFFFFFF"
+        android:background="#ff3c3c3c"
+        android:visibility="invisible"/>
+
+</RelativeLayout>
