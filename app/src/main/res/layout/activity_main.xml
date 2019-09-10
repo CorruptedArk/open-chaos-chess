@@ -92,32 +92,14 @@
         android:onClick="aboutButtonClicked"
         android:layout_centerHorizontal="true" />
 
-    <com.google.android.gms.common.SignInButton
-        android:id="@+id/sign_in_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:visibility="gone" />
-
-    <Button
-        android:id="@+id/sign_out_button"
-        android:layout_width="117dp"
-        android:layout_height="wrap_content"
-        android:text="@string/sign_out"
-        android:visibility="gone"
-        android:background="@color/colorAccent"
-        android:layout_alignParentBottom="true"
-        android:onClick="signOutButtonClicked" />
 
     <ImageButton
         android:layout_width="50dp"
         android:layout_height="50dp"
-        app:srcCompat="@drawable/games_controller_white"
+        app:srcCompat="@drawable/ic_medal"
         android:id="@+id/achievements_button"
         android:scaleType="fitCenter"
         android:background="@color/colorAccent"
-        android:layout_alignTop="@+id/sign_in_button"
         android:layout_alignParentRight="true"
         android:onClick="achievementsClicked"
         android:layout_alignParentBottom="true" />
@@ -125,11 +107,10 @@
     <ImageButton
         android:layout_width="50dp"
         android:layout_height="50dp"
-        app:srcCompat="@drawable/ic_settings_white_48dp"
+        app:srcCompat="@drawable/ic_settings"
         android:id="@+id/settings_button"
         android:scaleType="fitCenter"
         android:background="@color/colorAccent"
-        android:layout_alignTop="@+id/sign_in_button"
         android:layout_alignParentLeft="true"
         android:onClick="settingsButtonClicked"
         android:layout_alignParentBottom="true" />
@@ -142,13 +123,15 @@
         android:textSize="40sp"
         android:gravity="center"
         android:textColor="#ffffff"
+        android:maxLines="1"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
     <TextView
-        android:text="@string/slogan"
+        android:text="@string/new_slogan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:id="@+id/main_slogan"
         android:textStyle="normal|bold|italic"
         android:textAllCaps="true"

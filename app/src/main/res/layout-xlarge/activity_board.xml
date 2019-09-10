@@ -9,7 +9,7 @@
     android:paddingRight="0dp"
     android:paddingTop="0dp"
     android:id="@+id/board_layout"
-    tools:context="dev.corruptedark.chaoschess.Board"
+    tools:context="dev.corruptedark.openchaoschess.SinglePlayerBoard"
     android:layout_alignParentLeft="true"
     android:layout_alignParentStart="true"
     android:clipChildren="false"

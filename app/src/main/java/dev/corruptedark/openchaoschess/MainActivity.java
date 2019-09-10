@@ -1,4 +1,4 @@
-package com.openchaoschess.openchaoschess;
+package dev.corruptedark.openchaoschess;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,14 +7,13 @@ import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -24,26 +23,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.Scopes;
-import com.google.android.gms.common.SignInButton;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.CommonStatusCodes;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.Scope;
-import com.google.android.gms.games.Games;
-import com.google.android.gms.games.GamesActivityResultCodes;
-import com.google.android.gms.games.TurnBasedMultiplayerClient;
-import com.google.android.gms.games.multiplayer.Multiplayer;
-import com.google.android.gms.games.multiplayer.realtime.RoomConfig;
-import com.google.android.gms.games.multiplayer.turnbased.TurnBasedMatch;
-import com.google.android.gms.games.multiplayer.turnbased.TurnBasedMatchConfig;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.example.games.basegameutils.BaseGameActivity;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -56,7 +37,7 @@ import java.util.Random;
 /**
  * Created by CorruptedArk
  */
-public class MainActivity extends BaseGameActivity {
+public class MainActivity extends AppCompatActivity {
     public final int YOU = -1;
     public final int OPPONENT = 1;
     public final int NONE = 0;
@@ -77,8 +58,6 @@ public class MainActivity extends BaseGameActivity {
     Button quitButton;
     ImageButton settingsButton;
     ImageButton achievementsButton;
-    SignInButton signInButton;
-    Button signOutButton;
     ImageButton knightButton;
     ImageView mainImage;
 
@@ -88,6 +67,8 @@ public class MainActivity extends BaseGameActivity {
     byte[] bytes;
     String[] contentArray;
     Handler knightHandler;
+
+    AchievementHandler achievementHandler;
 
     Random rand = new Random(System.currentTimeMillis());
 
@@ -111,6 +92,8 @@ public class MainActivity extends BaseGameActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        achievementHandler = AchievementHandler.getInstance(this);
+
         mainTitle = (TextView)findViewById(R.id.main_title);
         mainSlogan = (TextView)findViewById(R.id.main_slogan);
         playButton = (Button)findViewById(R.id.play_button);
@@ -120,14 +103,12 @@ public class MainActivity extends BaseGameActivity {
         quitButton = (Button)findViewById(R.id.quit_button);
         settingsButton = (ImageButton)findViewById(R.id.settings_button);
         achievementsButton = (ImageButton)findViewById(R.id.achievements_button);
-        signInButton = (SignInButton)findViewById(R.id.sign_in_button);
-        signOutButton = (Button)findViewById(R.id.sign_out_button);
         knightButton = (ImageButton)findViewById(R.id.knight_button);
         mainImage = (ImageView)findViewById(R.id.mainImage);
 
         mainLayout = (RelativeLayout)findViewById(R.id.activity_main);
 
-        settingsFile = new File(getApplicationContext().getFilesDir(),"settings.txt");
+        settingsFile = new File(getApplicationContext().getFilesDir(),getString(R.string.settings_file));
         if(settingsFile.exists()) {
             try{
                 fileReader = new FileInputStream(settingsFile);
@@ -153,24 +134,6 @@ public class MainActivity extends BaseGameActivity {
                 e.printStackTrace();
             }
 
-        }
-
-        signInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                signInButtonClicked(view);
-            }
-        });
-
-        if(mHelper.isSignedIn()) {
-            Toast.makeText(this,"You're already signed in to Play Games.",Toast.LENGTH_SHORT).show();
-            signInButton.setVisibility(View.GONE);
-            signOutButton.setVisibility(View.VISIBLE);
-        }
-        else{
-            Toast.makeText(this,"You aren't logged in to Play Games.",Toast.LENGTH_SHORT).show();
-            signInButton.setVisibility(View.VISIBLE);
-            signOutButton.setVisibility(View.GONE);
         }
 
         knightHandler = new Handler();
@@ -209,14 +172,14 @@ public class MainActivity extends BaseGameActivity {
 
         int textHeight = (int)(height * .03);
 
-        RelativeLayout.LayoutParams mainTitleParams = new RelativeLayout.LayoutParams(2*iconWidth, buttonHeight);
+        RelativeLayout.LayoutParams mainTitleParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, buttonHeight);
         mainTitleParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         mainTitleParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
         mainTitleParams.setMargins(0, 0,0,0);
         mainTitle.setLayoutParams(mainTitleParams);
         mainTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX,(int)(height*.05));
 
-        RelativeLayout.LayoutParams mainSloganParams = new RelativeLayout.LayoutParams(2*iconWidth, (int)(height*.025));
+        RelativeLayout.LayoutParams mainSloganParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, (int)(height*.025));
         mainSloganParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         mainSloganParams.addRule(RelativeLayout.BELOW,R.id.main_title);
         mainSloganParams.setMargins(0, 0,0,0);
@@ -264,20 +227,6 @@ public class MainActivity extends BaseGameActivity {
         quitButtonParams.addRule(RelativeLayout.BELOW, R.id.about_button);
         quitButtonParams.setMargins(0, buttonGap,0,0);
         quitButton.setLayoutParams(quitButtonParams);
-
-        RelativeLayout.LayoutParams signInButtonParams = new RelativeLayout.LayoutParams(iconWidth, buttonHeight);
-        signInButtonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        signInButtonParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        signInButtonParams.setMargins(0, 0,0,0);
-        signInButton.setLayoutParams(signInButtonParams);
-
-        RelativeLayout.LayoutParams signOutButtonParams = new RelativeLayout.LayoutParams(iconWidth, buttonHeight);
-        signOutButtonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        signOutButtonParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        signOutButtonParams.setMargins(0, 0,0,0);
-        signOutButton.setLayoutParams(signOutButtonParams);
-        signOutButton.setTextSize(TypedValue.COMPLEX_UNIT_PX,(int)(height*.02));
-        signOutButton.setGravity(Gravity.CENTER);
 
         RelativeLayout.LayoutParams settingsButtonParams = new RelativeLayout.LayoutParams(buttonHeight, buttonHeight);
         settingsButtonParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
@@ -311,8 +260,6 @@ public class MainActivity extends BaseGameActivity {
         settingsButton.getDrawable().setColorFilter(Color.parseColor("#"+contentArray[7]),PorterDuff.Mode.MULTIPLY);
         achievementsButton.setBackgroundColor(Color.parseColor("#"+contentArray[3]));
         achievementsButton.getDrawable().setColorFilter(Color.parseColor("#"+contentArray[7]),PorterDuff.Mode.MULTIPLY);
-        signOutButton.setBackgroundColor(Color.parseColor("#"+contentArray[3]));
-        signOutButton.setTextColor(Color.parseColor("#"+contentArray[7]));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -337,14 +284,14 @@ public class MainActivity extends BaseGameActivity {
 
         int textHeight = (int)(height * .03);
 
-        RelativeLayout.LayoutParams mainTitleParams = new RelativeLayout.LayoutParams(2*iconWidth, buttonHeight);
+        RelativeLayout.LayoutParams mainTitleParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, buttonHeight);
         mainTitleParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         mainTitleParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
         mainTitleParams.setMargins(0, 0,0,0);
         mainTitle.setLayoutParams(mainTitleParams);
         mainTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX,(int)(height*.05));
 
-        RelativeLayout.LayoutParams mainSloganParams = new RelativeLayout.LayoutParams(2*iconWidth, (int)(height*.025));
+        RelativeLayout.LayoutParams mainSloganParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, (int)(height*.025));
         mainSloganParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         mainSloganParams.addRule(RelativeLayout.BELOW,R.id.main_title);
         mainSloganParams.setMargins(0, 0,0,0);
@@ -393,19 +340,6 @@ public class MainActivity extends BaseGameActivity {
         quitButtonParams.setMargins(0, buttonGap,0,0);
         quitButton.setLayoutParams(quitButtonParams);
 
-        RelativeLayout.LayoutParams signInButtonParams = new RelativeLayout.LayoutParams(iconWidth, buttonHeight);
-        signInButtonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        signInButtonParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        signInButtonParams.setMargins(0, 0,0,0);
-        signInButton.setLayoutParams(signInButtonParams);
-
-        RelativeLayout.LayoutParams signOutButtonParams = new RelativeLayout.LayoutParams(iconWidth, buttonHeight);
-        signOutButtonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        signOutButtonParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        signOutButtonParams.setMargins(0, 0,0,0);
-        signOutButton.setLayoutParams(signOutButtonParams);
-        signOutButton.setTextSize(TypedValue.COMPLEX_UNIT_PX,(int)(height*.02));
-        signOutButton.setGravity(Gravity.CENTER);
 
         RelativeLayout.LayoutParams settingsButtonParams = new RelativeLayout.LayoutParams(buttonHeight, buttonHeight);
         settingsButtonParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
@@ -466,8 +400,6 @@ public class MainActivity extends BaseGameActivity {
         settingsButton.getDrawable().setColorFilter(Color.parseColor("#"+contentArray[7]),PorterDuff.Mode.MULTIPLY);
         achievementsButton.setBackgroundColor(Color.parseColor("#"+contentArray[3]));
         achievementsButton.getDrawable().setColorFilter(Color.parseColor("#"+contentArray[7]),PorterDuff.Mode.MULTIPLY);
-        signOutButton.setBackgroundColor(Color.parseColor("#"+contentArray[3]));
-        signOutButton.setTextColor(Color.parseColor("#"+contentArray[7]));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -475,61 +407,32 @@ public class MainActivity extends BaseGameActivity {
         }
     }
 
-    @Override
-    public void onSignInFailed() {
-        Toast.makeText(this,"Sign in failed. Achievements will not be saved.",Toast.LENGTH_SHORT).show();
-        signInButton.setVisibility(View.VISIBLE);
-        signOutButton.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void onSignInSucceeded() {
-        Toast.makeText(this,"Sign in successful. Achievements will be saved.",Toast.LENGTH_SHORT).show();
-        signInButton.setVisibility(View.GONE);
-        signOutButton.setVisibility(View.VISIBLE);
-
-
-    }
 
     public void settingsButtonClicked(View view) {
         startActivity(new Intent(MainActivity.this,SettingsActivity.class));
     }
 
     public void playButtonClicked(View view){
-        SingleGame.saveHelper(mHelper);
         Intent intent = new Intent(MainActivity.this, SinglePlayerBoard.class);
         startActivity(intent);
     }
 
     public void createGameButtonClicked(View view)
     {
-        boolean allowAutoMatch = true;
-        Games.getTurnBasedMultiplayerClient(this,GoogleSignIn.getAccountForScopes(this, new Scope(Scopes.GAMES_LITE)))
-                .getSelectOpponentsIntent(1,1, allowAutoMatch)
-                .addOnSuccessListener(new OnSuccessListener<Intent>() {
-                    @Override
-                    public void onSuccess(Intent intent) {
-                        startActivityForResult(intent, SELECT_PLAYERS);
-                    }
-                });
+        //TODO
     }
 
     public void checkInvitesButtonClicked(View view)
     {
         //TODO
-        Games.getTurnBasedMultiplayerClient(this,GoogleSignIn.getAccountForScopes(this, new Scope(Scopes.GAMES_LITE))).getInboxIntent()
-                .addOnSuccessListener(new OnSuccessListener<Intent>() {
-            @Override
-            public void onSuccess(Intent intent) {
-                startActivityForResult(intent, CHECK_INBOX);
-            }
-        });
+
     }
 
     public void aboutButtonClicked(View view){
-        SingleGame.saveHelper(mHelper);
-        if(mHelper.getApiClient() != null && mHelper.getApiClient().isConnected())
-            Games.Achievements.unlock(mHelper.getApiClient(),getString(R.string.achievement_informed_player));
+
+        achievementHandler.incrementInMemory(AchievementHandler.OPENED_ABOUT);
+        achievementHandler.saveValues();
+
         startActivity(new Intent(MainActivity.this,AboutActivity.class));
     }
 
@@ -537,35 +440,18 @@ public class MainActivity extends BaseGameActivity {
         finish();
     }
 
-    public void signInButtonClicked(View view){
-        Toast.makeText(this, "Attempting to sign in.", Toast.LENGTH_SHORT).show();
-        mHelper.beginUserInitiatedSignIn();
-        signInButton.setVisibility(View.GONE);
-        signOutButton.setVisibility(View.VISIBLE);
-    }
-
-    public void signOutButtonClicked(View view){
-        Toast.makeText(this, "Signing out.", Toast.LENGTH_SHORT).show();
-        mHelper.signOut();
-        signInButton.setVisibility(View.VISIBLE);
-        signOutButton.setVisibility(View.GONE);
-    }
 
     public void achievementsClicked(View view){
-        if(mHelper.getApiClient() != null && mHelper.getApiClient().isConnected())
-            startActivityForResult(Games.Achievements.getAchievementsIntent(mHelper.getApiClient()),
-                    REQUEST_ACHIEVEMENTS);
-        else
-            Toast.makeText(this, "Achievements can't be accessed when Google Play Games Services isn't connected.",Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(MainActivity.this, AchievementsActivity.class));
     }
 
     public void knightButtonClicked(View view){
-        SingleGame.saveHelper(mHelper);
         Intent intent = new Intent(MainActivity.this, SinglePlayerBoard.class);
         intent.putExtra("knightsOnly",true);
-        if(mHelper.getApiClient() != null && mHelper.getApiClient().isConnected())
-            Games.Achievements.unlock(mHelper.getApiClient(),getString(R.string.achievement_horsing_around));
-        SingleGame.getInstance().newGame();
+        //SingleGame.getInstance().newGame();
+
+        achievementHandler.incrementInMemory(AchievementHandler.HORSING_AROUND);
+
         startActivity(intent);
     }
 
@@ -576,7 +462,6 @@ public class MainActivity extends BaseGameActivity {
 
     protected void initializeGameData(int request) {
         //TODO
-        MultiGame.saveHelper(mHelper);
 
         if (request == SELECT_PLAYERS) {
             MultiGame.getInstance().setTurn(YOU);
@@ -584,108 +469,18 @@ public class MainActivity extends BaseGameActivity {
             MultiGame.getInstance().setTurn(OPPONENT);
         }
 
-        MultiGame.getInstance().newGame();
-
     }
 
-    protected void showTurnUI(TurnBasedMatch match)
+    protected void showTurnUI()
     {
         //TODO
         Intent intent = new Intent(MainActivity.this, MultiPlayerBoard.class);
         intent.putExtra("knightsOnly", false);
-        intent.putExtra("match", match);
         startActivity(intent);
     }
 
     @Override
     protected void onActivityResult(final int request, int response, Intent data) {
-        if(request == REQUEST_ACHIEVEMENTS &&
-                response == GamesActivityResultCodes.RESULT_RECONNECT_REQUIRED){
-            mHelper.disconnect();
-            signInButton.setVisibility(View.VISIBLE);
-            signOutButton.setVisibility(View.GONE);
-        }
-        else if(request == SELECT_PLAYERS) {
-            if(response != Activity.RESULT_OK)
-            {
-                Toast.makeText(this,"Multiplayer failed", Toast.LENGTH_SHORT);
-                return;
-            }
-            ArrayList<String> invitees = data.getStringArrayListExtra(Games.EXTRA_PLAYER_IDS);
-
-            Bundle autoMatchCriteria = null;
-            int minAutoPlayers = data.getIntExtra(Multiplayer.EXTRA_MIN_AUTOMATCH_PLAYERS,0);
-            int maxAutoPlayers = data.getIntExtra(Multiplayer.EXTRA_MAX_AUTOMATCH_PLAYERS, 0);
-
-            TurnBasedMatchConfig.Builder builder = TurnBasedMatchConfig.builder().addInvitedPlayers(invitees);
-
-            if(minAutoPlayers > 0)
-            {
-                builder.setAutoMatchCriteria(RoomConfig.createAutoMatchCriteria(minAutoPlayers, maxAutoPlayers, 0));
-            }
-            Games.getTurnBasedMultiplayerClient(this, GoogleSignIn.getAccountForScopes(this, new Scope(Scopes.GAMES_LITE)))
-                    .createMatch(builder.build()).addOnCompleteListener(new OnCompleteListener<TurnBasedMatch>() {
-                @Override
-                public void onComplete(@NonNull Task<TurnBasedMatch> task) {
-                    if(task.isSuccessful())
-                    {
-                        TurnBasedMatch match = task.getResult();
-                        if (match.getData() == null)
-                        {
-                            initializeGameData(request);
-                        }
-
-                        showTurnUI(match);
-                    }
-                    else
-                    {
-                        int status = CommonStatusCodes.DEVELOPER_ERROR;
-                        Exception exception = task.getException();
-                        if (exception instanceof ApiException)
-                        {
-                            status = ((ApiException) exception).getStatusCode();
-                            exception.printStackTrace();
-                        }
-                        Toast.makeText(getApplicationContext(),"Send invite failed", Toast.LENGTH_SHORT);// handle error
-                    }
-                }
-            });
-
-        }
-        else if (request == CHECK_INBOX) {
-            Games.getTurnBasedMultiplayerClient(this, GoogleSignIn.getAccountForScopes(this, new Scope(Scopes.GAMES_LITE))).acceptInvitation(data.getExtras().getParcelable(Multiplayer.EXTRA_TURN_BASED_MATCH).toString()).addOnCompleteListener(
-                    new OnCompleteListener<TurnBasedMatch>() {
-                        @Override
-                        public void onComplete(@NonNull Task<TurnBasedMatch> task) {
-                            if(task.isSuccessful())
-                            {
-                                TurnBasedMatch match = task.getResult();
-                                if (match.getData() == null)
-                                {
-                                    initializeGameData(request);
-                                }
-
-                                showTurnUI(match);
-                            }
-                            else
-                            {
-                                int status = CommonStatusCodes.DEVELOPER_ERROR;
-                                Exception exception = task.getException();
-                                if (exception instanceof ApiException)
-                                {
-                                    status = ((ApiException) exception).getStatusCode();
-                                    exception.printStackTrace();
-                                }
-                                Toast.makeText(getApplicationContext(),"Recieve invite failed", Toast.LENGTH_SHORT);// handle error
-                            }
-                        }
-                    }
-            );
-        }
-        else{
-            mHelper.onActivityResult(request,response,data);
-        }
-
 
     }
 

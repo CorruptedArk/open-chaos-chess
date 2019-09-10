@@ -12,10 +12,9 @@
     android:paddingTop="0dp"
     android:layout_alignParentLeft="true"
     android:layout_alignParentStart="true"
-    android:clipChildren="false"
-    tools:context=".MultiPlayerBoard">
+    android:clipChildren="false">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/multiplay_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"

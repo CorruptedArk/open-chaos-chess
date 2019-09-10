@@ -1,4 +1,4 @@
-package com.openchaoschess.openchaoschess;
+package dev.corruptedark.openchaoschess;
 
 
 import android.view.View;

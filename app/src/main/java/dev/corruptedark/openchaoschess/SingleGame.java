@@ -1,6 +1,5 @@
-package com.openchaoschess.openchaoschess;
+package dev.corruptedark.openchaoschess;
 
-import com.google.example.games.basegameutils.GameHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +22,6 @@ public class SingleGame {
     private boolean canPlayerMove;
     private boolean canComputerMove;
     private static boolean hasBoard = false;
-    private static GameHelper mHelper;
 
     static private SingleGame instance;
 
@@ -209,14 +207,6 @@ public class SingleGame {
 
     public boolean hasBoard(){
         return hasBoard;
-    }
-
-    public static void saveHelper(GameHelper helper){
-        mHelper = helper;
-    }
-
-    public static GameHelper getHelper(){
-        return mHelper;
     }
 
 }

@@ -1,9 +1,11 @@
-package com.openchaoschess.openchaoschess;
+package dev.corruptedark.openchaoschess;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.PorterDuff;
-import android.support.v7.widget.AppCompatImageView;
+
+
+import androidx.appcompat.widget.AppCompatImageView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;

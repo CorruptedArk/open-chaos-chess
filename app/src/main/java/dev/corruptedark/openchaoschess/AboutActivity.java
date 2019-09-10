@@ -1,4 +1,4 @@
-package com.openchaoschess.openchaoschess;
+package dev.corruptedark.openchaoschess;
 
 /**
  * Created by CorruptedArk
@@ -9,10 +9,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Build;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,15 +20,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.games.Games;
-import com.google.example.games.basegameutils.BaseGameActivity;
-import com.google.example.games.basegameutils.GameHelper;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
-public class AboutActivity extends BaseGameActivity {
+public class AboutActivity extends AppCompatActivity {
     RelativeLayout aboutLayout;
     Toolbar toolbar;
     TextView aboutTitle;
@@ -46,6 +44,7 @@ public class AboutActivity extends BaseGameActivity {
     File settingsFile;
     FileInputStream fileReader;
     FileOutputStream fileWriter;
+    AchievementHandler achievementHandler = AchievementHandler.getInstance(this);
 
     private final int KNOCK = 13;
     private int knockCount = 0;
@@ -78,9 +77,8 @@ public class AboutActivity extends BaseGameActivity {
             public void onClick(View view) {
                 if(++knockCount == KNOCK){
                     Toast.makeText(context, "You have discovered the secret.", Toast.LENGTH_LONG).show();
-                    if(mHelper.getApiClient() != null && mHelper.getApiClient().isConnected()) {
-                        Games.Achievements.unlock(mHelper.getApiClient(), getString(R.string.achievement_secret_knock));
-                    }
+                    achievementHandler.incrementInMemory(AchievementHandler.SECRET_KNOCK);
+                    achievementHandler.saveValues();
                     Intent intent = new Intent(AboutActivity.this,SecretActivity.class);
                     knockCount = 0;
                     startActivity(intent);
@@ -88,7 +86,7 @@ public class AboutActivity extends BaseGameActivity {
             }
         });
 
-        settingsFile = new File(getApplicationContext().getFilesDir(),"settings.txt");
+        settingsFile = new File(getApplicationContext().getFilesDir(), getString(R.string.settings_file));
         if(settingsFile.exists()) {
             try {
                 fileReader = new FileInputStream(settingsFile);
@@ -164,13 +162,4 @@ public class AboutActivity extends BaseGameActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onSignInFailed() {
-
-    }
-
-    @Override
-    public void onSignInSucceeded() {
-
-    }
 }

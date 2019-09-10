@@ -11,70 +11,83 @@
     android:layout_height="match_parent"
     tools:context="dev.corruptedark.openchaoschess.AboutActivity">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/about_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"/>
 
-    <ImageView
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:id="@+id/about_image"
-        android:layout_below="@+id/about_toolbar"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="5dp"
-        android:contentDescription="@string/app_name"
-        app:srcCompat="@drawable/ic_icon" />
+    <ScrollView
+        android:id="@+id/about_scroll_view"
+        android:layout_below="@id/about_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/app_name"
-        android:id="@+id/about_title"
-        android:textSize="35sp"
-        android:layout_below="@+id/about_image"
-        android:layout_centerHorizontal="true"
-        android:gravity="center"
-        android:textColor="#ffffff" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/credits"
-        android:id="@+id/about_credits"
-        android:textSize="15sp"
-        android:layout_below="@+id/about_title"
-        android:layout_centerHorizontal="true"
-        android:gravity="center_horizontal"
-        android:textColor="#ffffff" />
+            <ImageView
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:id="@+id/about_image"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:contentDescription="@string/app_name"
+                app:srcCompat="@drawable/ic_icon" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/descript"
-        android:id="@+id/about_descript"
-        android:layout_below="@+id/about_credits"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginBottom="5dp"
-        android:textColor="#ffffff" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/app_name"
+                android:id="@+id/about_title"
+                android:textSize="35sp"
+                android:layout_below="@+id/about_image"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:textColor="#ffffff" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/contact"
-        android:id="@+id/about_contact"
-        android:autoLink="web|email"
-        android:textColor="#ffffff"
-        android:textColorLink="@color/colorAccent"
-        android:layout_alignLeft="@+id/about_descript"
-        android:layout_alignStart="@+id/about_descript"
-        android:layout_alignRight="@+id/about_descript"
-        android:layout_alignEnd="@+id/about_descript"
-        android:layout_below="@+id/about_descript" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/credits"
+                android:id="@+id/about_credits"
+                android:textSize="15sp"
+                android:layout_below="@+id/about_title"
+                android:layout_centerHorizontal="true"
+                android:gravity="center_horizontal"
+                android:textColor="#ffffff" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/descript"
+                android:id="@+id/about_descript"
+                android:layout_below="@+id/about_credits"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginBottom="5dp"
+                android:textColor="#ffffff" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/contact"
+                android:id="@+id/about_contact"
+                android:autoLink="web|email"
+                android:textColor="#ffffff"
+                android:textColorLink="@color/colorAccent"
+                android:layout_alignLeft="@+id/about_descript"
+                android:layout_alignStart="@+id/about_descript"
+                android:layout_alignRight="@+id/about_descript"
+                android:layout_alignEnd="@+id/about_descript"
+                android:layout_below="@+id/about_descript" />
+
+        </RelativeLayout>
+    </ScrollView>
 
 </RelativeLayout>

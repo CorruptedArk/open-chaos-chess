@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Chaos Chess</string>
+    <string name="app_name">Open Chaos Chess</string>
     <string name="new_game">New Game</string>
     <string name="player_points">Player Points:   </string>
     <string name="computer_points">Computer Points:   </string>
@@ -28,6 +28,7 @@
     <string name="your_points">Your Points:   </string>
     <string name="sign_out">Sign Out</string>
     <string name="slogan">You pick the piece, not the move</string>
+    <string name="new_slogan">You pick the piece, not the move\nNow with more freedom!</string>
     <string name="secret_hello">Hello, I\'m not sure how you figured out how to get here. But, since you\'re here, may I ask your name?</string>
     <string name="background_color">Background Color:</string>
     <string name="bar_color">Bar Color:</string>
@@ -39,4 +40,5 @@
     <string name="set_to_defaults">Set to defaults</string>
     <string name="save_colors">Save Colors</string>
     <string name="text_color">Text Color:</string>
+    <string name="settings_file">settings.txt</string>
 </resources>

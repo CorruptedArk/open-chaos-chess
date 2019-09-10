@@ -1,11 +1,12 @@
-package com.openchaoschess.openchaoschess;
+package dev.corruptedark.openchaoschess;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
-import android.support.annotation.ColorInt;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -81,7 +82,7 @@ public class SettingsActivity extends AppCompatActivity {
         layout = (RelativeLayout) findViewById(R.id.settings_layout);
 
 
-        settingsFile = new File(getApplicationContext().getFilesDir(),"settings.txt");
+        settingsFile = new File(getApplicationContext().getFilesDir(), getString(R.string.settings_file));
         if(settingsFile.exists()) {
             //Toast.makeText(this,"File does exist",Toast.LENGTH_SHORT).show();
             try{

@@ -1,11 +1,13 @@
-package com.openchaoschess.openchaoschess;
+package dev.corruptedark.openchaoschess;
 
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Build;
-import android.support.annotation.Nullable;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Display;
@@ -29,7 +31,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MultiPlayerBoard {
+public class MultiPlayerBoard extends AppCompatActivity {
     public final int YOU = -1;
     public final int OPPONENT = 1;
     public final int NONE = 0;
@@ -45,10 +47,11 @@ public class MultiPlayerBoard {
     MultiPlayerBoard context;
     MoveThread moveThread;
     RelativeLayout boardLayout;
-    TurnBasedMatch match;
 
 
     Toolbar toolbar;
+
+    AchievementHandler achievementHandler;
 
     File settingsFile;
     FileInputStream fileReader;
@@ -66,6 +69,8 @@ public class MultiPlayerBoard {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_multi_player_board);
+
+        achievementHandler = AchievementHandler.getInstance(this);
 
         toolbar = (Toolbar) findViewById(R.id.multiplay_toolbar);
         setSupportActionBar(toolbar);
@@ -89,7 +94,7 @@ public class MultiPlayerBoard {
         opponentPointLabel = (TextView) findViewById(R.id.opponent_points);
         tieLabel = (TextView) findViewById(R.id.tie_label);
 
-        settingsFile = new File(getApplicationContext().getFilesDir(),"settings.txt");
+        settingsFile = new File(getApplicationContext().getFilesDir(),getString(R.string.settings_file));
         if(settingsFile.exists()) {
             try{
                 fileReader = new FileInputStream(settingsFile);
@@ -176,12 +181,7 @@ public class MultiPlayerBoard {
         gameOverLabel.bringToFront();
         thatSucksLabel.bringToFront();
         boardMain.invalidate();
-        if(mHelper.getApiClient() != null && mHelper.getApiClient().isConnected()) {
-            Games.Achievements.unlock(mHelper.getApiClient(), getResources().getString(R.string.achievement_started_game));
-        }
 
-
-        match = getIntent().getParcelableExtra("match");
     }
 
     @Override
@@ -408,9 +408,8 @@ public class MultiPlayerBoard {
 
     public synchronized void moveSelectedButton_Click(final View view)
     {
-        if(mHelper.getApiClient() != null && mHelper.getApiClient().isConnected()) {
-            Games.Achievements.unlock(mHelper.getApiClient(), getResources().getString(R.string.achievement_started_game));
-        }
+        achievementHandler.incrementInMemory(AchievementHandler.STARTED_GAME);
+        achievementHandler.saveValues();
         thatSucksLabel.post(new Runnable() {
             @Override
             public void run() {
@@ -440,19 +439,18 @@ public class MultiPlayerBoard {
                     }
                 });
                 multiGame.setTurn(0);
-                if(multiGame.getOpponentPoints()== multiGame.getYourPoints())
+                if(multiGame.getOpponentPoints() == multiGame.getYourPoints())
                     tieLabel.post(new Runnable() {
                         @Override
                         public void run() {
                             tieLabel.setVisibility(View.VISIBLE);
-                            if(mHelper.getApiClient()!= null && mHelper.getApiClient().isConnected()) {
-                                Games.Achievements.unlock(mHelper.getApiClient(), getString(R.string.achievement_breaking_even));
-                                Games.Achievements.increment(mHelper.getApiClient(), getString(R.string.achievement_exceptionally_average), 1);
-                                Games.Achievements.increment(mHelper.getApiClient(), getString(R.string.achievement_master_of_balance), 1);
-                                Games.Achievements.increment(mHelper.getApiClient(), getString(R.string.achievement_hooked), 1);
-                                Games.Achievements.increment(mHelper.getApiClient(), getString(R.string.achievement_chaos_junkie), 1);
-                                Games.Achievements.increment(mHelper.getApiClient(), getString(R.string.achievement_get_help), 1);
-                            }
+                            achievementHandler.incrementInMemory(AchievementHandler.TIED_A_GAME);
+                            achievementHandler.incrementInMemory(AchievementHandler.TIED_10_GAMES);
+                            achievementHandler.incrementInMemory(AchievementHandler.TIED_50_GAMES);
+                            achievementHandler.incrementInMemory(AchievementHandler.PLAYED_10_GAMES);
+                            achievementHandler.incrementInMemory(AchievementHandler.PLAYED_50_GAMES);
+                            achievementHandler.incrementInMemory(AchievementHandler.PLAYED_100_GAMES);
+                            achievementHandler.saveValues();
                         }
                     });
                 else if(multiGame.getOpponentPoints()< multiGame.getYourPoints()) {
@@ -460,16 +458,17 @@ public class MultiPlayerBoard {
                         @Override
                         public void run() {
                             wonLabel.setVisibility(View.VISIBLE);
-                            if(mHelper.getApiClient()!= null && mHelper.getApiClient().isConnected()) {
-                                Games.Achievements.unlock(mHelper.getApiClient(), getResources().getString(R.string.achievement_noice_dude));
-                                Games.Achievements.increment(mHelper.getApiClient(), getString(R.string.achievement_winner), 1);
-                                Games.Achievements.increment(mHelper.getApiClient(), getString(R.string.achievement_master_of_chaos), 1);
-                                Games.Achievements.increment(mHelper.getApiClient(), getString(R.string.achievement_hooked), 1);
-                                Games.Achievements.increment(mHelper.getApiClient(), getString(R.string.achievement_chaos_junkie), 1);
-                                Games.Achievements.increment(mHelper.getApiClient(), getString(R.string.achievement_get_help), 1);
-                                if(multiGame.getOpponentPoints() == 0)
-                                    Games.Achievements.unlock(mHelper.getApiClient(),getString(R.string.achievement_untouchable));
+                            achievementHandler.incrementInMemory(AchievementHandler.WON_A_GAME);
+                            achievementHandler.incrementInMemory(AchievementHandler.WON_10_GAMES);
+                            achievementHandler.incrementInMemory(AchievementHandler.WON_50_GAMES);
+                            achievementHandler.incrementInMemory(AchievementHandler.PLAYED_10_GAMES);
+                            achievementHandler.incrementInMemory(AchievementHandler.PLAYED_50_GAMES);
+                            achievementHandler.incrementInMemory(AchievementHandler.PLAYED_100_GAMES);
+
+                            if (multiGame.getOpponentPoints() == 0) {
+                                achievementHandler.incrementInMemory(AchievementHandler.UNTOUCHABLE);
                             }
+                            achievementHandler.saveValues();
                         }
                     });
 
@@ -479,16 +478,17 @@ public class MultiPlayerBoard {
                         @Override
                         public void run() {
                             lostLabel.setVisibility(View.VISIBLE);
-                            if(mHelper.getApiClient()!= null && mHelper.getApiClient().isConnected()) {
-                                Games.Achievements.unlock(mHelper.getApiClient(), getResources().getString(R.string.achievement_bruh_));
-                                Games.Achievements.increment(mHelper.getApiClient(), getString(R.string.achievement_loser), 1);
-                                Games.Achievements.increment(mHelper.getApiClient(), getString(R.string.achievement_master_of_failure), 1);
-                                Games.Achievements.increment(mHelper.getApiClient(), getString(R.string.achievement_hooked), 1);
-                                Games.Achievements.increment(mHelper.getApiClient(), getString(R.string.achievement_chaos_junkie), 1);
-                                Games.Achievements.increment(mHelper.getApiClient(), getString(R.string.achievement_get_help), 1);
-                                if(multiGame.getYourPoints() == 0)
-                                    Games.Achievements.unlock(mHelper.getApiClient(),getString(R.string.achievement_slaughtered));
+                            achievementHandler.incrementInMemory(AchievementHandler.LOST_A_GAME);
+                            achievementHandler.incrementInMemory(AchievementHandler.LOST_10_GAMES);
+                            achievementHandler.incrementInMemory(AchievementHandler.LOST_50_GAMES);
+                            achievementHandler.incrementInMemory(AchievementHandler.PLAYED_10_GAMES);
+                            achievementHandler.incrementInMemory(AchievementHandler.PLAYED_50_GAMES);
+                            achievementHandler.incrementInMemory(AchievementHandler.PLAYED_100_GAMES);
+
+                            if (multiGame.getYourPoints() == 0) {
+                                achievementHandler.incrementInMemory(AchievementHandler.SLAUGHTERED);
                             }
+                            achievementHandler.saveValues();
                         }
                     });
             }
@@ -505,14 +505,13 @@ public class MultiPlayerBoard {
                         @Override
                         public void run() {
                             tieLabel.setVisibility(View.VISIBLE);
-                            if(mHelper.getApiClient()!= null && mHelper.getApiClient().isConnected()) {
-                                Games.Achievements.unlock(mHelper.getApiClient(), getString(R.string.achievement_breaking_even));
-                                Games.Achievements.increment(mHelper.getApiClient(), getString(R.string.achievement_exceptionally_average), 1);
-                                Games.Achievements.increment(mHelper.getApiClient(), getString(R.string.achievement_master_of_balance), 1);
-                                Games.Achievements.increment(mHelper.getApiClient(), getString(R.string.achievement_hooked), 1);
-                                Games.Achievements.increment(mHelper.getApiClient(), getString(R.string.achievement_chaos_junkie), 1);
-                                Games.Achievements.increment(mHelper.getApiClient(), getString(R.string.achievement_get_help), 1);
-                            }
+                            achievementHandler.incrementInMemory(AchievementHandler.TIED_A_GAME);
+                            achievementHandler.incrementInMemory(AchievementHandler.TIED_10_GAMES);
+                            achievementHandler.incrementInMemory(AchievementHandler.TIED_50_GAMES);
+                            achievementHandler.incrementInMemory(AchievementHandler.PLAYED_10_GAMES);
+                            achievementHandler.incrementInMemory(AchievementHandler.PLAYED_50_GAMES);
+                            achievementHandler.incrementInMemory(AchievementHandler.PLAYED_100_GAMES);
+                            achievementHandler.saveValues();
                         }
                     });
                 else if(multiGame.getOpponentPoints()< multiGame.getYourPoints()) {
@@ -520,16 +519,17 @@ public class MultiPlayerBoard {
                         @Override
                         public void run() {
                             wonLabel.setVisibility(View.VISIBLE);
-                            if(mHelper.getApiClient()!= null && mHelper.getApiClient().isConnected()) {
-                                Games.Achievements.unlock(mHelper.getApiClient(), getResources().getString(R.string.achievement_noice_dude));
-                                Games.Achievements.increment(mHelper.getApiClient(), getString(R.string.achievement_winner), 1);
-                                Games.Achievements.increment(mHelper.getApiClient(), getString(R.string.achievement_master_of_chaos), 1);
-                                Games.Achievements.increment(mHelper.getApiClient(), getString(R.string.achievement_hooked), 1);
-                                Games.Achievements.increment(mHelper.getApiClient(), getString(R.string.achievement_chaos_junkie), 1);
-                                Games.Achievements.increment(mHelper.getApiClient(), getString(R.string.achievement_get_help), 1);
-                                if(multiGame.getOpponentPoints() == 0)
-                                    Games.Achievements.unlock(mHelper.getApiClient(),getString(R.string.achievement_untouchable));
+                            achievementHandler.incrementInMemory(AchievementHandler.WON_A_GAME);
+                            achievementHandler.incrementInMemory(AchievementHandler.WON_10_GAMES);
+                            achievementHandler.incrementInMemory(AchievementHandler.WON_50_GAMES);
+                            achievementHandler.incrementInMemory(AchievementHandler.PLAYED_10_GAMES);
+                            achievementHandler.incrementInMemory(AchievementHandler.PLAYED_50_GAMES);
+                            achievementHandler.incrementInMemory(AchievementHandler.PLAYED_100_GAMES);
+
+                            if (multiGame.getOpponentPoints() == 0) {
+                                achievementHandler.incrementInMemory(AchievementHandler.UNTOUCHABLE);
                             }
+                            achievementHandler.saveValues();
                         }
                     });
 
@@ -539,16 +539,17 @@ public class MultiPlayerBoard {
                         @Override
                         public void run() {
                             lostLabel.setVisibility(View.VISIBLE);
-                            if(mHelper.getApiClient()!= null && mHelper.getApiClient().isConnected()) {
-                                Games.Achievements.unlock(mHelper.getApiClient(), getResources().getString(R.string.achievement_bruh_));
-                                Games.Achievements.increment(mHelper.getApiClient(), getString(R.string.achievement_loser), 1);
-                                Games.Achievements.increment(mHelper.getApiClient(), getString(R.string.achievement_master_of_failure), 1);
-                                Games.Achievements.increment(mHelper.getApiClient(), getString(R.string.achievement_hooked), 1);
-                                Games.Achievements.increment(mHelper.getApiClient(), getString(R.string.achievement_chaos_junkie), 1);
-                                Games.Achievements.increment(mHelper.getApiClient(), getString(R.string.achievement_get_help), 1);
-                                if(multiGame.getYourPoints() == 0)
-                                    Games.Achievements.unlock(mHelper.getApiClient(),getString(R.string.achievement_slaughtered));
+                            achievementHandler.incrementInMemory(AchievementHandler.LOST_A_GAME);
+                            achievementHandler.incrementInMemory(AchievementHandler.LOST_10_GAMES);
+                            achievementHandler.incrementInMemory(AchievementHandler.LOST_50_GAMES);
+                            achievementHandler.incrementInMemory(AchievementHandler.PLAYED_10_GAMES);
+                            achievementHandler.incrementInMemory(AchievementHandler.PLAYED_50_GAMES);
+                            achievementHandler.incrementInMemory(AchievementHandler.PLAYED_100_GAMES);
+
+                            if (multiGame.getYourPoints() == 0) {
+                                achievementHandler.incrementInMemory(AchievementHandler.SLAUGHTERED);
                             }
+                            achievementHandler.saveValues();
                         }
                     });
             } else if(selected.getI() == -1) {
@@ -648,16 +649,17 @@ public class MultiPlayerBoard {
                         @Override
                         public void run() {
                             lostLabel.setVisibility(View.VISIBLE);
-                            if(mHelper.getApiClient()!= null && mHelper.getApiClient().isConnected()) {
-                                Games.Achievements.unlock(mHelper.getApiClient(), getResources().getString(R.string.achievement_bruh_));
-                                Games.Achievements.increment(mHelper.getApiClient(), getString(R.string.achievement_loser), 1);
-                                Games.Achievements.increment(mHelper.getApiClient(), getString(R.string.achievement_master_of_failure), 1);
-                                Games.Achievements.increment(mHelper.getApiClient(), getString(R.string.achievement_hooked), 1);
-                                Games.Achievements.increment(mHelper.getApiClient(), getString(R.string.achievement_chaos_junkie), 1);
-                                Games.Achievements.increment(mHelper.getApiClient(), getString(R.string.achievement_get_help), 1);
-                                if(multiGame.getYourPoints() == 0)
-                                    Games.Achievements.unlock(mHelper.getApiClient(),getString(R.string.achievement_slaughtered));
+                            achievementHandler.incrementInMemory(AchievementHandler.LOST_A_GAME);
+                            achievementHandler.incrementInMemory(AchievementHandler.LOST_10_GAMES);
+                            achievementHandler.incrementInMemory(AchievementHandler.LOST_50_GAMES);
+                            achievementHandler.incrementInMemory(AchievementHandler.PLAYED_10_GAMES);
+                            achievementHandler.incrementInMemory(AchievementHandler.PLAYED_50_GAMES);
+                            achievementHandler.incrementInMemory(AchievementHandler.PLAYED_100_GAMES);
+
+                            if (multiGame.getYourPoints() == 0) {
+                                achievementHandler.incrementInMemory(AchievementHandler.SLAUGHTERED);
                             }
+                            achievementHandler.saveValues();
                         }
                     });
 
@@ -669,16 +671,17 @@ public class MultiPlayerBoard {
                         @Override
                         public void run() {
                             wonLabel.setVisibility(View.VISIBLE);
-                            if(mHelper.getApiClient()!= null && mHelper.getApiClient().isConnected()) {
-                                Games.Achievements.unlock(mHelper.getApiClient(), getResources().getString(R.string.achievement_noice_dude));
-                                Games.Achievements.increment(mHelper.getApiClient(), getString(R.string.achievement_winner), 1);
-                                Games.Achievements.increment(mHelper.getApiClient(), getString(R.string.achievement_master_of_chaos), 1);
-                                Games.Achievements.increment(mHelper.getApiClient(), getString(R.string.achievement_hooked), 1);
-                                Games.Achievements.increment(mHelper.getApiClient(), getString(R.string.achievement_chaos_junkie), 1);
-                                Games.Achievements.increment(mHelper.getApiClient(), getString(R.string.achievement_get_help), 1);
-                                if(multiGame.getOpponentPoints() == 0)
-                                    Games.Achievements.unlock(mHelper.getApiClient(),getString(R.string.achievement_untouchable));
+                            achievementHandler.incrementInMemory(AchievementHandler.WON_A_GAME);
+                            achievementHandler.incrementInMemory(AchievementHandler.WON_10_GAMES);
+                            achievementHandler.incrementInMemory(AchievementHandler.WON_50_GAMES);
+                            achievementHandler.incrementInMemory(AchievementHandler.PLAYED_10_GAMES);
+                            achievementHandler.incrementInMemory(AchievementHandler.PLAYED_50_GAMES);
+                            achievementHandler.incrementInMemory(AchievementHandler.PLAYED_100_GAMES);
+
+                            if (multiGame.getOpponentPoints() == 0) {
+                                achievementHandler.incrementInMemory(AchievementHandler.UNTOUCHABLE);
                             }
+                            achievementHandler.saveValues();
                         }
                     });
 
@@ -739,28 +742,6 @@ public class MultiPlayerBoard {
     @SuppressWarnings("unchecked")
     synchronized void moveOpponent() {
         //TODO
-        //Get move information from google services
-        while(match.getTurnStatus() != TurnBasedMatch.MATCH_TURN_STATUS_MY_TURN);
-        byte[] data = match.getData();
-        ArrayList<Square> squareList;
-
-        try
-        {
-            ByteArrayInputStream bais = new ByteArrayInputStream(data);
-            ObjectInputStream ois = new ObjectInputStream(bais);
-
-
-            squareList = (ArrayList<Square>) ois.readObject();
-
-            ois.close();
-            bais.close();
-
-            mover.forceMove(board,squareList.get(0),squareList.get(1),multiGame);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
 
 
     }
@@ -768,32 +749,7 @@ public class MultiPlayerBoard {
     synchronized void sendYourMove(Square selected, Square destination)
     {
         //TODO
-        //Send move over google services
-        if(match.getStatus() == TurnBasedMatch.MATCH_STATUS_ACTIVE)
-        {
-            ArrayList<Square> squareList = new ArrayList<>();
 
-            squareList.add(selected);
-            squareList.add(destination);
-
-            try
-            {
-
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                ObjectOutputStream oos = new ObjectOutputStream(baos);
-                oos.writeObject(squareList);
-                byte[] gameData = baos.toByteArray();
-                Games.getTurnBasedMultiplayerClient(this, GoogleSignIn.getAccountForScopes(this, new Scope(Scopes.GAMES_LITE))).takeTurn(match.getMatchId(),gameData,null);
-                oos.close();
-                baos.close();
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-
-
-        }
 
     }
 
@@ -915,13 +871,4 @@ public class MultiPlayerBoard {
         return;
     }
 
-    @Override
-    public void onSignInFailed() {
-
-    }
-
-    @Override
-    public void onSignInSucceeded() {
-
-    }
 }
