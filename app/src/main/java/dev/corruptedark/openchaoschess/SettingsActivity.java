@@ -49,11 +49,10 @@ public class SettingsActivity extends AppCompatActivity {
     ColorPicker colorPicker;
     RelativeLayout layout;
 
-    File settingsFile;
-    InputStream fileReader;
-    OutputStream fileWriter;
-    byte[] bytes;
-    String[] contentArray;
+
+    ColorManager colorManager;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,70 +80,40 @@ public class SettingsActivity extends AppCompatActivity {
         saveColorButton = (Button)findViewById(R.id.save_color_button);
         layout = (RelativeLayout) findViewById(R.id.settings_layout);
 
+        colorManager = ColorManager.getInstance(this);
 
-        settingsFile = new File(getApplicationContext().getFilesDir(), getString(R.string.settings_file));
-        if(settingsFile.exists()) {
-            //Toast.makeText(this,"File does exist",Toast.LENGTH_SHORT).show();
-            try{
-                fileReader = new FileInputStream(settingsFile);
-                bytes= new byte[(int)settingsFile.length()];
-                fileReader.read(bytes);
-                fileReader.close();
-                String contents = new String(bytes);
-                //Toast.makeText(this,contents,Toast.LENGTH_LONG).show();
-                contentArray = contents.split(" ");
-                backgroundColorButton.setBackgroundColor(Color.parseColor("#"+contentArray[0]));
-                barColorButton.setBackgroundColor(Color.parseColor("#"+contentArray[1]));
-                secondaryColorButton.setBackgroundColor(Color.parseColor("#"+contentArray[2]));
-                boardColor1Button.setBackgroundColor(Color.parseColor("#"+contentArray[3]));
-                boardColor2Button.setBackgroundColor(Color.parseColor("#"+contentArray[4]));
-                pieceColorButton.setBackgroundColor(Color.parseColor("#"+contentArray[5]));
-                selectionColorButton.setBackgroundColor(Color.parseColor("#"+contentArray[6]));
-                textColorButton.setBackgroundColor(Color.parseColor("#"+contentArray[7]));
-            }
-            catch (Exception e){
-                e.printStackTrace();
-            }
+        backgroundColorButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BACKGROUND_COLOR));
+        barColorButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BAR_COLOR));
+        secondaryColorButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.SECONDARY_COLOR));
+        boardColor1Button.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
+        boardColor2Button.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_2));
+        pieceColorButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.PIECE_COLOR));
+        selectionColorButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.SELECTION_COLOR));
+        textColorButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
 
-        }
-        else {
-            //Toast.makeText(this,"File did not exist",Toast.LENGTH_SHORT).show();
-            try {
-                fileWriter = new FileOutputStream(settingsFile,false);
-                String contents = "FF303030 FF454545 FF696969 FF800000 FF000000 FFFFFFFF FF888888 FFFFFFFF";
-                contentArray = contents.split(" ");
-                fileWriter.write(contents.getBytes());
-                fileWriter.close();
-            }
-            catch (Exception e){
-                e.printStackTrace();
-            }
-
-        }
     }
 
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        layout.setBackgroundColor(Color.parseColor("#"+contentArray[0]));
-        backgroundColorLabel.setTextColor(Color.parseColor("#"+contentArray[7]));
-        barColorLabel.setTextColor(Color.parseColor("#"+contentArray[7]));
-        secondaryColorLabel.setTextColor(Color.parseColor("#"+contentArray[7]));
-        boardColor1Label.setTextColor(Color.parseColor("#"+contentArray[7]));
-        boardColor2Label.setTextColor(Color.parseColor("#"+contentArray[7]));
-        pieceColorLabel.setTextColor(Color.parseColor("#"+contentArray[7]));
-        selectionColorLabel.setTextColor(Color.parseColor("#"+contentArray[7]));
-        textColorLabel.setTextColor(Color.parseColor("#"+contentArray[7]));
-
-        setDefaultsButton.setTextColor(Color.parseColor("#"+contentArray[7]));
-        setDefaultsButton.setBackgroundColor(Color.parseColor("#"+contentArray[3]));
-        saveColorButton.setTextColor(Color.parseColor("#"+contentArray[7]));
-        saveColorButton.setBackgroundColor(Color.parseColor("#"+contentArray[3]));
+        layout.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BACKGROUND_COLOR));
+        backgroundColorLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        barColorLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        secondaryColorLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        boardColor1Label.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        boardColor2Label.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        pieceColorLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        selectionColorLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        textColorLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        setDefaultsButton.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        setDefaultsButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
+        saveColorButton.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        saveColorButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.parseColor("#"+contentArray[1]));
+            window.setStatusBarColor(colorManager.getColorFromFile(ColorManager.BAR_COLOR));
         }
     }
 
@@ -175,35 +144,41 @@ public class SettingsActivity extends AppCompatActivity {
 
     public void saveColorsButtonClicked(View view) {
         String contents = String.format("%s %s %s %s %s %s %s %s",getColorString(backgroundColorButton), getColorString(barColorButton), getColorString(secondaryColorButton), getColorString(boardColor1Button), getColorString(boardColor2Button), getColorString(pieceColorButton), getColorString(selectionColorButton), getColorString(textColorButton));
-        contentArray = contents.split(" ");
-        try{
-            fileWriter = new FileOutputStream(settingsFile,false);
-            fileWriter.write(contents.getBytes());
-            fileWriter.close();
-            Toast.makeText(this,"Colors saved",Toast.LENGTH_SHORT).show();
-        }
-        catch (Exception e)
+        colorManager.updateColor(ColorManager.BACKGROUND_COLOR, getColorInt(backgroundColorButton));
+        colorManager.updateColor(ColorManager.BAR_COLOR, getColorInt(barColorButton));
+        colorManager.updateColor(ColorManager.SECONDARY_COLOR, getColorInt(saveColorButton));
+        colorManager.updateColor(ColorManager.BOARD_COLOR_1, getColorInt(boardColor1Button));
+        colorManager.updateColor(ColorManager.BOARD_COLOR_2, getColorInt(boardColor2Button));
+        colorManager.updateColor(ColorManager.PIECE_COLOR, getColorInt(pieceColorButton));
+        colorManager.updateColor(ColorManager.TEXT_COLOR, getColorInt(textColorButton));
+
+        if(colorManager.saveChangesToFile())
         {
-            e.printStackTrace();
+            Toast.makeText(this, "Colors saved", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            Toast.makeText(this, "Colors failed to save", Toast.LENGTH_SHORT).show();
         }
 
-        layout.setBackgroundColor(Color.parseColor("#"+contentArray[0]));
-        backgroundColorLabel.setTextColor(Color.parseColor("#"+contentArray[7]));
-        barColorLabel.setTextColor(Color.parseColor("#"+contentArray[7]));
-        secondaryColorLabel.setTextColor(Color.parseColor("#"+contentArray[7]));
-        boardColor1Label.setTextColor(Color.parseColor("#"+contentArray[7]));
-        boardColor2Label.setTextColor(Color.parseColor("#"+contentArray[7]));
-        pieceColorLabel.setTextColor(Color.parseColor("#"+contentArray[7]));
-        selectionColorLabel.setTextColor(Color.parseColor("#"+contentArray[7]));
-        textColorLabel.setTextColor(Color.parseColor("#"+contentArray[7]));
-        setDefaultsButton.setTextColor(Color.parseColor("#"+contentArray[7]));
-        setDefaultsButton.setBackgroundColor(Color.parseColor("#"+contentArray[3]));
-        saveColorButton.setTextColor(Color.parseColor("#"+contentArray[7]));
-        saveColorButton.setBackgroundColor(Color.parseColor("#"+contentArray[3]));
+        layout.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BACKGROUND_COLOR));
+        backgroundColorLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        barColorLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        secondaryColorLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        boardColor1Label.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        boardColor2Label.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        pieceColorLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        selectionColorLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        textColorLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        setDefaultsButton.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        setDefaultsButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
+        saveColorButton.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        saveColorButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.parseColor("#"+contentArray[1]));
+            window.setStatusBarColor(colorManager.getColorFromFile(ColorManager.BAR_COLOR));
         }
         layout.invalidate();
     }
@@ -212,8 +187,8 @@ public class SettingsActivity extends AppCompatActivity {
         return Integer.toHexString(((ColorDrawable)view.getBackground()).getColor());
     }
 
-    /*public int getColorInt(View view) {
+    public int getColorInt(View view) {
        return ((ColorDrawable)view.getBackground()).getColor();
-    }*/
+    }
 }
 

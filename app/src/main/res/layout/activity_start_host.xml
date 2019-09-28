@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/host_layout"
+    tools:context=".StartHostActivity">
+
+    <TextView
+        android:id="@+id/host_instructions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/multiplayer_guide"
+        android:textSize="25sp"
+        android:ellipsize="none"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"/>
+
+    <TextView
+        android:id="@+id/host_status"
+        android:textSize="25sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"/>
+
+
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/knights_only_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:text="@string/knights_only"
+        android:layout_gravity="left|center_vertical"
+        android:gravity="center"
+        android:layout_margin="10dp"/>
+
+
+    <Button
+        android:id="@+id/start_host_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/start_host"
+        android:onClick="startHosting"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"/>
+
+</LinearLayout>

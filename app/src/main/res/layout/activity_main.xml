@@ -57,27 +57,27 @@
         android:layout_centerHorizontal="true"/>
 
     <Button
-        android:text="@string/create_game"
+        android:text="@string/host_game"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:id="@+id/create_game_button"
+        android:id="@+id/host_game_button"
         android:textSize="25sp"
         android:background="@color/colorAccent"
-        android:onClick="createGameButtonClicked"
+        android:onClick="hostGameButtonClicked"
         android:layout_below="@+id/play_button"
         android:layout_centerHorizontal="true" />
 
     <Button
-        android:text="@string/check_invites"
+        android:text="@string/join_game"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:id="@+id/check_invites_button"
+        android:id="@+id/join_game_button"
         android:textSize="25sp"
         android:background="@color/colorAccent"
-        android:onClick="checkInvitesButtonClicked"
-        android:layout_below="@+id/create_game_button"
+        android:onClick="joinGameButtonClicked"
+        android:layout_below="@+id/host_game_button"
         android:layout_centerHorizontal="true" />
 
     <Button
@@ -88,7 +88,7 @@
         android:id="@+id/about_button"
         android:textSize="25sp"
         android:background="@color/colorAccent"
-        android:layout_below="@+id/check_invites_button"
+        android:layout_below="@+id/join_game_button"
         android:onClick="aboutButtonClicked"
         android:layout_centerHorizontal="true" />
 

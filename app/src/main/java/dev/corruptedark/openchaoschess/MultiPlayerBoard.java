@@ -53,11 +53,8 @@ public class MultiPlayerBoard extends AppCompatActivity {
 
     AchievementHandler achievementHandler;
 
-    File settingsFile;
-    FileInputStream fileReader;
-    FileOutputStream fileWriter;
-    byte[] bytes;
-    String[] contentArray;
+    ColorManager colorManager;
+
     int boardColor1;
     int boardColor2;
     int selectColor;
@@ -94,38 +91,12 @@ public class MultiPlayerBoard extends AppCompatActivity {
         opponentPointLabel = (TextView) findViewById(R.id.opponent_points);
         tieLabel = (TextView) findViewById(R.id.tie_label);
 
-        settingsFile = new File(getApplicationContext().getFilesDir(),getString(R.string.settings_file));
-        if(settingsFile.exists()) {
-            try{
-                fileReader = new FileInputStream(settingsFile);
-                bytes = new byte[(int)settingsFile.length()];
-                fileReader.read(bytes);
-                fileReader.close();
-                String contents = new String(bytes);
-                contentArray = contents.split(" ");
-            }
-            catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-        else {
-            try {
-                fileWriter = new FileOutputStream(settingsFile,false);
-                String contents = "FF303030 FF454545 FF696969 FF800000 FF000000 FFFFFFFF FF888888 FFFFFFFF";
-                contentArray = contents.split(" ");
-                fileWriter.write(contents.getBytes());
-                fileWriter.close();
-            }
-            catch (Exception e){
-                e.printStackTrace();
-            }
+        colorManager = ColorManager.getInstance(this);
 
-        }
-
-        boardColor1 = Color.parseColor("#"+contentArray[3]);
-        boardColor2 = Color.parseColor("#"+contentArray[4]);
-        selectColor = Color.parseColor("#"+contentArray[6]);
-        pieceColor = Color.parseColor("#"+contentArray[5]);
+        boardColor1 = colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1);
+        boardColor2 = colorManager.getColorFromFile(ColorManager.BOARD_COLOR_2);
+        selectColor = colorManager.getColorFromFile(ColorManager.SELECTION_COLOR);
+        pieceColor = colorManager.getColorFromFile(ColorManager.PIECE_COLOR);
 
         context = this;
         defaultSquare = new Square(this,pieceColor);
@@ -279,23 +250,23 @@ public class MultiPlayerBoard extends AppCompatActivity {
         thatSucksLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX,(int)(height*.02));
         thatSucksLabel.setGravity(Gravity.CENTER);
 
-        boardLayout.setBackgroundColor(Color.parseColor("#"+contentArray[0]));
-        toolbar.setBackgroundColor(Color.parseColor("#"+contentArray[2]));
-        toolbar.setTitleTextColor(Color.parseColor("#"+contentArray[7]));
-        wonLabel.setTextColor(Color.parseColor("#"+contentArray[7]));
-        lostLabel.setTextColor(Color.parseColor("#"+contentArray[7]));
-        tieLabel.setTextColor(Color.parseColor("#"+contentArray[7]));
-        yourPointLabel.setTextColor(Color.parseColor("#"+contentArray[7]));
-        opponentPointLabel.setTextColor(Color.parseColor("#"+contentArray[7]));
-        cantMoveThatLabel.setTextColor(Color.parseColor("#"+contentArray[7]));
-        noiceLabel.setTextColor(Color.parseColor("#"+contentArray[7]));
-        notYourTurnLabel.setTextColor(Color.parseColor("#"+contentArray[7]));
-        gameOverLabel.setTextColor(Color.parseColor("#"+contentArray[7]));
-        thatSucksLabel.setTextColor(Color.parseColor("#"+contentArray[7]));
+        boardLayout.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BACKGROUND_COLOR));
+        toolbar.setBackgroundColor(colorManager.getColorFromFile(ColorManager.SECONDARY_COLOR));
+        toolbar.setTitleTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        wonLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        lostLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        tieLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        yourPointLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        opponentPointLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        cantMoveThatLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        noiceLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        notYourTurnLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        gameOverLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        thatSucksLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.parseColor("#"+contentArray[1]));
+            window.setStatusBarColor(colorManager.getColorFromFile(ColorManager.BAR_COLOR));
         }
     }
 

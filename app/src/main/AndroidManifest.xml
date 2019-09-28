@@ -7,12 +7,14 @@
         android:icon="@drawable/ic_icon"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
+        <activity android:name=".StartClientActivity"></activity>
+        <activity android:name=".StartHostActivity" />
         <activity
             android:name=".AchievementDetailActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".AchievementsActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".MultiPlayerBoard"
             android:screenOrientation="portrait" />
@@ -39,5 +41,9 @@
             android:name=".SettingsActivity"
             android:screenOrientation="portrait" />
     </application>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
 </manifest>

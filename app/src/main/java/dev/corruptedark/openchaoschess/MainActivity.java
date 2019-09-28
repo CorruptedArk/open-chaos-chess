@@ -52,8 +52,8 @@ public class MainActivity extends AppCompatActivity {
     TextView mainTitle;
     TextView mainSlogan;
     Button playButton;
-    Button createGameButton;
-    Button checkInvitesButton;
+    Button hostGameButton;
+    Button joinGameButton;
     Button aboutButton;
     Button quitButton;
     ImageButton settingsButton;
@@ -61,14 +61,11 @@ public class MainActivity extends AppCompatActivity {
     ImageButton knightButton;
     ImageView mainImage;
 
-    File settingsFile;
-    InputStream fileReader;
-    OutputStream fileWriter;
-    byte[] bytes;
-    String[] contentArray;
     Handler knightHandler;
 
     AchievementHandler achievementHandler;
+
+    ColorManager colorManager;
 
     Random rand = new Random(System.currentTimeMillis());
 
@@ -97,8 +94,8 @@ public class MainActivity extends AppCompatActivity {
         mainTitle = (TextView)findViewById(R.id.main_title);
         mainSlogan = (TextView)findViewById(R.id.main_slogan);
         playButton = (Button)findViewById(R.id.play_button);
-        createGameButton = (Button)findViewById(R.id.create_game_button);
-        checkInvitesButton = (Button)findViewById(R.id.check_invites_button);
+        hostGameButton = (Button)findViewById(R.id.host_game_button);
+        joinGameButton = (Button)findViewById(R.id.join_game_button);
         aboutButton = (Button)findViewById(R.id.about_button);
         quitButton = (Button)findViewById(R.id.quit_button);
         settingsButton = (ImageButton)findViewById(R.id.settings_button);
@@ -108,33 +105,7 @@ public class MainActivity extends AppCompatActivity {
 
         mainLayout = (RelativeLayout)findViewById(R.id.activity_main);
 
-        settingsFile = new File(getApplicationContext().getFilesDir(),getString(R.string.settings_file));
-        if(settingsFile.exists()) {
-            try{
-                fileReader = new FileInputStream(settingsFile);
-                bytes = new byte[(int)settingsFile.length()];
-                fileReader.read(bytes);
-                fileReader.close();
-                String contents = new String(bytes);
-                contentArray = contents.split(" ");
-            }
-            catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-        else {
-            try {
-                fileWriter = new FileOutputStream(settingsFile,false);
-                String contents = "FF303030 FF454545 FF696969 FF800000 FF000000 FFFFFFFF FF888888 FFFFFFFF";
-                contentArray = contents.split(" ");
-                fileWriter.write(contents.getBytes());
-                fileWriter.close();
-            }
-            catch (Exception e){
-                e.printStackTrace();
-            }
-
-        }
+        colorManager = ColorManager.getInstance(this);
 
         knightHandler = new Handler();
         startKnight();
@@ -200,24 +171,24 @@ public class MainActivity extends AppCompatActivity {
         playButtonParams.setMargins(0, buttonGap,0,0);
         playButton.setLayoutParams(playButtonParams);
 
-        createGameButton.setTextSize(TypedValue.COMPLEX_UNIT_PX,textHeight);
-        RelativeLayout.LayoutParams createGameButtonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        createGameButtonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        createGameButtonParams.addRule(RelativeLayout.BELOW, R.id.play_button);
-        createGameButtonParams.setMargins(0, buttonGap,0,0);
-        createGameButton.setLayoutParams(createGameButtonParams);
+        hostGameButton.setTextSize(TypedValue.COMPLEX_UNIT_PX,textHeight);
+        RelativeLayout.LayoutParams hostGameButtonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        hostGameButtonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        hostGameButtonParams.addRule(RelativeLayout.BELOW, R.id.play_button);
+        hostGameButtonParams.setMargins(0, buttonGap,0,0);
+        hostGameButton.setLayoutParams(hostGameButtonParams);
 
-        checkInvitesButton.setTextSize(TypedValue.COMPLEX_UNIT_PX,textHeight);
-        RelativeLayout.LayoutParams checkInvitesButtonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        checkInvitesButtonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        checkInvitesButtonParams.addRule(RelativeLayout.BELOW, R.id.create_game_button);
-        checkInvitesButtonParams.setMargins(0, buttonGap,0,0);
-        checkInvitesButton.setLayoutParams(checkInvitesButtonParams);
+        joinGameButton.setTextSize(TypedValue.COMPLEX_UNIT_PX,textHeight);
+        RelativeLayout.LayoutParams joinGameButtonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        joinGameButtonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        joinGameButtonParams.addRule(RelativeLayout.BELOW, R.id.host_game_button);
+        joinGameButtonParams.setMargins(0, buttonGap,0,0);
+        joinGameButton.setLayoutParams(joinGameButtonParams);
 
         aboutButton.setTextSize(TypedValue.COMPLEX_UNIT_PX,textHeight);
         RelativeLayout.LayoutParams aboutButtonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         aboutButtonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        aboutButtonParams.addRule(RelativeLayout.BELOW, R.id.check_invites_button);
+        aboutButtonParams.addRule(RelativeLayout.BELOW, R.id.join_game_button);
         aboutButtonParams.setMargins(0, buttonGap,0,0);
         aboutButton.setLayoutParams(aboutButtonParams);
 
@@ -241,29 +212,29 @@ public class MainActivity extends AppCompatActivity {
         achievementsButton.setLayoutParams(achievementButtonParams);
 
 
-        knightButton.setBackgroundColor(Color.parseColor("#"+contentArray[0]));
-        knightButton.getDrawable().setColorFilter(Color.parseColor("#"+contentArray[7]),PorterDuff.Mode.MULTIPLY);
-        mainLayout.setBackgroundColor(Color.parseColor("#"+contentArray[0]));
-        mainTitle.setTextColor(Color.parseColor("#"+contentArray[7]));
-        mainSlogan.setTextColor(Color.parseColor("#"+contentArray[7]));
-        playButton.setTextColor(Color.parseColor("#"+contentArray[7]));
-        playButton.setBackgroundColor(Color.parseColor("#"+contentArray[3]));
-        createGameButton.setTextColor(Color.parseColor("#"+contentArray[7]));
-        createGameButton.setBackgroundColor(Color.parseColor("#"+contentArray[3]));
-        checkInvitesButton.setTextColor(Color.parseColor("#"+contentArray[7]));
-        checkInvitesButton.setBackgroundColor(Color.parseColor("#"+contentArray[3]));
-        aboutButton.setTextColor(Color.parseColor("#"+contentArray[7]));
-        aboutButton.setBackgroundColor(Color.parseColor("#"+contentArray[3]));
-        quitButton.setTextColor(Color.parseColor("#"+contentArray[7]));
-        quitButton.setBackgroundColor(Color.parseColor("#"+contentArray[3]));
-        settingsButton.setBackgroundColor(Color.parseColor("#"+contentArray[3]));
-        settingsButton.getDrawable().setColorFilter(Color.parseColor("#"+contentArray[7]),PorterDuff.Mode.MULTIPLY);
-        achievementsButton.setBackgroundColor(Color.parseColor("#"+contentArray[3]));
-        achievementsButton.getDrawable().setColorFilter(Color.parseColor("#"+contentArray[7]),PorterDuff.Mode.MULTIPLY);
+        knightButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BACKGROUND_COLOR));
+        knightButton.getDrawable().setColorFilter(colorManager.getColorFromFile(ColorManager.PIECE_COLOR), PorterDuff.Mode.MULTIPLY);
+        mainLayout.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BACKGROUND_COLOR));
+        mainTitle.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        mainSlogan.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        playButton.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        playButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
+        hostGameButton.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        hostGameButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
+        joinGameButton.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        joinGameButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
+        aboutButton.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        aboutButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
+        quitButton.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        quitButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
+        settingsButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
+        settingsButton.getDrawable().setColorFilter(colorManager.getColorFromFile(ColorManager.TEXT_COLOR),PorterDuff.Mode.MULTIPLY);
+        achievementsButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
+        achievementsButton.getDrawable().setColorFilter(colorManager.getColorFromFile(ColorManager.TEXT_COLOR),PorterDuff.Mode.MULTIPLY);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.parseColor("#"+contentArray[1]));
+            window.setStatusBarColor(colorManager.getColorFromFile(ColorManager.BAR_COLOR));
         }
     }
 
@@ -312,24 +283,24 @@ public class MainActivity extends AppCompatActivity {
         playButtonParams.setMargins(0, buttonGap,0,0);
         playButton.setLayoutParams(playButtonParams);
 
-        createGameButton.setTextSize(TypedValue.COMPLEX_UNIT_PX,textHeight);
-        RelativeLayout.LayoutParams createGameButtonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        createGameButtonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        createGameButtonParams.addRule(RelativeLayout.BELOW, R.id.play_button);
-        createGameButtonParams.setMargins(0, buttonGap,0,0);
-        createGameButton.setLayoutParams(createGameButtonParams);
+        hostGameButton.setTextSize(TypedValue.COMPLEX_UNIT_PX,textHeight);
+        RelativeLayout.LayoutParams hostGameButtonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        hostGameButtonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        hostGameButtonParams.addRule(RelativeLayout.BELOW, R.id.play_button);
+        hostGameButtonParams.setMargins(0, buttonGap,0,0);
+        hostGameButton.setLayoutParams(hostGameButtonParams);
 
-        checkInvitesButton.setTextSize(TypedValue.COMPLEX_UNIT_PX,textHeight);
-        RelativeLayout.LayoutParams checkInvitesButtonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        checkInvitesButtonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        checkInvitesButtonParams.addRule(RelativeLayout.BELOW, R.id.create_game_button);
-        checkInvitesButtonParams.setMargins(0, buttonGap,0,0);
-        checkInvitesButton.setLayoutParams(checkInvitesButtonParams);
+        joinGameButton.setTextSize(TypedValue.COMPLEX_UNIT_PX,textHeight);
+        RelativeLayout.LayoutParams joinGameButtonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        joinGameButtonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        joinGameButtonParams.addRule(RelativeLayout.BELOW, R.id.host_game_button);
+        joinGameButtonParams.setMargins(0, buttonGap,0,0);
+        joinGameButton.setLayoutParams(joinGameButtonParams);
 
         aboutButton.setTextSize(TypedValue.COMPLEX_UNIT_PX,textHeight);
         RelativeLayout.LayoutParams aboutButtonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         aboutButtonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        aboutButtonParams.addRule(RelativeLayout.BELOW, R.id.check_invites_button);
+        aboutButtonParams.addRule(RelativeLayout.BELOW, R.id.join_game_button);
         aboutButtonParams.setMargins(0, buttonGap,0,0);
         aboutButton.setLayoutParams(aboutButtonParams);
 
@@ -353,57 +324,31 @@ public class MainActivity extends AppCompatActivity {
         achievementButtonParams.setMargins(0, 0,0,0);
         achievementsButton.setLayoutParams(achievementButtonParams);
 
-        settingsFile = new File(getApplicationContext().getFilesDir(),"settings.txt");
-        if(settingsFile.exists()) {
-            try{
-                fileReader = new FileInputStream(settingsFile);
-                bytes = new byte[(int)settingsFile.length()];
-                fileReader.read(bytes);
-                fileReader.close();
-                String contents = new String(bytes);
-                contentArray = contents.split(" ");
-            }
-            catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-        else {
-            try {
-                fileWriter = new FileOutputStream(settingsFile,false);
-                String contents = "FF303030 FF454545 FF696969 FF800000 FF000000 FFFFFFFF FF888888 FFFFFFFF";
-                contentArray = contents.split(" ");
-                fileWriter.write(contents.getBytes());
-                fileWriter.close();
-            }
-            catch (Exception e){
-                e.printStackTrace();
-            }
+        colorManager = ColorManager.getInstance(this);
 
-        }
-
-        knightButton.setBackgroundColor(Color.parseColor("#"+contentArray[0]));
-        knightButton.getDrawable().setColorFilter(Color.parseColor("#"+contentArray[7]),PorterDuff.Mode.MULTIPLY);
-        mainLayout.setBackgroundColor(Color.parseColor("#"+contentArray[0]));
-        mainTitle.setTextColor(Color.parseColor("#"+contentArray[7]));
-        mainSlogan.setTextColor(Color.parseColor("#"+contentArray[7]));
-        playButton.setTextColor(Color.parseColor("#"+contentArray[7]));
-        playButton.setBackgroundColor(Color.parseColor("#"+contentArray[3]));
-        createGameButton.setTextColor(Color.parseColor("#"+contentArray[7]));
-        createGameButton.setBackgroundColor(Color.parseColor("#"+contentArray[3]));
-        checkInvitesButton.setTextColor(Color.parseColor("#"+contentArray[7]));
-        checkInvitesButton.setBackgroundColor(Color.parseColor("#"+contentArray[3]));
-        aboutButton.setTextColor(Color.parseColor("#"+contentArray[7]));
-        aboutButton.setBackgroundColor(Color.parseColor("#"+contentArray[3]));
-        quitButton.setTextColor(Color.parseColor("#"+contentArray[7]));
-        quitButton.setBackgroundColor(Color.parseColor("#"+contentArray[3]));
-        settingsButton.setBackgroundColor(Color.parseColor("#"+contentArray[3]));
-        settingsButton.getDrawable().setColorFilter(Color.parseColor("#"+contentArray[7]),PorterDuff.Mode.MULTIPLY);
-        achievementsButton.setBackgroundColor(Color.parseColor("#"+contentArray[3]));
-        achievementsButton.getDrawable().setColorFilter(Color.parseColor("#"+contentArray[7]),PorterDuff.Mode.MULTIPLY);
+        knightButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BACKGROUND_COLOR));
+        knightButton.getDrawable().setColorFilter(colorManager.getColorFromFile(ColorManager.PIECE_COLOR), PorterDuff.Mode.MULTIPLY);
+        mainLayout.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BACKGROUND_COLOR));
+        mainTitle.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        mainSlogan.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        playButton.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        playButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
+        hostGameButton.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        hostGameButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
+        joinGameButton.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        joinGameButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
+        aboutButton.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        aboutButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
+        quitButton.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        quitButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
+        settingsButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
+        settingsButton.getDrawable().setColorFilter(colorManager.getColorFromFile(ColorManager.TEXT_COLOR),PorterDuff.Mode.MULTIPLY);
+        achievementsButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
+        achievementsButton.getDrawable().setColorFilter(colorManager.getColorFromFile(ColorManager.TEXT_COLOR),PorterDuff.Mode.MULTIPLY);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.parseColor("#"+contentArray[1]));
+            window.setStatusBarColor(colorManager.getColorFromFile(ColorManager.BAR_COLOR));
         }
     }
 
@@ -417,15 +362,20 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void createGameButtonClicked(View view)
+    public void hostGameButtonClicked(View view)
     {
         //TODO
+
+        Intent intent = new Intent(MainActivity.this,StartHostActivity.class);
+        startActivity(intent);
     }
 
-    public void checkInvitesButtonClicked(View view)
+    public void joinGameButtonClicked(View view)
     {
         //TODO
 
+        Intent intent = new Intent(MainActivity.this,StartClientActivity.class);
+        startActivity(intent);
     }
 
     public void aboutButtonClicked(View view){

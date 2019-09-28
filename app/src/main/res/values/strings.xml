@@ -41,4 +41,10 @@
     <string name="save_colors">Save Colors</string>
     <string name="text_color">Text Color:</string>
     <string name="settings_file">settings.txt</string>
+    <string name="BT_UUID">fc0ebdde–e425–4123–92a8–17bd8a90a769</string>
+    <string name="host_game">Host Game</string>
+    <string name="join_game">Join Game</string>
+    <string name="multiplayer_guide">If you haven\'t paired up with the device of your opponent, go into your device\'s settings and do so before you start connecting.</string>
+    <string name="knights_only">Knights only?</string>
+    <string name="start_host">Start Host</string>
 </resources>

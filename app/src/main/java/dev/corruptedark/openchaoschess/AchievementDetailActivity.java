@@ -21,11 +21,7 @@ public class AchievementDetailActivity extends AppCompatActivity {
 
     LinearLayout achievementDetailLayout;
 
-    File settingsFile;
-    InputStream fileReader;
-    OutputStream fileWriter;
-    byte[] bytes;
-    String[] contentArray;
+    ColorManager colorManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,41 +33,16 @@ public class AchievementDetailActivity extends AppCompatActivity {
         achievementDetailLayout = findViewById(R.id.achievement_detail_activity);
         descriptionView.setMovementMethod(new ScrollingMovementMethod());
 
-        settingsFile = new File(getApplicationContext().getFilesDir(),"settings.txt");
-        if(settingsFile.exists()) {
-            try{
-                fileReader = new FileInputStream(settingsFile);
-                bytes = new byte[(int)settingsFile.length()];
-                fileReader.read(bytes);
-                fileReader.close();
-                String contents = new String(bytes);
-                contentArray = contents.split(" ");
-            }
-            catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-        else {
-            try {
-                fileWriter = new FileOutputStream(settingsFile,false);
-                String contents = "FF303030 FF454545 FF696969 FF800000 FF000000 FFFFFFFF FF888888 FFFFFFFF";
-                contentArray = contents.split(" ");
-                fileWriter.write(contents.getBytes());
-                fileWriter.close();
-            }
-            catch (Exception e){
-                e.printStackTrace();
-            }
-        }
+        colorManager = ColorManager.getInstance(this);
 
-        achievementDetailLayout.setBackgroundColor(Color.parseColor("#"+ contentArray[0]));
+        achievementDetailLayout.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BACKGROUND_COLOR));
 
         String title = getIntent().getStringExtra("title");
         String description = getIntent().getStringExtra("description");
 
         titleView.setText(title);
-        titleView.setTextColor(Color.parseColor("#"+contentArray[7]));
+        titleView.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         descriptionView.setText(description);
-        descriptionView.setTextColor(Color.parseColor("#"+contentArray[7]));
+        descriptionView.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
     }
 }

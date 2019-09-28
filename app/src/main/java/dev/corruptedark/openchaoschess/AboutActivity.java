@@ -41,16 +41,13 @@ public class AboutActivity extends AppCompatActivity {
 
     Context context;
 
-    File settingsFile;
-    FileInputStream fileReader;
-    FileOutputStream fileWriter;
+    ColorManager colorManager;
+
     AchievementHandler achievementHandler = AchievementHandler.getInstance(this);
 
     private final int KNOCK = 13;
     private int knockCount = 0;
 
-    byte[] bytes;
-    String[] contentArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,34 +83,7 @@ public class AboutActivity extends AppCompatActivity {
             }
         });
 
-        settingsFile = new File(getApplicationContext().getFilesDir(), getString(R.string.settings_file));
-        if(settingsFile.exists()) {
-            try {
-                fileReader = new FileInputStream(settingsFile);
-                bytes = new byte[(int) settingsFile.length()];
-                fileReader.read(bytes);
-                fileReader.close();
-                String contents = new String(bytes);
-                //Toast.makeText(this,contents,Toast.LENGTH_LONG).show();
-                contentArray = contents.split(" ");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        else {
-            //Toast.makeText(this,"File did not exist",Toast.LENGTH_SHORT).show();
-            try {
-                fileWriter = new FileOutputStream(settingsFile,false);
-                String contents = "FF303030 FF454545 FF696969 FF800000 FF000000 FFFFFFFF FF888888 FFFFFFFF";
-                contentArray = contents.split(" ");
-                fileWriter.write(contents.getBytes());
-                fileWriter.close();
-            }
-            catch (Exception e){
-                e.printStackTrace();
-            }
-
-        }
+        colorManager = ColorManager.getInstance(this);
     }
 
     @Override
@@ -137,20 +107,20 @@ public class AboutActivity extends AppCompatActivity {
         iconParams.setMargins(0, buttonGap,0,buttonGap);
         aboutImage.setLayoutParams(iconParams);
 
-        toolbar.setTitleTextColor(Color.parseColor("#" + contentArray[7]));
-        toolbar.setBackgroundColor(Color.parseColor("#" + contentArray[2]));
-        aboutLayout.setBackgroundColor(Color.parseColor("#"+contentArray[0]));
-        aboutTitle.setTextColor(Color.parseColor("#" + contentArray[7]));
-        aboutCredits.setTextColor(Color.parseColor("#" + contentArray[7]));
-        aboutDescript.setTextColor(Color.parseColor("#" + contentArray[7]));
-        aboutContact.setTextColor(Color.parseColor("#" + contentArray[7]));
-        aboutContact.setLinkTextColor(Color.parseColor("#" + contentArray[7]));
-        aboutContact.setHighlightColor(Color.parseColor("#55" + contentArray[3].substring(2,8)));
+        toolbar.setTitleTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        toolbar.setBackgroundColor(colorManager.getColorFromFile(ColorManager.SECONDARY_COLOR));
+        aboutLayout.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BACKGROUND_COLOR));
+        aboutTitle.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        aboutCredits.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        aboutDescript.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        aboutContact.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        aboutContact.setLinkTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        aboutContact.setHighlightColor(colorManager.getColorFromFile(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1)));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.parseColor("#"+contentArray[1]));
+            window.setStatusBarColor(colorManager.getColorFromFile(ColorManager.BAR_COLOR));
         }
     }
 
