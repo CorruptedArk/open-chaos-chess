@@ -146,7 +146,7 @@ public class SettingsActivity extends AppCompatActivity {
         String contents = String.format("%s %s %s %s %s %s %s %s",getColorString(backgroundColorButton), getColorString(barColorButton), getColorString(secondaryColorButton), getColorString(boardColor1Button), getColorString(boardColor2Button), getColorString(pieceColorButton), getColorString(selectionColorButton), getColorString(textColorButton));
         colorManager.updateColor(ColorManager.BACKGROUND_COLOR, getColorInt(backgroundColorButton));
         colorManager.updateColor(ColorManager.BAR_COLOR, getColorInt(barColorButton));
-        colorManager.updateColor(ColorManager.SECONDARY_COLOR, getColorInt(saveColorButton));
+        colorManager.updateColor(ColorManager.SECONDARY_COLOR, getColorInt(secondaryColorButton));
         colorManager.updateColor(ColorManager.BOARD_COLOR_1, getColorInt(boardColor1Button));
         colorManager.updateColor(ColorManager.BOARD_COLOR_2, getColorInt(boardColor2Button));
         colorManager.updateColor(ColorManager.PIECE_COLOR, getColorInt(pieceColorButton));

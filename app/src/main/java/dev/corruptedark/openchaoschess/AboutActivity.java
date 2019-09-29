@@ -115,7 +115,7 @@ public class AboutActivity extends AppCompatActivity {
         aboutDescript.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         aboutContact.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         aboutContact.setLinkTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
-        aboutContact.setHighlightColor(colorManager.getColorFromFile(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1)));
+        aboutContact.setHighlightColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
