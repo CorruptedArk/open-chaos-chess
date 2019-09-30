@@ -9,13 +9,13 @@ import android.content.res.Resources;
 import android.util.Log;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.nio.file.attribute.AttributeView;
 import java.util.UUID;
 
 public class StartHostThread extends Thread {
 
     private final BluetoothServerSocket serverSocket;
-    private BluetoothAdapter adapter;
     private final String NAME = "Chaos Chess";
     private final String TAG = "Start Host Thread";
     private Activity callingActivity;
@@ -25,22 +25,39 @@ public class StartHostThread extends Thread {
     {
         MultiPlayerService multiPlayerService = new MultiPlayerService(socket);
 
+        /*while(!multiPlayerService.hasNewMessage())
+        {
+            multiPlayerService.sendData("knightsOnly:" + String.valueOf(knightsOnly));
+            try
+            {
+                Thread.sleep(500);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+
+        }
+        multiPlayerService.getMostRecentData();*/
+
         multiPlayerService.sendData("knightsOnly:" + String.valueOf(knightsOnly));
 
-        GameConnectionHandler.setMultiPlayerService(multiPlayerService, callingActivity, knightsOnly);
+        GameConnectionHandler.setMultiPlayerService(multiPlayerService, callingActivity, knightsOnly, true);
     }
 
     public StartHostThread(Activity callingActivity, BluetoothAdapter adapter, boolean knightsOnly)
     {
         this.knightsOnly = knightsOnly;
 
-        this.adapter = adapter;
-
         this.callingActivity = callingActivity;
 
         Resources resources = callingActivity.getResources();
 
-        UUID uuid = UUID.fromString(resources.getString(R.string.BT_UUID));
+        String uuidString = resources.getString(R.string.BT_UUID);
+        String cleanUuidString = uuidString.replace("–","");
+        UUID uuid = new UUID(
+                new BigInteger(cleanUuidString.substring(0, 16), 16).longValue(),
+                new BigInteger(cleanUuidString.substring(16), 16).longValue());
 
         BluetoothServerSocket tempSocket = null;
         try {

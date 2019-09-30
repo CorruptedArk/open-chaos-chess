@@ -55,6 +55,8 @@ public class MultiPlayerBoard extends AppCompatActivity {
 
     ColorManager colorManager;
 
+    MultiPlayerService multiPlayerService;
+
     int boardColor1;
     int boardColor2;
     int selectColor;
@@ -139,6 +141,15 @@ public class MultiPlayerBoard extends AppCompatActivity {
                     board[i][ j] = new Square(this,pieceColor);
             startNewGame(getIntent().getBooleanExtra("knightsOnly",false));
             multiGame.newGame();
+            boolean isHost = getIntent().getBooleanExtra("isHost",false);
+            if(isHost)
+            {
+                multiGame.setTurn(YOU);
+            }
+            else
+            {
+                multiGame.setTurn(OPPONENT);
+            }
         }
 
         yourPointLabel.setText(getResources().getText(R.string.your_points).toString()+ " " + multiGame.getYourPoints());
@@ -710,18 +721,62 @@ public class MultiPlayerBoard extends AppCompatActivity {
 
     }
 
-    @SuppressWarnings("unchecked")
+
     synchronized void moveOpponent() {
         //TODO
 
+        multiPlayerService = GameConnectionHandler.getMultiPlayerService();
 
+        Thread opponentThread = new Thread(){
+            @Override
+            public void run() {
+                super.run();
+
+                while(!multiPlayerService.hasNewMessage());
+
+                String recieved = multiPlayerService.getMostRecentData();
+
+                String[] recievedPieces = recieved.split(",");
+
+                final int startI = boardSize - 1 - Integer.parseInt(recievedPieces[0]);
+                final int startJ = boardSize - 1 - Integer.parseInt(recievedPieces[1]);
+                final int endI = boardSize - 1 - Integer.parseInt(recievedPieces[2]);
+                final int endJ = boardSize - 1 - Integer.parseInt(recievedPieces[3]);
+
+                final Square startSquare = board[startI][startJ];
+                final Square endSquare = board[endI][endJ];
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        if(endSquare.getTeam() == YOU)
+                        {
+                            multiGame.incrementOpponentPoints();
+                        }
+
+                        endSquare.setTeam(OPPONENT);
+                        endSquare.setPiece(startSquare.getPiece());
+                        endSquare.setPieceCount(startSquare.getPieceCount()+1);
+                        startSquare.setPieceCount(0);
+                        startSquare.setTeam(NONE);
+                        startSquare.setPiece(" ");
+                    }
+                });
+            }
+        };
+
+        opponentThread.run();
     }
 
-    synchronized void sendYourMove(Square selected, Square destination)
-    {
+    synchronized void sendYourMove(Square selected, Square destination) {
         //TODO
 
+        multiPlayerService = GameConnectionHandler.getMultiPlayerService();
 
+        String data = selected.getI() + "," + selected.getJ() + "," + destination.getI() + "," + destination.getJ();
+
+        multiPlayerService.sendData(data);
     }
 
     void drawBoard(boolean knightsOnly, int size)

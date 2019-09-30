@@ -27,6 +27,7 @@ public class MultiPlayerService {
     public MultiPlayerService(BluetoothSocket connectedSocket) {
         handler = new ServiceHandler();
         connectedThread = new ConnectedThread(connectedSocket);
+        connectedThread.run();
     }
 
     public synchronized void sendData(String data)
@@ -93,7 +94,8 @@ public class MultiPlayerService {
                 case Constants.WRITE:
                     byte[] writeBuffer = (byte[]) message.obj;
 
-                    lastSent = new String(writeBuffer);
+                    if(writeBuffer != null)
+                        lastSent = new String(writeBuffer);
                     break;
                 case Constants.ERROR:
                     newError = true;

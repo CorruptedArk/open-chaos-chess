@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import java.io.File;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 
 public class AchievementsActivity extends AppCompatActivity {
 
+    LinearLayout achievementsLayout;
     ListView achievementListView;
     AchievementAdapter achievementAdapter;
     Toolbar toolbar;
@@ -35,6 +37,7 @@ public class AchievementsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_achievements);
 
+        achievementsLayout = findViewById(R.id.achievements_activity);
         toolbar = (Toolbar) findViewById(R.id.achievement_toolbar);
         toolbar.setTitle("Achievements");
         setSupportActionBar(toolbar);
@@ -42,6 +45,8 @@ public class AchievementsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         colorManager = ColorManager.getInstance(this);
+
+        achievementsLayout.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BACKGROUND_COLOR));
 
         toolbar.setTitleTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         toolbar.setBackgroundColor(colorManager.getColorFromFile(ColorManager.SECONDARY_COLOR));

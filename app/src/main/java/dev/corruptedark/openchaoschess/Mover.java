@@ -111,7 +111,7 @@ public class Mover {
                             destination.setPieceCount(square.getPieceCount() + 1);
                             square.setPieceCount(0);
                             square.setPiece(" ");
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             moveSuccess = true;
                         }
                     }
@@ -135,7 +135,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount()+ 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -164,7 +164,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount()+ 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -253,7 +253,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount() + 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -294,7 +294,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount() + 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -335,7 +335,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount() + 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -376,7 +376,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount() + 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -461,7 +461,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount()+ 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -509,7 +509,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount()+ 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -557,7 +557,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount()+ 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -605,7 +605,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount()+ 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -675,7 +675,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount()+ 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -704,7 +704,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount()+ 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -733,7 +733,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount()+ 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -762,7 +762,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount()+ 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -791,7 +791,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount()+ 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -820,7 +820,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount()+ 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -849,7 +849,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount()+ 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -878,7 +878,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount()+ 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -966,7 +966,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount()+ 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -1012,7 +1012,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount()+ 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -1059,7 +1059,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount()+ 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -1105,7 +1105,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount()+ 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -1188,7 +1188,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount()+ 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -1234,7 +1234,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount()+ 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -1281,7 +1281,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount()+ 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -1327,7 +1327,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount()+ 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -2487,7 +2487,7 @@ public class Mover {
             destination.setPiece(square.getPiece());
             destination.setPieceCount(square.getPieceCount() + 1);
             square.setPieceCount(0);
-            square.setTeam(0);
+            square.setTeam(NONE);
             square.setPiece(" ");
 
             if(destination.getPiece() == "P" && destination.getJ() == 7 && destination.getTeam() == OPPONENT)
@@ -2583,7 +2583,7 @@ public class Mover {
                             destination.setPieceCount(square.getPieceCount() + 1);
                             square.setPieceCount(0);
                             square.setPiece(" ");
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             moveSuccess = true;
                         }
                     }
@@ -2607,7 +2607,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount()+ 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -2636,7 +2636,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount()+ 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -2726,7 +2726,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount() + 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -2767,7 +2767,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount() + 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -2808,7 +2808,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount() + 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -2849,7 +2849,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount() + 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -2935,7 +2935,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount()+ 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -2983,7 +2983,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount()+ 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -3031,7 +3031,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount()+ 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -3079,7 +3079,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount()+ 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -3149,7 +3149,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount()+ 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -3178,7 +3178,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount()+ 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -3207,7 +3207,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount()+ 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -3236,7 +3236,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount()+ 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -3265,7 +3265,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount()+ 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -3294,7 +3294,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount()+ 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -3323,7 +3323,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount()+ 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -3352,7 +3352,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount()+ 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -3441,7 +3441,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount()+ 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -3487,7 +3487,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount()+ 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -3534,7 +3534,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount()+ 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -3580,7 +3580,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount()+ 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -3664,7 +3664,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount()+ 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -3710,7 +3710,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount()+ 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -3757,7 +3757,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount()+ 1);
                             square.setPieceCount(0);
-                            square.setTeam(0);
+                            square.setTeam(NONE);
                             square.setPiece(" ");
                             moveSuccess = true;
                         }
@@ -3803,7 +3803,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount()+ 1);
                             square.setPieceCount(0);
-                        square.setTeam(0);
+                        square.setTeam(NONE);
                         square.setPiece(" ");
                         moveSuccess = true;
                     }

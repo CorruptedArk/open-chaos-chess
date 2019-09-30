@@ -9,13 +9,13 @@ import android.content.res.Resources;
 import android.util.Log;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.Calendar;
 import java.util.UUID;
 
 public class StartClientThread extends Thread {
 
     private final BluetoothSocket socket;
-    private final BluetoothDevice hostDevice;
     private final String TAG = "Start Client Thread";
     private BluetoothAdapter adapter;
     private Activity callingActivity;
@@ -24,7 +24,18 @@ public class StartClientThread extends Thread {
     {
         MultiPlayerService multiPlayerService = new MultiPlayerService(socket);
 
-        while (!multiPlayerService.hasNewMessage());
+        while (!multiPlayerService.hasNewMessage())
+        {
+            try {
+                Thread.sleep(500);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+        //multiPlayerService.sendData("We good fam");
 
         String knightsOnlyString = multiPlayerService.getMostRecentData();
 
@@ -32,17 +43,21 @@ public class StartClientThread extends Thread {
 
         boolean knightsOnly = Boolean.parseBoolean(response);
 
-        GameConnectionHandler.setMultiPlayerService(multiPlayerService, callingActivity, knightsOnly);
+        GameConnectionHandler.setMultiPlayerService(multiPlayerService, callingActivity, knightsOnly, false);
     }
 
     StartClientThread(BluetoothDevice device, Activity callingActivity, BluetoothAdapter adapter) {
         this.adapter = adapter;
         this.callingActivity = callingActivity;
         BluetoothSocket tempSocket = null;
-        hostDevice = device;
+
         Resources resources = callingActivity.getResources();
 
-        UUID uuid = UUID.fromString(resources.getString(R.string.BT_UUID));
+        String uuidString = resources.getString(R.string.BT_UUID);
+        String cleanUuidString = uuidString.replace("–","");
+        UUID uuid = new UUID(
+                new BigInteger(cleanUuidString.substring(0, 16), 16).longValue(),
+                new BigInteger(cleanUuidString.substring(16), 16).longValue());
 
         try {
             tempSocket = device.createRfcommSocketToServiceRecord(uuid);
