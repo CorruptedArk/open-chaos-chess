@@ -75,7 +75,7 @@ public class GameConnectionHandler {
         {
             Set<BluetoothDevice> pairedDevices = adapter.getBondedDevices();
 
-            String uuidString = callingActivity.getString(R.string.BT_UUID);
+            /*String uuidString = callingActivity.getString(R.string.BT_UUID);
             String cleanUuidString = uuidString.replace("–","");
             UUID uuid = new UUID(
                     new BigInteger(cleanUuidString.substring(0, 16), 16).longValue(),
@@ -85,6 +85,7 @@ public class GameConnectionHandler {
             {
                 boolean hasUuid = false;
 
+
                 for(int i = 0; i < device.getUuids().length && !hasUuid; i++)
                 {
                    hasUuid = device.getUuids()[i].getUuid().equals(uuid);
@@ -92,7 +93,7 @@ public class GameConnectionHandler {
                    if(hasUuid)
                        devices.add(device);
                 }
-            }
+            }*/
 
             devices.addAll(pairedDevices);
         }
@@ -104,14 +105,14 @@ public class GameConnectionHandler {
     {
         isHost = false;
         StartClientThread startClientThread = new StartClientThread(device, callingActivity, adapter);
-        startClientThread.run();
+        startClientThread.start();
     }
 
     public void startHost(boolean knightsOnly)
     {
         isHost = true;
         StartHostThread startHostThread = new StartHostThread(callingActivity, adapter, knightsOnly);
-        startHostThread.run();
+        startHostThread.start();
     }
 
     public static void setMultiPlayerService(MultiPlayerService service, Activity callingActivity, boolean knightsOnly, boolean isHost)

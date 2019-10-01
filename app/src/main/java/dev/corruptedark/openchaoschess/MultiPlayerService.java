@@ -3,6 +3,7 @@ package dev.corruptedark.openchaoschess;
 import android.bluetooth.BluetoothSocket;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 
@@ -27,7 +28,7 @@ public class MultiPlayerService {
     public MultiPlayerService(BluetoothSocket connectedSocket) {
         handler = new ServiceHandler();
         connectedThread = new ConnectedThread(connectedSocket);
-        connectedThread.run();
+        connectedThread.start();
     }
 
     public synchronized void sendData(String data)
@@ -112,7 +113,8 @@ public class MultiPlayerService {
         private final BluetoothSocket connectedSocket;
         private final InputStream inStream;
         private final OutputStream outStream;
-        private byte[] buffer;
+        private volatile byte[] inBuffer;
+        private volatile byte[] outBuffer;
 
         public ConnectedThread(BluetoothSocket socket) {
             connectedSocket = socket;
@@ -139,29 +141,38 @@ public class MultiPlayerService {
         }
 
         public void run() {
-            buffer = new byte[BUFFER_SIZE];
-            int bytesReturned;
+            Looper.prepare();
+            inBuffer = new byte[BUFFER_SIZE];
+            //outBuffer = new byte[BUFFER_SIZE];
+
+            int inBytesReturned;
+            //int outBytesReturned;
 
             while (true) {
                 try {
-                    bytesReturned = inStream.read(buffer);
+                    inBytesReturned = inStream.read(inBuffer);
 
-                    Message inMessage = handler.obtainMessage(Constants.READ, bytesReturned, -1, buffer);
+                    Message inMessage = handler.obtainMessage(Constants.READ, inBytesReturned, -1, inBuffer);
                     inMessage.sendToTarget();
+                    handler.handleMessage(inMessage);
                 }
                 catch (IOException e) {
+                    e.printStackTrace();
                     Log.e(TAG, "Input stream disconnected", e);
+                    //cancel();
                     break;
                 }
             }
         }
 
-        public void write(byte[] bytes) {
+        public synchronized void write(byte[] bytes) {
             try {
+
                 outStream.write(bytes);
 
-                Message outMessage = handler.obtainMessage(Constants.WRITE, -1, -1, buffer);
+                Message outMessage = handler.obtainMessage(Constants.WRITE, -1, -1, bytes);
                 outMessage.sendToTarget();
+                handler.handleMessage(outMessage);
             }
             catch (IOException e) {
                 Log.e(TAG, "Sending data failed", e);

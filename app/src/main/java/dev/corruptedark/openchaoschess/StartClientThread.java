@@ -6,7 +6,9 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.Looper;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -26,6 +28,8 @@ public class StartClientThread extends Thread {
 
         while (!multiPlayerService.hasNewMessage())
         {
+            Log.v(TAG, "Waiting for message");
+
             try {
                 Thread.sleep(500);
             }
@@ -35,6 +39,7 @@ public class StartClientThread extends Thread {
             }
         }
 
+        Log.v(TAG, "Connected");
         //multiPlayerService.sendData("We good fam");
 
         String knightsOnlyString = multiPlayerService.getMostRecentData();
@@ -42,6 +47,8 @@ public class StartClientThread extends Thread {
         String response = knightsOnlyString.split(":")[1];
 
         boolean knightsOnly = Boolean.parseBoolean(response);
+
+        Toast.makeText(callingActivity, "Starting Service", Toast.LENGTH_LONG).show();
 
         GameConnectionHandler.setMultiPlayerService(multiPlayerService, callingActivity, knightsOnly, false);
     }
@@ -70,15 +77,19 @@ public class StartClientThread extends Thread {
     }
 
     public void run() {
+        Looper.prepare();
         adapter.cancelDiscovery();
 
         try {
+            Log.v(TAG, "Trying to connect");
             socket.connect();
         }
         catch (IOException e) {
+            e.printStackTrace();
             cancel();
             return;
         }
+
 
         manageConnectedSocket(socket);
     }

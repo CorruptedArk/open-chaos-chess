@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.Gravity;
@@ -35,6 +36,8 @@ public class MultiPlayerBoard extends AppCompatActivity {
     public final int YOU = -1;
     public final int OPPONENT = 1;
     public final int NONE = 0;
+    
+    public final String TAG = "Multiplayer Board";
 
 
     int boardSize, squareSize, xPosition, yPosition;
@@ -278,6 +281,11 @@ public class MultiPlayerBoard extends AppCompatActivity {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(colorManager.getColorFromFile(ColorManager.BAR_COLOR));
+        }
+
+        if(multiGame.getTurn() == OPPONENT)
+        {
+            moveOpponent();
         }
     }
 
@@ -617,12 +625,6 @@ public class MultiPlayerBoard extends AppCompatActivity {
                     }
                     if (multiGame.getCanOpponentMove(mover, board))
                         moveOpponent();
-                    opponentPointLabel.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            opponentPointLabel.setText(getResources().getText(R.string.opponent_points).toString() + " " + multiGame.getOpponentPoints());
-                        }
-                    });
                 }  while(!multiGame.getCanYouMove(mover,board) && multiGame.getCanOpponentMove(mover,board) && multiGame.getYourCount() > 0);
 
                 if (multiGame.getYourCount() == 0)
@@ -732,41 +734,85 @@ public class MultiPlayerBoard extends AppCompatActivity {
             public void run() {
                 super.run();
 
-                while(!multiPlayerService.hasNewMessage());
+                thatSucksLabel.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        thatSucksLabel.setVisibility(View.INVISIBLE);
+                    }
+                });
+                noiceLabel.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        noiceLabel.setVisibility(View.INVISIBLE);
+                    }
+                });
 
-                String recieved = multiPlayerService.getMostRecentData();
+                while(!multiPlayerService.hasNewMessage())
+                {
+                    Log.v(TAG,"Waiting for move");
 
-                String[] recievedPieces = recieved.split(",");
+                    try
+                    {
+                        Thread.sleep(500);
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
 
-                final int startI = boardSize - 1 - Integer.parseInt(recievedPieces[0]);
-                final int startJ = boardSize - 1 - Integer.parseInt(recievedPieces[1]);
-                final int endI = boardSize - 1 - Integer.parseInt(recievedPieces[2]);
-                final int endJ = boardSize - 1 - Integer.parseInt(recievedPieces[3]);
+                String received = multiPlayerService.getMostRecentData();
+
+                String[] receivedPieces = received.split(",");
+
+                final int startI = Integer.parseInt(receivedPieces[0]);
+                final int startJ = boardSize - 1 -Integer.parseInt(receivedPieces[1]);
+                final int endI = Integer.parseInt(receivedPieces[2]);
+                final int endJ = boardSize - 1 - Integer.parseInt(receivedPieces[3]);
 
                 final Square startSquare = board[startI][startJ];
                 final Square endSquare = board[endI][endJ];
+                final int endSquareTeam = endSquare.getTeam();
 
-                runOnUiThread(new Runnable() {
+                        runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-
-                        if(endSquare.getTeam() == YOU)
-                        {
-                            multiGame.incrementOpponentPoints();
-                        }
-
                         endSquare.setTeam(OPPONENT);
-                        endSquare.setPiece(startSquare.getPiece());
+                        if(startSquare.getPiece() == "P" && endJ == 7)
+                        {
+                            endSquare.setPiece("Q");
+                        }
+                        else
+                        {
+                            endSquare.setPiece(startSquare.getPiece());
+                        }
                         endSquare.setPieceCount(startSquare.getPieceCount()+1);
                         startSquare.setPieceCount(0);
                         startSquare.setTeam(NONE);
                         startSquare.setPiece(" ");
+
+                        multiGame.setTurn(YOU);
+
+                        if(endSquareTeam == YOU)
+                        {
+                            multiGame.incrementOpponentPoints();
+                            thatSucksLabel.setVisibility(View.VISIBLE);
+                            noiceLabel.setVisibility(View.INVISIBLE);
+                        }
+                        else
+                        {
+                            thatSucksLabel.setVisibility(View.INVISIBLE);
+                        }
+
+                        opponentPointLabel.setText(getResources().getText(R.string.opponent_points).toString() + " " + multiGame.getOpponentPoints());
+
+                        boardLayout.invalidate();
                     }
                 });
             }
         };
 
-        opponentThread.run();
+        opponentThread.start();
     }
 
     synchronized void sendYourMove(Square selected, Square destination) {
@@ -777,6 +823,8 @@ public class MultiPlayerBoard extends AppCompatActivity {
         String data = selected.getI() + "," + selected.getJ() + "," + destination.getI() + "," + destination.getJ();
 
         multiPlayerService.sendData(data);
+
+        Log.v(TAG, "Sent move");
     }
 
     void drawBoard(boolean knightsOnly, int size)
