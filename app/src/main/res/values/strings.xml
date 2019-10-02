@@ -47,5 +47,7 @@
     <string name="multiplayer_guide">If you haven\'t paired up with the device of your opponent, go into your device\'s settings and do so before you start connecting.</string>
     <string name="knights_only">Knights only?</string>
     <string name="start_host">Start Host</string>
+    <string name="stop_host">Stop Host</string>
     <string name="paired_devices">Paired Devices:</string>
+    <string name="host_status">Host status:</string>
 </resources>

@@ -31,7 +31,7 @@ public class MultiGame {
         yourPoints = 0;
         opponentPoints = 0;
         moveCount = 0;
-        turn = YOU;
+        turn = NONE;
         gameCount = 0;
     }
 
@@ -45,12 +45,24 @@ public class MultiGame {
         return instance;
     }
 
-    public void newGame(){
+    public void newGame(boolean isHost){
         yourPoints = 0;
         opponentPoints = 0;
         moveCount = 0;
-        turn = YOU;
+
+        if(isHost)
+        {
+            turn = YOU;
+        }
+        else{
+            turn = OPPONENT;
+        }
+
         gameCount++;
+    }
+
+    public void resetGames(){
+        gameCount = 0;
     }
 
     public int getYourPoints(){
@@ -63,6 +75,10 @@ public class MultiGame {
 
     public void incrementYourPoints(){
         yourPoints++;
+        if(yourPoints >= 16)
+        {
+            turn = NONE;
+        }
     }
 
 
@@ -76,6 +92,10 @@ public class MultiGame {
 
     public void incrementOpponentPoints(){
         opponentPoints++;
+        if(opponentPoints >= 16)
+        {
+            turn = NONE;
+        }
     }
 
 
@@ -195,19 +215,19 @@ public class MultiGame {
         return  movablePieces;
     }
 
-    public void saveBoard(Square[][] board){
+    /*public void saveBoard(Square[][] board){
         boardStatic = board;
         hasBoard = true;
-    }
+    }*/
 
-    public Square[][] restoreBoard(){
+    /*public Square[][] restoreBoard(){
         hasBoard = false;
         return boardStatic;
-    }
+    }*/
 
-    public boolean hasBoard(){
+    /*public boolean hasBoard(){
         return hasBoard;
-    }
+    }*/
 
 
 }

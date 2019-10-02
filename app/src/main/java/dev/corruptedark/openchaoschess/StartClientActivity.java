@@ -6,12 +6,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -49,6 +51,7 @@ public class StartClientActivity extends AppCompatActivity {
         gameConnectionHandler = new GameConnectionHandler();
         gameConnectionHandler.startBluetooth(this);
 
+        pairedDevicesListView.setSelector(new ColorDrawable(colorManager.getColorFromFile(ColorManager.SELECTION_COLOR)));
         if(gameConnectionHandler.bluetoothIsOn())
         {
             ArrayList<BluetoothDevice> bluetoothDevices = gameConnectionHandler.getAndListPairedDevices(this);
@@ -59,7 +62,7 @@ public class StartClientActivity extends AppCompatActivity {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     BluetoothDevice device = deviceAdapter.getItem(position);
 
-                    gameConnectionHandler.connectToHost(device);
+                    connectToHost(device);
                 }
             });
         }
@@ -67,7 +70,22 @@ public class StartClientActivity extends AppCompatActivity {
 
 
     public void connectToHost(BluetoothDevice device) {
+        Toast.makeText(this, "Starting connection to host", Toast.LENGTH_SHORT).show();
         gameConnectionHandler.connectToHost(device);
+    }
+
+    public void stopClient()
+    {
+        Toast.makeText(this, "Stopping client", Toast.LENGTH_SHORT).show();
+        gameConnectionHandler.stopClient();
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        gameConnectionHandler.stopClient();
+
+        super.onBackPressed();
     }
 
     @Override

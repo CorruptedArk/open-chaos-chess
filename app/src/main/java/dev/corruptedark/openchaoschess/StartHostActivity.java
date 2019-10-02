@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,6 +30,7 @@ public class StartHostActivity extends AppCompatActivity {
     private TextView hostStatusLabel;
     private AppCompatCheckBox knightsOnlyCheckBox;
     private Button startHostButton;
+    private Button stopHostButton;
 
     private ColorManager colorManager;
 
@@ -45,6 +47,7 @@ public class StartHostActivity extends AppCompatActivity {
         hostStatusLabel = findViewById(R.id.host_status);
         knightsOnlyCheckBox = findViewById(R.id.knights_only_checkbox);
         startHostButton = findViewById(R.id.start_host_button);
+        stopHostButton = findViewById(R.id.stop_host_button);
 
         colorManager = ColorManager.getInstance(this);
 
@@ -67,14 +70,42 @@ public class StartHostActivity extends AppCompatActivity {
         CompoundButtonCompat.setButtonTintList(knightsOnlyCheckBox, colorStateList);
 
         startHostButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
+        stopHostButton.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        stopHostButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
+        stopHostButton.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
 
         gameConnectionHandler = new GameConnectionHandler();
         gameConnectionHandler.startBluetooth(this);
+        hostStatusLabel.setText(getString(R.string.host_status) + " " + gameConnectionHandler.getHostStatus());
     }
 
     public void startHosting(View view)
     {
+        Toast.makeText(this,"Starting host", Toast.LENGTH_SHORT).show();
         gameConnectionHandler.startHost(knightsOnlyCheckBox.isChecked());
+        hostStatusLabel.setText(getString(R.string.host_status) + " " + gameConnectionHandler.getHostStatus());
+    }
+
+
+    public void stopHosting(View view)
+    {
+        Toast.makeText(this,"Stopping host", Toast.LENGTH_SHORT).show();
+        gameConnectionHandler.stopHost();
+        hostStatusLabel.setText(getString(R.string.host_status) + " " + gameConnectionHandler.getHostStatus());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        hostStatusLabel.setText(getString(R.string.host_status) + " " + gameConnectionHandler.getHostStatus());
+    }
+
+    @Override
+    public void onBackPressed() {
+        stopHosting(hostLayout);
+
+        super.onBackPressed();
     }
 
     @Override

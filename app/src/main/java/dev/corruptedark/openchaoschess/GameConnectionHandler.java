@@ -24,9 +24,14 @@ public class GameConnectionHandler {
     public static final int REQUEST_ENABLE_BT = 69;
     private Activity callingActivity;
 
-    private boolean isHost = false;
+
+    public final String RUNNING = "running";
+    public final String NOT_RUNNING = "not running";
 
     private static MultiPlayerService multiPlayerService = null;
+
+    private StartHostThread startHostThread;
+    private StartClientThread startClientThread;
 
     /**
      * Opens a request to start bluetooth if bluetooth is supported.
@@ -103,16 +108,39 @@ public class GameConnectionHandler {
 
     public void connectToHost(BluetoothDevice device)
     {
-        isHost = false;
-        StartClientThread startClientThread = new StartClientThread(device, callingActivity, adapter);
-        startClientThread.start();
+        if(startClientThread == null || !startClientThread.isAlive()) {
+            startClientThread = new StartClientThread(device, callingActivity, adapter);
+            startClientThread.start();
+        }
+        else
+        {
+            startClientThread.cancel();
+            startClientThread = new StartClientThread(device, callingActivity, adapter);
+            startClientThread.start();
+        }
     }
 
     public void startHost(boolean knightsOnly)
     {
-        isHost = true;
-        StartHostThread startHostThread = new StartHostThread(callingActivity, adapter, knightsOnly);
-        startHostThread.start();
+        if(startHostThread == null || !startHostThread.isAlive()) {
+            startHostThread = new StartHostThread(callingActivity, adapter, knightsOnly);
+            startHostThread.start();
+        }
+    }
+
+    public void stopHost()
+    {
+        if(startHostThread != null)
+        {
+            startHostThread.cancel();
+        }
+    }
+
+    public void stopClient()
+    {
+        if(startClientThread != null){
+            startClientThread.cancel();
+        }
     }
 
     public static void setMultiPlayerService(MultiPlayerService service, Activity callingActivity, boolean knightsOnly, boolean isHost)
@@ -133,9 +161,28 @@ public class GameConnectionHandler {
         return adapter != null && adapter.isEnabled();
     }
 
+    public String getHostStatus()
+    {
+        String status;
+
+        if(startHostThread != null && startHostThread.isAlive())
+        {
+            status = RUNNING;
+        }
+        else
+        {
+            status = NOT_RUNNING;
+        }
+
+        return status;
+    }
+
+
     public static MultiPlayerService getMultiPlayerService()
     {
         return multiPlayerService;
     }
+
+
 
 }

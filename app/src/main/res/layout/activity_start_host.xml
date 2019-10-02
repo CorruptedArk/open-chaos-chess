@@ -21,6 +21,7 @@
     <TextView
         android:id="@+id/host_status"
         android:textSize="25sp"
+        android:text="@string/host_status"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"/>
@@ -43,6 +44,15 @@
         android:layout_height="wrap_content"
         android:text="@string/start_host"
         android:onClick="startHosting"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"/>
+
+    <Button
+        android:id="@+id/stop_host_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/stop_host"
+        android:onClick="stopHosting"
         android:layout_gravity="center"
         android:layout_margin="10dp"/>
 

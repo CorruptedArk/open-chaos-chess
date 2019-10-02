@@ -53,6 +53,10 @@ public class MultiPlayerService {
         return handler.hasNewError();
     }
 
+    public synchronized void cancel(){
+        connectedThread.cancel();
+    }
+
     static class ServiceHandler extends Handler {
         private String lastSent = null;
         private String lastReceived = null;
