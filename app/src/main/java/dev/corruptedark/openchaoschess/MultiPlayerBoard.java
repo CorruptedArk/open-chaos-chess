@@ -46,6 +46,9 @@ public class MultiPlayerBoard extends AppCompatActivity {
     public final String NEW_GAME = "New Game?";
     public final String YES = "Yes";
     public final String NO = "No";
+    public final String TIE = "Tie";
+    public final String LOSS = "Loss";
+    public final String WIN = "Win";
     
     public final String TAG = "Multiplayer Board";
 
@@ -467,6 +470,21 @@ public class MultiPlayerBoard extends AppCompatActivity {
             multiPlayerService.cancel();
         }
 
+        if(moveOpponentThread != null)
+        {
+            moveOpponentThread.interrupt();
+        }
+
+        if(newGameRequestThread != null)
+        {
+            newGameRequestThread.interrupt();
+        }
+
+        if(newGameListenerThread != null)
+        {
+            newGameListenerThread.interrupt();
+        }
+
         Toast.makeText(this,"Connection ended", Toast.LENGTH_LONG).show();
 
         this.finish();
@@ -502,17 +520,27 @@ public class MultiPlayerBoard extends AppCompatActivity {
                 @Override
                 public void run() {
                     super.run();
+                    Looper.prepare();
 
+                    multiPlayerService = GameConnectionHandler.getMultiPlayerService();
                     multiPlayerService.sendData(NEW_GAME);
+
 
                     Toast.makeText(MultiPlayerBoard.this, "New game requested", Toast.LENGTH_LONG).show();
 
-                    while (!multiPlayerService.hasNewMessage()) {
+
+                    while (!multiPlayerService.hasNewMessage() && !isInterrupted()) {
+                        Log.v(TAG,"Waiting for new game response");
                         try {
                             Thread.sleep(500);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
+                    }
+
+                    if(isInterrupted())
+                    {
+                        return;
                     }
 
                     if (multiPlayerService.getMostRecentData().equals(YES)) {
@@ -528,7 +556,12 @@ public class MultiPlayerBoard extends AppCompatActivity {
                                 thatSucksLabel.setVisibility(View.INVISIBLE);
                                 noiceLabel.setVisibility(View.INVISIBLE);
 
-                                while (moveThread != null && moveThread.isAlive()) ;
+                                while (moveThread != null && moveThread.isAlive() && !isInterrupted());
+
+                                if(isInterrupted())
+                                {
+                                    return;
+                                }
 
                                 selected = defaultSquare;
                                 clearPieces();
@@ -544,7 +577,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
                             }
                         });
                     } else {
-                        onBackPressed();
+                        //onBackPressed();
                     }
                 }
             };
@@ -562,6 +595,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
                     super.run();
 
                     while (!multiPlayerService.hasNewMessage()) {
+                        Log.v(TAG, "Listening for new game");
                         try {
                             Thread.sleep(500);
                         } catch (Exception e) {
@@ -569,9 +603,11 @@ public class MultiPlayerBoard extends AppCompatActivity {
                         }
                     }
 
-                    if (multiPlayerService.getMostRecentData().equals(NEW_GAME))
+                    String received = multiPlayerService.getMostRecentData();
+                    if (received.equals(NEW_GAME))
                     {
-                        AlertDialog.Builder newGameAlertBuilder = new AlertDialog.Builder(MultiPlayerBoard.this);
+                        //TODO - Fix the alert not responding to button presses
+                        AlertDialog.Builder newGameAlertBuilder = new AlertDialog.Builder(boardLayout.getContext());
 
                         newGameAlertBuilder.setMessage(NEW_GAME);
 
@@ -580,8 +616,9 @@ public class MultiPlayerBoard extends AppCompatActivity {
                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        dialog.cancel();
 
+                                        multiPlayerService.sendData(YES);
+                                        Log.v(TAG, "Sent yes");
                                         tieLabel.setVisibility(View.INVISIBLE);
                                         wonLabel.setVisibility(View.INVISIBLE);
                                         lostLabel.setVisibility(View.INVISIBLE);
@@ -604,6 +641,8 @@ public class MultiPlayerBoard extends AppCompatActivity {
                                         startNewGame(getIntent().getBooleanExtra("knightsOnly", false));
                                         yourPointLabel.setText(getResources().getText(R.string.your_points).toString() + " " + multiGame.getYourPoints());
                                         opponentPointLabel.setText(getResources().getText(R.string.opponent_points).toString() + " " + multiGame.getOpponentPoints());
+
+                                        dialog.cancel();
                                     }
                                 }
                         );
@@ -613,16 +652,26 @@ public class MultiPlayerBoard extends AppCompatActivity {
                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        dialog.cancel();
-
+                                        multiPlayerService.sendData(NO);
+                                        Log.v(TAG,"Sent no");
                                         onBackPressed();
+
+                                        dialog.cancel();
                                     }
                                 }
                         );
 
                         Looper.prepare();
-                        AlertDialog newGameAlert = newGameAlertBuilder.create();
-                        newGameAlert.show();
+                        final AlertDialog newGameAlert = newGameAlertBuilder.create();
+
+                        Log.v(TAG, "Trying to show alert");
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                newGameAlert.show();
+                            }
+                        });
                     }
                 }
             };
@@ -722,6 +771,8 @@ public class MultiPlayerBoard extends AppCompatActivity {
                             achievementHandler.incrementInMemory(AchievementHandler.PLAYED_50_GAMES);
                             achievementHandler.incrementInMemory(AchievementHandler.PLAYED_100_GAMES);
                             achievementHandler.saveValues();
+                            multiPlayerService = GameConnectionHandler.getMultiPlayerService();
+                            multiPlayerService.sendData(TIE);
                             listenForNewGame();
                         }
                     });
@@ -785,6 +836,8 @@ public class MultiPlayerBoard extends AppCompatActivity {
                             achievementHandler.incrementInMemory(AchievementHandler.PLAYED_50_GAMES);
                             achievementHandler.incrementInMemory(AchievementHandler.PLAYED_100_GAMES);
                             achievementHandler.saveValues();
+                            multiPlayerService = GameConnectionHandler.getMultiPlayerService();
+                            multiPlayerService.sendData(TIE);
                             listenForNewGame();
                         }
                     });
@@ -903,13 +956,10 @@ public class MultiPlayerBoard extends AppCompatActivity {
                 });
 
                 do {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
                     if (multiGame.getCanOpponentMove(mover, board))
+                    {
                         moveOpponent();
+                    }
                 }  while(!multiGame.getCanYouMove(mover,board) && multiGame.getCanOpponentMove(mover,board) && multiGame.getYourCount() > 0);
 
                 if (multiGame.getYourCount() == 0)
@@ -1014,112 +1064,237 @@ public class MultiPlayerBoard extends AppCompatActivity {
 
         multiPlayerService = GameConnectionHandler.getMultiPlayerService();
 
-        moveOpponentThread = new Thread(){
-            @Override
-            public void run() {
-                super.run();
+        if(moveOpponentThread == null || !moveOpponentThread.isAlive())
+            moveOpponentThread = new Thread(){
+                @Override
+                public void run() {
+                    super.run();
 
-                thatSucksLabel.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        thatSucksLabel.setVisibility(View.INVISIBLE);
-                    }
-                });
-                noiceLabel.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        noiceLabel.setVisibility(View.INVISIBLE);
-                    }
-                });
-
-                while(!multiPlayerService.hasNewMessage())
-                {
-                    Log.v(TAG,"Waiting for move");
-
-                    try
-                    {
-                        Thread.sleep(500);
-                    }
-                    catch (Exception e)
-                    {
-                        e.printStackTrace();
-                    }
-                }
-
-                String received = multiPlayerService.getMostRecentData();
-
-                String[] receivedPieces = received.split(",");
-
-                final int startI = Integer.parseInt(receivedPieces[0]);
-                final int startJ = boardSize - 1 -Integer.parseInt(receivedPieces[1]);
-                final int endI = Integer.parseInt(receivedPieces[2]);
-                final int endJ = boardSize - 1 - Integer.parseInt(receivedPieces[3]);
-
-                final Square startSquare = board[startI][startJ];
-                final Square endSquare = board[endI][endJ];
-                final int endSquareTeam = endSquare.getTeam();
-
-                        runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        endSquare.setTeam(OPPONENT);
-                        if(startSquare.getPiece() == "P" && endJ == 7)
-                        {
-                            endSquare.setPiece("Q");
-                        }
-                        else
-                        {
-                            endSquare.setPiece(startSquare.getPiece());
-                        }
-                        endSquare.setPieceCount(startSquare.getPieceCount()+1);
-                        startSquare.setPieceCount(0);
-                        startSquare.setTeam(NONE);
-                        startSquare.setPiece(" ");
-
-                        multiGame.setTurn(YOU);
-
-                        if(endSquareTeam == YOU)
-                        {
-                            multiGame.incrementOpponentPoints();
-                            thatSucksLabel.setVisibility(View.VISIBLE);
-                            noiceLabel.setVisibility(View.INVISIBLE);
-                        }
-                        else
-                        {
+                    thatSucksLabel.post(new Runnable() {
+                        @Override
+                        public void run() {
                             thatSucksLabel.setVisibility(View.INVISIBLE);
                         }
+                    });
+                    noiceLabel.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            noiceLabel.setVisibility(View.INVISIBLE);
+                        }
+                    });
 
-                        opponentPointLabel.setText(getResources().getText(R.string.opponent_points).toString() + " " + multiGame.getOpponentPoints());
+                    while (!multiPlayerService.hasNewMessage() && !isInterrupted()) {
+                        Log.v(TAG, "Waiting for move");
 
-                        boardLayout.invalidate();
-
-                        if(multiGame.getOpponentPoints() >= 16 )
-                        {
-                            lostLabel.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    lostLabel.setVisibility(View.VISIBLE);
-                                    achievementHandler.incrementInMemory(AchievementHandler.LOST_A_GAME);
-                                    achievementHandler.incrementInMemory(AchievementHandler.LOST_10_GAMES);
-                                    achievementHandler.incrementInMemory(AchievementHandler.LOST_50_GAMES);
-                                    achievementHandler.incrementInMemory(AchievementHandler.PLAYED_10_GAMES);
-                                    achievementHandler.incrementInMemory(AchievementHandler.PLAYED_50_GAMES);
-                                    achievementHandler.incrementInMemory(AchievementHandler.PLAYED_100_GAMES);
-
-                                    if (multiGame.getYourPoints() == 0) {
-                                        achievementHandler.incrementInMemory(AchievementHandler.SLAUGHTERED);
-                                    }
-                                    achievementHandler.saveValues();
-                                }
-                            });
-
-                            multiGame.setTurn(NONE);
-                            listenForNewGame();
+                        try {
+                            Thread.sleep(500);
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     }
-                });
-            }
-        };
+
+                    if (isInterrupted()) {
+                        return;
+                    }
+
+                    String received = multiPlayerService.getMostRecentData();
+
+                    if (received.equals(WIN)) {
+                        lostLabel.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                lostLabel.setVisibility(View.VISIBLE);
+                                achievementHandler.incrementInMemory(AchievementHandler.LOST_A_GAME);
+                                achievementHandler.incrementInMemory(AchievementHandler.LOST_10_GAMES);
+                                achievementHandler.incrementInMemory(AchievementHandler.LOST_50_GAMES);
+                                achievementHandler.incrementInMemory(AchievementHandler.PLAYED_10_GAMES);
+                                achievementHandler.incrementInMemory(AchievementHandler.PLAYED_50_GAMES);
+                                achievementHandler.incrementInMemory(AchievementHandler.PLAYED_100_GAMES);
+
+                                if (multiGame.getYourPoints() == 0) {
+                                    achievementHandler.incrementInMemory(AchievementHandler.SLAUGHTERED);
+                                }
+                                achievementHandler.saveValues();
+                            }
+                        });
+
+                        multiGame.setTurn(NONE);
+                        listenForNewGame();
+                    } else if (received.equals(TIE)) {
+                        tieLabel.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                tieLabel.setVisibility(View.VISIBLE);
+                                achievementHandler.incrementInMemory(AchievementHandler.TIED_A_GAME);
+                                achievementHandler.incrementInMemory(AchievementHandler.TIED_10_GAMES);
+                                achievementHandler.incrementInMemory(AchievementHandler.TIED_50_GAMES);
+                                achievementHandler.incrementInMemory(AchievementHandler.PLAYED_10_GAMES);
+                                achievementHandler.incrementInMemory(AchievementHandler.PLAYED_50_GAMES);
+                                achievementHandler.incrementInMemory(AchievementHandler.PLAYED_100_GAMES);
+                                achievementHandler.saveValues();
+                            }
+                        });
+                        multiGame.setTurn(NONE);
+                        listenForNewGame();
+                    } else if (received.equals(LOSS)) {
+                        lostLabel.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                lostLabel.setVisibility(View.VISIBLE);
+                                achievementHandler.incrementInMemory(AchievementHandler.LOST_A_GAME);
+                                achievementHandler.incrementInMemory(AchievementHandler.LOST_10_GAMES);
+                                achievementHandler.incrementInMemory(AchievementHandler.LOST_50_GAMES);
+                                achievementHandler.incrementInMemory(AchievementHandler.PLAYED_10_GAMES);
+                                achievementHandler.incrementInMemory(AchievementHandler.PLAYED_50_GAMES);
+                                achievementHandler.incrementInMemory(AchievementHandler.PLAYED_100_GAMES);
+
+                                if (multiGame.getYourPoints() == 0) {
+                                    achievementHandler.incrementInMemory(AchievementHandler.SLAUGHTERED);
+                                }
+                                achievementHandler.saveValues();
+                            }
+                        });
+
+                        multiGame.setTurn(NONE);
+                        listenForNewGame();
+                    } else if (received.equals(NEW_GAME)) {
+                        AlertDialog.Builder newGameAlertBuilder = new AlertDialog.Builder(MultiPlayerBoard.this);
+
+                        newGameAlertBuilder.setMessage(NEW_GAME);
+
+                        newGameAlertBuilder.setPositiveButton(
+                                YES,
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                        multiPlayerService.sendData(YES);
+                                        Log.v(TAG, "Sent yes");
+                                        tieLabel.setVisibility(View.INVISIBLE);
+                                        wonLabel.setVisibility(View.INVISIBLE);
+                                        lostLabel.setVisibility(View.INVISIBLE);
+                                        cantMoveThatLabel.setVisibility(View.INVISIBLE);
+                                        notYourTurnLabel.setVisibility(View.INVISIBLE);
+                                        gameOverLabel.setVisibility(View.INVISIBLE);
+                                        thatSucksLabel.setVisibility(View.INVISIBLE);
+                                        noiceLabel.setVisibility(View.INVISIBLE);
+
+                                        while (moveThread != null && moveThread.isAlive()) ;
+
+                                        selected = defaultSquare;
+                                        clearPieces();
+                                        multiGame.newGame(isHost);
+                                        if (isHost) {
+                                            multiGame.setTurn(YOU);
+                                        } else {
+                                            multiGame.setTurn(OPPONENT);
+                                        }
+                                        startNewGame(getIntent().getBooleanExtra("knightsOnly", false));
+                                        yourPointLabel.setText(getResources().getText(R.string.your_points).toString() + " " + multiGame.getYourPoints());
+                                        opponentPointLabel.setText(getResources().getText(R.string.opponent_points).toString() + " " + multiGame.getOpponentPoints());
+
+                                        dialog.cancel();
+                                    }
+                                }
+                        );
+
+                        newGameAlertBuilder.setNegativeButton(
+                                NO,
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+
+                                        multiPlayerService.sendData(NO);
+                                        Log.v(TAG, "Sent no");
+                                        onBackPressed();
+
+                                        dialog.cancel();
+                                    }
+                                }
+                        );
+
+                        Looper.prepare();
+                        final AlertDialog newGameAlert = newGameAlertBuilder.create();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                newGameAlert.show();
+                            }
+                        });
+
+                    } else {
+
+                        String[] receivedPieces = received.split(",");
+
+                        final int startI = Integer.parseInt(receivedPieces[0]);
+                        final int startJ = boardSize - 1 - Integer.parseInt(receivedPieces[1]);
+                        final int endI = Integer.parseInt(receivedPieces[2]);
+                        final int endJ = boardSize - 1 - Integer.parseInt(receivedPieces[3]);
+
+                        final Square startSquare = board[startI][startJ];
+                        final Square endSquare = board[endI][endJ];
+                        final int endSquareTeam = endSquare.getTeam();
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                endSquare.setTeam(OPPONENT);
+                                if (startSquare.getPiece() == "P" && endJ == 7) {
+                                    endSquare.setPiece("Q");
+                                } else {
+                                    endSquare.setPiece(startSquare.getPiece());
+                                }
+                                endSquare.setPieceCount(startSquare.getPieceCount() + 1);
+                                startSquare.setPieceCount(0);
+                                startSquare.setTeam(NONE);
+                                startSquare.setPiece(" ");
+
+
+                                if (endSquareTeam == YOU) {
+                                    multiGame.incrementOpponentPoints();
+                                    thatSucksLabel.setVisibility(View.VISIBLE);
+                                    noiceLabel.setVisibility(View.INVISIBLE);
+                                } else {
+                                    thatSucksLabel.setVisibility(View.INVISIBLE);
+                                }
+
+                                opponentPointLabel.setText(getResources().getText(R.string.opponent_points).toString() + " " + multiGame.getOpponentPoints());
+
+                                boardLayout.invalidate();
+
+                                if (multiGame.getOpponentPoints() >= 16) {
+                                    lostLabel.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            lostLabel.setVisibility(View.VISIBLE);
+                                            achievementHandler.incrementInMemory(AchievementHandler.LOST_A_GAME);
+                                            achievementHandler.incrementInMemory(AchievementHandler.LOST_10_GAMES);
+                                            achievementHandler.incrementInMemory(AchievementHandler.LOST_50_GAMES);
+                                            achievementHandler.incrementInMemory(AchievementHandler.PLAYED_10_GAMES);
+                                            achievementHandler.incrementInMemory(AchievementHandler.PLAYED_50_GAMES);
+                                            achievementHandler.incrementInMemory(AchievementHandler.PLAYED_100_GAMES);
+
+                                            if (multiGame.getYourPoints() == 0) {
+                                                achievementHandler.incrementInMemory(AchievementHandler.SLAUGHTERED);
+                                            }
+                                            achievementHandler.saveValues();
+                                        }
+                                    });
+
+                                    multiGame.setTurn(NONE);
+                                    listenForNewGame();
+                                } else if (multiGame.getCanYouMove(mover, board)) {
+                                    multiGame.setTurn(YOU);
+                                } else {
+                                    multiGame.setTurn(OPPONENT);
+                                    //moveOpponent();
+                                }
+                            }
+                        });
+                    }
+                }
+            };
 
         moveOpponentThread.start();
     }
@@ -1209,6 +1384,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
 
         }
         else {
+
             // Set Teams
             for (int i = 0; i < size; i++) {
                 board[i][0].setTeam(OPPONENT);
@@ -1216,6 +1392,11 @@ public class MultiPlayerBoard extends AppCompatActivity {
                 board[i][6].setTeam(YOU);
                 board[i][7].setTeam(YOU);
             }
+
+            /*
+            board[5][0].setPiece("B");
+            board[5][7].setPiece("B");
+             */
 
             // Set Pawns
             for (int i = 0; i < size; i++)
@@ -1249,6 +1430,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
             // Set Queens
             board[4][0].setPiece("Q");
             board[4][7].setPiece("Q");
+            
         }
 
         return;

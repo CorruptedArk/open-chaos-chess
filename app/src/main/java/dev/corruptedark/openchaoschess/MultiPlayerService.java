@@ -58,31 +58,31 @@ public class MultiPlayerService {
     }
 
     static class ServiceHandler extends Handler {
-        private String lastSent = null;
-        private String lastReceived = null;
-        private String lastError = null;
-        private boolean newMessage = false;
-        private boolean newError = false;
+        private volatile String lastSent = null;
+        private volatile String lastReceived = null;
+        private volatile String lastError = null;
+        private volatile boolean newMessage = false;
+        private volatile boolean newError = false;
 
-        public String getLastSent() {
+        public synchronized String getLastSent() {
             return lastSent;
         }
 
-        public String getLastReceived() {
+        public synchronized String getLastReceived() {
             newMessage = false;
             return lastReceived;
         }
 
-        public String getLastError() {
+        public synchronized String getLastError() {
             newError = false;
             return lastError;
         }
 
-        public boolean hasNewMessage() {
+        public synchronized boolean hasNewMessage() {
             return newMessage;
         }
 
-        public boolean hasNewError() {
+        public synchronized boolean hasNewError() {
             return newError;
         }
 
@@ -93,8 +93,8 @@ public class MultiPlayerService {
                 case Constants.READ:
                     byte[] readBuffer = (byte[]) message.obj;
 
-                    newMessage = true;
                     lastReceived = new String(readBuffer, 0, message.arg1);
+                    newMessage = true;
                     break;
                 case Constants.WRITE:
                     byte[] writeBuffer = (byte[]) message.obj;
@@ -103,8 +103,8 @@ public class MultiPlayerService {
                         lastSent = new String(writeBuffer);
                     break;
                 case Constants.ERROR:
-                    newError = true;
                     lastError = message.getData().getString(Constants.ERROR_KEY);
+                    newError = true;
                     break;
 
             }
