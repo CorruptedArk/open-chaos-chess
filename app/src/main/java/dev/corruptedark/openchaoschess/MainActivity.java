@@ -1,3 +1,22 @@
+/*
+ * Open Chaos Chess is a free as in speech version of Chaos Chess
+ * Chaos Chess is a chess game where you control the piece that moves, but not how it moves
+ *     Copyright (C) 2019  Noah Stanford <noahstandingford@gmail.com>
+ *
+ *     Open Chaos Chess is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     Open Chaos Chess is distributed in the hope that it will be fun,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package dev.corruptedark.openchaoschess;
 
 import android.app.Activity;
@@ -34,9 +53,6 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Random;
 
-/**
- * Created by CorruptedArk
- */
 public class MainActivity extends AppCompatActivity {
     public final int YOU = -1;
     public final int OPPONENT = 1;
@@ -150,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
         mainTitle.setLayoutParams(mainTitleParams);
         mainTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX,(int)(height*.05));
 
-        RelativeLayout.LayoutParams mainSloganParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, (int)(height*.025));
+        RelativeLayout.LayoutParams mainSloganParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, (int)(height*.05));
         mainSloganParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         mainSloganParams.addRule(RelativeLayout.BELOW,R.id.main_title);
         mainSloganParams.setMargins(0, 0,0,0);
@@ -262,7 +278,7 @@ public class MainActivity extends AppCompatActivity {
         mainTitle.setLayoutParams(mainTitleParams);
         mainTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX,(int)(height*.05));
 
-        RelativeLayout.LayoutParams mainSloganParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, (int)(height*.025));
+        RelativeLayout.LayoutParams mainSloganParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, (int)(height*.05));
         mainSloganParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         mainSloganParams.addRule(RelativeLayout.BELOW,R.id.main_title);
         mainSloganParams.setMargins(0, 0,0,0);
