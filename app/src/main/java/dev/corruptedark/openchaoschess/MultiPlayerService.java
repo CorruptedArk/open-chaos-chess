@@ -195,7 +195,7 @@ public class MultiPlayerService {
                         @Override
                         public void run() {
                             Toast.makeText(lastCallingActivity.getApplicationContext(),"Connection ended", Toast.LENGTH_LONG).show();
-                            if(/*lastCallingActivity instanceof MultiPlayerBoard*/true)
+                            if(lastCallingActivity instanceof MultiPlayerBoard)
                             {
                                 lastCallingActivity.finish();
                             }
@@ -229,7 +229,7 @@ public class MultiPlayerService {
                     @Override
                     public void run() {
                         Toast.makeText(lastCallingActivity.getApplicationContext(),"Connection ended", Toast.LENGTH_LONG).show();
-                        if(/*lastCallingActivity instanceof MultiPlayerBoard*/true)
+                        if(lastCallingActivity instanceof MultiPlayerBoard)
                         {
                             lastCallingActivity.finish();
                         }
