@@ -68,7 +68,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
     public final String TIE = "Tie";
     public final String LOSS = "Loss";
     public final String WIN = "Win";
-    
+
     public final String TAG = "Multiplayer Board";
 
     private boolean isHost;
@@ -83,6 +83,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
     MultiPlayerBoard context;
     MoveThread moveThread;
     RelativeLayout boardLayout;
+    NewGameAlertFragment newGameAlertFragment;
 
     private Thread newGameRequestThread;
     private Thread newGameListenerThread;
@@ -190,7 +191,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
 
     }
 
-    @Override
+    /*@Override
     protected void onResume() {
         super.onResume();
 
@@ -345,7 +346,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
             moveOpponent();
         }
 
-    }
+    }*/
 
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
@@ -455,6 +456,9 @@ public class MultiPlayerBoard extends AppCompatActivity {
         notYourTurnLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         gameOverLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         thatSucksLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+
+        newGameAlertFragment = new NewGameAlertFragment(MultiPlayerBoard.this,TAG,isHost);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -526,8 +530,6 @@ public class MultiPlayerBoard extends AppCompatActivity {
         }
     }
 
-
-
     private int convertDpToPx(int dp){
         return Math.round(dp*(getResources().getDisplayMetrics().xdpi/ DisplayMetrics.DENSITY_DEFAULT));
     }
@@ -552,7 +554,12 @@ public class MultiPlayerBoard extends AppCompatActivity {
                         Log.v(TAG,"Waiting for new game response");
                         try {
                             Thread.sleep(500);
-                        } catch (Exception e) {
+                        }
+                        catch (InterruptedException interruptException)
+                        {
+                            return;
+                        }
+                        catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
@@ -596,7 +603,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
                             }
                         });
                     } else {
-                        //onBackPressed();
+                        onBackPressed();
                     }
                 }
             };
@@ -613,6 +620,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
                 public void run() {
                     super.run();
 
+
                     while (!multiPlayerService.hasNewMessage()) {
                         Log.v(TAG, "Listening for new game");
                         try {
@@ -622,73 +630,19 @@ public class MultiPlayerBoard extends AppCompatActivity {
                         }
                     }
 
+
                     String received = multiPlayerService.getMostRecentData();
                     if (received.equals(NEW_GAME))
                     {
-                        //TODO - Fix the alert not responding to button presses
-                        AlertDialog.Builder newGameAlertBuilder = new AlertDialog.Builder(boardLayout.getContext());
-
-                        newGameAlertBuilder.setMessage(NEW_GAME);
-
-                        newGameAlertBuilder.setPositiveButton(
-                                YES,
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-
-                                        multiPlayerService.sendData(YES);
-                                        Log.v(TAG, "Sent yes");
-                                        tieLabel.setVisibility(View.INVISIBLE);
-                                        wonLabel.setVisibility(View.INVISIBLE);
-                                        lostLabel.setVisibility(View.INVISIBLE);
-                                        cantMoveThatLabel.setVisibility(View.INVISIBLE);
-                                        notYourTurnLabel.setVisibility(View.INVISIBLE);
-                                        gameOverLabel.setVisibility(View.INVISIBLE);
-                                        thatSucksLabel.setVisibility(View.INVISIBLE);
-                                        noiceLabel.setVisibility(View.INVISIBLE);
-
-                                        while (moveThread != null && moveThread.isAlive()) ;
-
-                                        selected = defaultSquare;
-                                        clearPieces();
-                                        multiGame.newGame(isHost);
-                                        if (isHost) {
-                                            multiGame.setTurn(YOU);
-                                        } else {
-                                            multiGame.setTurn(OPPONENT);
-                                        }
-                                        startNewGame(getIntent().getBooleanExtra("knightsOnly", false));
-                                        yourPointLabel.setText(getResources().getText(R.string.your_points).toString() + " " + multiGame.getYourPoints());
-                                        opponentPointLabel.setText(getResources().getText(R.string.opponent_points).toString() + " " + multiGame.getOpponentPoints());
-
-                                        dialog.cancel();
-                                    }
-                                }
-                        );
-
-                        newGameAlertBuilder.setNegativeButton(
-                                NO,
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        multiPlayerService.sendData(NO);
-                                        Log.v(TAG,"Sent no");
-                                        onBackPressed();
-
-                                        dialog.cancel();
-                                    }
-                                }
-                        );
 
                         Looper.prepare();
-                        final AlertDialog newGameAlert = newGameAlertBuilder.create();
 
                         Log.v(TAG, "Trying to show alert");
 
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                newGameAlert.show();
+                                newGameAlertFragment.show(getSupportFragmentManager(),"newGameAlert");
                             }
                         });
                     }
@@ -832,6 +786,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
                                 achievementHandler.incrementInMemory(AchievementHandler.SLAUGHTERED);
                             }
                             achievementHandler.saveValues();
+                            listenForNewGame();
                         }
                     });
             }
@@ -897,6 +852,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
                                 achievementHandler.incrementInMemory(AchievementHandler.SLAUGHTERED);
                             }
                             achievementHandler.saveValues();
+                            listenForNewGame();
                         }
                     });
             } else if(selected.getI() == -1) {
@@ -998,6 +954,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
                                 achievementHandler.incrementInMemory(AchievementHandler.SLAUGHTERED);
                             }
                             achievementHandler.saveValues();
+                            listenForNewGame();
                         }
                     });
 
@@ -1107,7 +1064,12 @@ public class MultiPlayerBoard extends AppCompatActivity {
 
                         try {
                             Thread.sleep(500);
-                        } catch (Exception e) {
+                        }
+                        catch (InterruptedException interruptException)
+                        {
+                            return;
+                        }
+                        catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
@@ -1177,68 +1139,12 @@ public class MultiPlayerBoard extends AppCompatActivity {
                         multiGame.setTurn(NONE);
                         listenForNewGame();
                     } else if (received.equals(NEW_GAME)) {
-                        AlertDialog.Builder newGameAlertBuilder = new AlertDialog.Builder(MultiPlayerBoard.this);
-
-                        newGameAlertBuilder.setMessage(NEW_GAME);
-
-                        newGameAlertBuilder.setPositiveButton(
-                                YES,
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-
-                                        multiPlayerService.sendData(YES);
-                                        Log.v(TAG, "Sent yes");
-                                        tieLabel.setVisibility(View.INVISIBLE);
-                                        wonLabel.setVisibility(View.INVISIBLE);
-                                        lostLabel.setVisibility(View.INVISIBLE);
-                                        cantMoveThatLabel.setVisibility(View.INVISIBLE);
-                                        notYourTurnLabel.setVisibility(View.INVISIBLE);
-                                        gameOverLabel.setVisibility(View.INVISIBLE);
-                                        thatSucksLabel.setVisibility(View.INVISIBLE);
-                                        noiceLabel.setVisibility(View.INVISIBLE);
-
-                                        while (moveThread != null && moveThread.isAlive()) ;
-
-                                        selected = defaultSquare;
-                                        clearPieces();
-                                        multiGame.newGame(isHost);
-                                        if (isHost) {
-                                            multiGame.setTurn(YOU);
-                                        } else {
-                                            multiGame.setTurn(OPPONENT);
-                                        }
-                                        startNewGame(getIntent().getBooleanExtra("knightsOnly", false));
-                                        yourPointLabel.setText(getResources().getText(R.string.your_points).toString() + " " + multiGame.getYourPoints());
-                                        opponentPointLabel.setText(getResources().getText(R.string.opponent_points).toString() + " " + multiGame.getOpponentPoints());
-
-                                        dialog.cancel();
-                                    }
-                                }
-                        );
-
-                        newGameAlertBuilder.setNegativeButton(
-                                NO,
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-
-
-                                        multiPlayerService.sendData(NO);
-                                        Log.v(TAG, "Sent no");
-                                        onBackPressed();
-
-                                        dialog.cancel();
-                                    }
-                                }
-                        );
 
                         Looper.prepare();
-                        final AlertDialog newGameAlert = newGameAlertBuilder.create();
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                newGameAlert.show();
+                                newGameAlertFragment.show(getSupportFragmentManager(),"newGameAlert");
                             }
                         });
 
@@ -1449,7 +1355,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
             // Set Queens
             board[4][0].setPiece("Q");
             board[4][7].setPiece("Q");
-            
+
         }
 
         return;

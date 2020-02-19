@@ -74,4 +74,7 @@
     <string name="stop_host">Stop Host</string>
     <string name="paired_devices">Paired Devices:</string>
     <string name="host_status">Host status:</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
