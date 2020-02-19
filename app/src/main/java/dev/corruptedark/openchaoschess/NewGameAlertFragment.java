@@ -49,15 +49,21 @@ public class NewGameAlertFragment extends DialogFragment {
     private String tag;
     private boolean isHost;
 
+    private ColorManager colorManager;
+
     public NewGameAlertFragment(MultiPlayerBoard context, String tag, boolean isHost) {
         this.context = context;
         this.tag = tag;
         this.isHost = isHost;
+        this.colorManager = ColorManager.getInstance(context);
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        final AlertDialog.Builder newGameAlertBuilder = new AlertDialog.Builder(context);
+
+        final AlertDialog newGameAlert;
+
+        AlertDialog.Builder newGameAlertBuilder = new AlertDialog.Builder(context);
 
         newGameAlertBuilder.setTitle(NEW_GAME);
 
@@ -67,7 +73,7 @@ public class NewGameAlertFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Toast.makeText(context,"Pressed Yes", Toast.LENGTH_SHORT).show();
-                        context.multiPlayerService.sendData(YES);
+                        context.multiPlayerService.sendData(context, YES);
                         Log.v(tag, "Sent yes");
                         context.tieLabel.setVisibility(View.INVISIBLE);
                         context.wonLabel.setVisibility(View.INVISIBLE);
@@ -104,14 +110,26 @@ public class NewGameAlertFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Toast.makeText(context,"Pressed No", Toast.LENGTH_SHORT).show();
-                        context.multiPlayerService.sendData(NO);
+                        context.multiPlayerService.sendData(context, NO);
                         Log.v(tag,"Sent no");
                         context.onBackPressed();
                     }
                 }
         );
 
-        return newGameAlertBuilder.create();
+        newGameAlert = newGameAlertBuilder.create();
+
+        newGameAlert.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                int textColor = colorManager.getColorFromFile(ColorManager.TEXT_COLOR);
+                newGameAlert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(textColor);
+                newGameAlert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(textColor);
+            }
+        });
+
+        return newGameAlert;
     }
+
 
 }

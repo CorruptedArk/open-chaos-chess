@@ -197,8 +197,9 @@ public class GameConnectionHandler {
     }
 
 
-    public static MultiPlayerService getMultiPlayerService()
+    public static MultiPlayerService getMultiPlayerService(Activity callingActivity)
     {
+        multiPlayerService.hasNewMessage(callingActivity);
         return multiPlayerService;
     }
 

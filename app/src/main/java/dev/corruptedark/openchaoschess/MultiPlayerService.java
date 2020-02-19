@@ -19,12 +19,14 @@
 
 package dev.corruptedark.openchaoschess;
 
+import android.app.Activity;
 import android.bluetooth.BluetoothSocket;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -43,6 +45,7 @@ public class MultiPlayerService {
     private final String TAG = "Multi Player Service";
     private final ServiceHandler handler;
     private ConnectedThread connectedThread;
+    private Activity lastCallingActivity;
 
     public MultiPlayerService(BluetoothSocket connectedSocket) {
         handler = new ServiceHandler();
@@ -50,22 +53,27 @@ public class MultiPlayerService {
         connectedThread.start();
     }
 
-    public synchronized void sendData(String data)
+    public synchronized void sendData(Activity sendingActivity, String data)
     {
+        lastCallingActivity = sendingActivity;
         byte[] bytes = data.getBytes();
 
         connectedThread.write(bytes);
     }
 
-    public synchronized String getMostRecentData()
+    public synchronized String getMostRecentData(Activity callingActivity)
     {
+        lastCallingActivity = callingActivity;
         return handler.getLastReceived();
     }
 
-    public synchronized boolean hasNewMessage()
+    public synchronized boolean hasNewMessage(Activity callingActivity)
     {
+        lastCallingActivity = callingActivity;
         return handler.hasNewMessage();
     }
+
+    public synchronized String getLastSent() {return handler.getLastSent();}
 
     public synchronized boolean hasNewError()
     {
@@ -181,8 +189,19 @@ public class MultiPlayerService {
                 }
                 catch (IOException e) {
                     e.printStackTrace();
-                    Log.e(TAG, "Input stream disconnected", e);
-                    //cancel();
+                    Log.e(TAG, "Input stream disconnected " + lastCallingActivity.getLocalClassName(), e);
+
+                    lastCallingActivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(lastCallingActivity.getApplicationContext(),"Connection ended", Toast.LENGTH_LONG).show();
+                            if(/*lastCallingActivity instanceof MultiPlayerBoard*/true)
+                            {
+                                lastCallingActivity.finish();
+                            }
+                        }
+                    });
+
                     break;
                 }
             }
@@ -205,6 +224,18 @@ public class MultiPlayerService {
                 bundle.putString(Constants.ERROR_KEY, Constants.SEND_FAILED);
                 errorMessage.setData(bundle);
                 handler.sendMessage(errorMessage);
+
+                lastCallingActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(lastCallingActivity.getApplicationContext(),"Connection ended", Toast.LENGTH_LONG).show();
+                        if(/*lastCallingActivity instanceof MultiPlayerBoard*/true)
+                        {
+                            lastCallingActivity.finish();
+                        }
+                    }
+                });
+
             }
         }
 

@@ -25,6 +25,7 @@ import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -68,6 +69,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
     public final String TIE = "Tie";
     public final String LOSS = "Loss";
     public final String WIN = "Win";
+    public final String QUIT = "Quit";
 
     public final String TAG = "Multiplayer Board";
 
@@ -543,14 +545,14 @@ public class MultiPlayerBoard extends AppCompatActivity {
                     super.run();
                     Looper.prepare();
 
-                    multiPlayerService = GameConnectionHandler.getMultiPlayerService();
-                    multiPlayerService.sendData(NEW_GAME);
+                    multiPlayerService = GameConnectionHandler.getMultiPlayerService(context);
+                    multiPlayerService.sendData(context,NEW_GAME);
 
 
                     Toast.makeText(MultiPlayerBoard.this, "New game requested", Toast.LENGTH_LONG).show();
 
 
-                    while (!multiPlayerService.hasNewMessage() && !isInterrupted()) {
+                    while (!multiPlayerService.hasNewMessage(context) && !isInterrupted()) {
                         Log.v(TAG,"Waiting for new game response");
                         try {
                             Thread.sleep(500);
@@ -569,7 +571,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
                         return;
                     }
 
-                    if (multiPlayerService.getMostRecentData().equals(YES)) {
+                    if (multiPlayerService.getMostRecentData(context).equals(YES)) {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -603,7 +605,12 @@ public class MultiPlayerBoard extends AppCompatActivity {
                             }
                         });
                     } else {
-                        onBackPressed();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                onBackPressed();
+                            }
+                        });
                     }
                 }
             };
@@ -621,7 +628,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
                     super.run();
 
 
-                    while (!multiPlayerService.hasNewMessage()) {
+                    while (!multiPlayerService.hasNewMessage(context)) {
                         Log.v(TAG, "Listening for new game");
                         try {
                             Thread.sleep(500);
@@ -631,7 +638,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
                     }
 
 
-                    String received = multiPlayerService.getMostRecentData();
+                    String received = multiPlayerService.getMostRecentData(context);
                     if (received.equals(NEW_GAME))
                     {
 
@@ -744,8 +751,9 @@ public class MultiPlayerBoard extends AppCompatActivity {
                             achievementHandler.incrementInMemory(AchievementHandler.PLAYED_50_GAMES);
                             achievementHandler.incrementInMemory(AchievementHandler.PLAYED_100_GAMES);
                             achievementHandler.saveValues();
-                            multiPlayerService = GameConnectionHandler.getMultiPlayerService();
-                            multiPlayerService.sendData(TIE);
+                            multiPlayerService = GameConnectionHandler.getMultiPlayerService(context);
+                            multiPlayerService.sendData(context,TIE);
+                            multiGame.setTurn(NONE);
                             listenForNewGame();
                         }
                     });
@@ -765,6 +773,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
                                 achievementHandler.incrementInMemory(AchievementHandler.UNTOUCHABLE);
                             }
                             achievementHandler.saveValues();
+                            multiGame.setTurn(NONE);
                             listenForNewGame();
                         }
                     });
@@ -786,6 +795,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
                                 achievementHandler.incrementInMemory(AchievementHandler.SLAUGHTERED);
                             }
                             achievementHandler.saveValues();
+                            multiGame.setTurn(NONE);
                             listenForNewGame();
                         }
                     });
@@ -810,8 +820,9 @@ public class MultiPlayerBoard extends AppCompatActivity {
                             achievementHandler.incrementInMemory(AchievementHandler.PLAYED_50_GAMES);
                             achievementHandler.incrementInMemory(AchievementHandler.PLAYED_100_GAMES);
                             achievementHandler.saveValues();
-                            multiPlayerService = GameConnectionHandler.getMultiPlayerService();
-                            multiPlayerService.sendData(TIE);
+                            multiPlayerService = GameConnectionHandler.getMultiPlayerService(context);
+                            multiPlayerService.sendData(context,TIE);
+                            multiGame.setTurn(NONE);
                             listenForNewGame();
                         }
                     });
@@ -831,6 +842,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
                                 achievementHandler.incrementInMemory(AchievementHandler.UNTOUCHABLE);
                             }
                             achievementHandler.saveValues();
+                            multiGame.setTurn(NONE);
                             listenForNewGame();
                         }
                     });
@@ -852,6 +864,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
                                 achievementHandler.incrementInMemory(AchievementHandler.SLAUGHTERED);
                             }
                             achievementHandler.saveValues();
+                            multiGame.setTurn(NONE);
                             listenForNewGame();
                         }
                     });
@@ -954,11 +967,12 @@ public class MultiPlayerBoard extends AppCompatActivity {
                                 achievementHandler.incrementInMemory(AchievementHandler.SLAUGHTERED);
                             }
                             achievementHandler.saveValues();
+                            multiGame.setTurn(NONE);
                             listenForNewGame();
                         }
                     });
 
-                    multiGame.setTurn(NONE);
+
                 }
                 else if (multiGame.getOpponentCount() == 0)
                 {
@@ -977,11 +991,12 @@ public class MultiPlayerBoard extends AppCompatActivity {
                                 achievementHandler.incrementInMemory(AchievementHandler.UNTOUCHABLE);
                             }
                             achievementHandler.saveValues();
+                            multiGame.setTurn(NONE);
                             listenForNewGame();
                         }
                     });
 
-                    multiGame.setTurn(NONE);
+
 
                 }
             }
@@ -1038,7 +1053,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
 
     synchronized void moveOpponent() {
 
-        multiPlayerService = GameConnectionHandler.getMultiPlayerService();
+        multiPlayerService = GameConnectionHandler.getMultiPlayerService(context);
 
         if(moveOpponentThread == null || !moveOpponentThread.isAlive())
             moveOpponentThread = new Thread(){
@@ -1059,7 +1074,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
                         }
                     });
 
-                    while (!multiPlayerService.hasNewMessage() && !isInterrupted()) {
+                    while (!multiPlayerService.hasNewMessage(context) && !isInterrupted()) {
                         Log.v(TAG, "Waiting for move");
 
                         try {
@@ -1078,7 +1093,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
                         return;
                     }
 
-                    String received = multiPlayerService.getMostRecentData();
+                    String received = multiPlayerService.getMostRecentData(context);
 
                     if (received.equals(WIN)) {
                         lostLabel.post(new Runnable() {
@@ -1213,7 +1228,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
                                     multiGame.setTurn(YOU);
                                 } else {
                                     multiGame.setTurn(OPPONENT);
-                                    //moveOpponent();
+                                    moveOpponent();
                                 }
                             }
                         });
@@ -1226,11 +1241,11 @@ public class MultiPlayerBoard extends AppCompatActivity {
 
     synchronized void sendYourMove(Square selected, Square destination) {
 
-        multiPlayerService = GameConnectionHandler.getMultiPlayerService();
+        multiPlayerService = GameConnectionHandler.getMultiPlayerService(context);
 
         String data = selected.getI() + "," + selected.getJ() + "," + destination.getI() + "," + destination.getJ();
 
-        multiPlayerService.sendData(data);
+        multiPlayerService.sendData(context,data);
 
         Log.v(TAG, "Sent move");
     }

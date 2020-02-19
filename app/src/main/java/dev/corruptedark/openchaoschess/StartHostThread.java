@@ -62,7 +62,7 @@ public class StartHostThread extends Thread {
         }
         multiPlayerService.getMostRecentData();*/
 
-        multiPlayerService.sendData("knightsOnly:" + String.valueOf(knightsOnly));
+        multiPlayerService.sendData(callingActivity,"knightsOnly:" + String.valueOf(knightsOnly));
 
         Toast.makeText(callingActivity, "Starting Service", Toast.LENGTH_LONG).show();
 

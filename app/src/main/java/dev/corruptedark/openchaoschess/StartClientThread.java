@@ -45,7 +45,7 @@ public class StartClientThread extends Thread {
     {
         MultiPlayerService multiPlayerService = new MultiPlayerService(socket);
 
-        while (!multiPlayerService.hasNewMessage())
+        while (!multiPlayerService.hasNewMessage(callingActivity))
         {
             Log.v(TAG, "Waiting for message");
 
@@ -61,7 +61,7 @@ public class StartClientThread extends Thread {
         Log.v(TAG, "Connected");
         //multiPlayerService.sendData("We good fam");
 
-        String knightsOnlyString = multiPlayerService.getMostRecentData();
+        String knightsOnlyString = multiPlayerService.getMostRecentData(callingActivity);
 
         String response = knightsOnlyString.split(":")[1];
 
