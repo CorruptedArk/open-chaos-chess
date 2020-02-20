@@ -1,10 +1,21 @@
+
+<img src="https://imgur.com/vGlxh6Z.png" alt="Banner" width
+="600" />
+
 # open-chaos-chess
-This repository is for an open sourced version of Chaos Chess, stripped of Google Play Services.
+
+## About
+Open Chaos Chess a free and open source version of [Chaos Chess](https://play.google.com/store/apps/details?id=dev.corruptedark.chaoschess), stripped of Google Play Services. All developmental effort for Chaos Chess going forward will be in this project.
 
 ## Current Status
-As of the most recent commit to the master branch, achievements and single player games are working.
-However, since it is not using any online services, the progress is only saved locally and is lost if app data is wiped or if a player install on a new device.
+As of the most recent commit to the master branch, achievements and single player games are working. However, since it is not using any online services, the progress is only saved locally and is lost if app data is wiped or if a player install on a new device. Multiplayer is now working over Bluetooth for the most part.
 
-## Upcoming Goals
-The next goal I want to achieve for this project is multiplayer.
-Currently, I'm looking into using Bluetooth for local multiplayer and using something like ice4j for multiplayer over NAT.
+----
+
+## Screenshots
+<img src="https://i.imgur.com/somueei.png" alt="Main menu" width="200" />
+<img src="https://i.imgur.com/MKLKXqn.png" alt="Normal Game Start" width="200" />
+<img src="https://i.imgur.com/Nij5ZU0.png" alt="Normal Game Playing" width="200" />
+<img src="https://i.imgur.com/NRuWsUf.png" alt="Knights Only Start" width="200" />
+<img src="https://i.imgur.com/HZlM2rV.png" alt="Knights Only Playing" width="200" />
+
