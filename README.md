@@ -1,6 +1,5 @@
 
-<img src="https://imgur.com/vGlxh6Z.png" alt="Banner" width
-="600" />
+<img src="https://imgur.com/vGlxh6Z.png" alt="Banner" width="600" />
 
 # open-chaos-chess
 
