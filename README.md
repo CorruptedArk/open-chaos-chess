@@ -5,7 +5,10 @@
 # open-chaos-chess
 
 ## About
-Open Chaos Chess a free and open source version of [Chaos Chess](https://play.google.com/store/apps/details?id=dev.corruptedark.chaoschess), stripped of Google Play Services. All developmental effort for Chaos Chess going forward will be in this project.
+Open Chaos Chess is a free and open source version of [Chaos Chess](https://play.google.com/store/apps/details?id=dev.corruptedark.chaoschess), stripped of Google Play Services. Chaos Chess is a variation of chess where you can pick the piece that moves, but the moves are random. As such, you no longer win by checkmates. Instead, you win by eliminating your opponent's pieces. Have fun, and may the RNG be ever in your favor. 
+
+
+All future development for Chaos Chess will be in this project.
 
 ## Current Status
 As of the most recent commit to the master branch, achievements and single player games are working. However, since it is not using any online services, the progress is only saved locally and is lost if app data is wiped or if a player install on a new device. Multiplayer is now working over Bluetooth for the most part.
