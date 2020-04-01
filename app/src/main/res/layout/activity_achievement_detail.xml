@@ -51,6 +51,7 @@
         android:ellipsize="none"
         android:scrollHorizontally="false"
         android:scrollbars="vertical"
-        android:layout_margin="5dp"/>
+        android:layout_margin="5dp"
+        android:gravity="center_horizontal"/>
 
 </LinearLayout>
