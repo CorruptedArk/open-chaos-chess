@@ -30,6 +30,9 @@ public class Mover {
     public final int OPPONENT = 1;
     public final int NONE = 0;
 
+    private enum Direction {UP, BACK, LEFT, RIGHT, LEFTUP, RIGHTUP, LEFTBACK, RIGHTBACK, _2R1U, _1R2U, _1L2U, _2L1U, _2L1D, _1L2D, _1R2D, _2R1D}
+    private enum KQMODE {ROOK, BISHOP}
+
     Random rand = new Random();
     Context context;
 
@@ -78,6 +81,9 @@ public class Mover {
 
     boolean movePawn( Square[][] board,  Square square,  SingleGame singleGame)
     {
+        List<Direction> options = new ArrayList<>();
+
+
         boolean moveSuccess = false;
         boolean forwardImpossible = false;
         boolean leftImpossible = false;
@@ -85,23 +91,24 @@ public class Mover {
         destination = new Square(context,0xffffffff);
 
         rand.nextInt();
+        int count;
 
         while (!moveSuccess && (!forwardImpossible || !leftImpossible || !rightImpossible))
         {
-            List<Integer> options = new ArrayList<>();
+            options.clear();
 
             if (!forwardImpossible)
-                options.add(0);
+                options.add(Direction.UP);
             if (!leftImpossible)
-                options.add(1);
+                options.add(Direction.LEFT);
             if (!rightImpossible)
-                options.add(2);
+                options.add(Direction.RIGHT);
+
 
             switch(options.get(rand.nextInt(options.size())))
             {
-                case 0: // tries to move forward
+                case UP: // tries to move forward
 
-                    int count;
                     if (square.getPieceCount() == 0)
                         count = rand.nextInt(2)+1;
                     else
@@ -136,7 +143,7 @@ public class Mover {
                     forwardImpossible = true;
                 }
                 break;
-                case 1: // tries to capture diagonally to left
+                case LEFT: // tries to capture diagonally to left
                     try
                     {
                         destination = board[square.getI() + square.getTeam()][ square.getJ() + square.getTeam()];
@@ -165,7 +172,7 @@ public class Mover {
                     leftImpossible = true;
                 }
                 break;
-                case 2: // tries to capture diagonally to right
+                case RIGHT: // tries to capture diagonally to right
                     try
                     {
                         destination = board[square.getI() - square.getTeam()][ square.getJ() + square.getTeam()];
@@ -211,6 +218,8 @@ public class Mover {
 
     boolean moveRook(Square[][] board, Square square, SingleGame singleGame, int max)
     {
+        List<Direction> options = new ArrayList<>();
+
         boolean moveSuccess = false;
         boolean forwardImpossible = false;
         boolean leftImpossible = false;
@@ -225,20 +234,20 @@ public class Mover {
         rand.nextInt();
 
         while (!moveSuccess && (!forwardImpossible || !leftImpossible || !rightImpossible || !backImpossible)) {
-            List<Integer> options = new ArrayList<>();
 
+            options.clear();
 
             if (!forwardImpossible)
-                options.add(0);
+                options.add(Direction.UP);
             if (!leftImpossible)
-                options.add(1);
+                options.add(Direction.LEFT);
             if (!rightImpossible)
-                options.add(2);
+                options.add(Direction.RIGHT);
             if (!backImpossible)
-                options.add(3);
+                options.add(Direction.BACK);
 
             switch (options.get(rand.nextInt(options.size()))) {
-                case 0: // Tries to move forward
+                case UP: // Tries to move forward
 
                     count = rand.nextInt(maxForward) + 1;
 
@@ -279,7 +288,7 @@ public class Mover {
                             forwardImpossible = true;
                     }
                     break;
-                case 1: // Tries to move left
+                case LEFT: // Tries to move left
 
                     count = rand.nextInt(maxLeft) + 1;
 
@@ -320,7 +329,7 @@ public class Mover {
                             leftImpossible = true;
                     }
                     break;
-                case 2: // Tries to move right
+                case RIGHT: // Tries to move right
 
                     count = rand.nextInt(maxRight) + 1;
 
@@ -361,7 +370,7 @@ public class Mover {
                             rightImpossible = true;
                     }
                     break;
-                case 3: // Tries to move back
+                case BACK: // Tries to move back
 
                     count = rand.nextInt(maxBack) + 1;
 
@@ -411,6 +420,8 @@ public class Mover {
 
     boolean moveRook( Square[][] board,  Square square,  SingleGame singleGame)
     {
+        List<Direction> options = new ArrayList<>();
+
         boolean moveSuccess = false;
         boolean forwardImpossible = false;
         boolean leftImpossible = false;
@@ -427,21 +438,21 @@ public class Mover {
 
         while(!moveSuccess && (!forwardImpossible || !leftImpossible || !rightImpossible || !backImpossible))
         {
-            List<Integer> options = new ArrayList<>();
+            options.clear();
 
 
             if (!forwardImpossible)
-                options.add(0);
+                options.add(Direction.UP);
             if (!leftImpossible)
-                options.add(1);
+                options.add(Direction.LEFT);
             if (!rightImpossible)
-                options.add(2);
+                options.add(Direction.RIGHT);
             if (!backImpossible)
-                options.add(3);
+                options.add(Direction.BACK);
 
             switch (options.get(rand.nextInt(options.size())))
             {
-                case 0: // Tries to move forward
+                case UP: // Tries to move forward
 
                     count = rand.nextInt(maxForward)+1;
 
@@ -489,7 +500,7 @@ public class Mover {
                         forwardImpossible = true;
                 }
                 break;
-                case 1: // Tries to move left
+                case LEFT: // Tries to move left
 
                     count = rand.nextInt(maxLeft)+1;
 
@@ -537,7 +548,7 @@ public class Mover {
                         leftImpossible = true;
                 }
                 break;
-                case 2: // Tries to move right
+                case RIGHT: // Tries to move right
 
                     count = rand.nextInt(maxRight)+1;
 
@@ -585,7 +596,7 @@ public class Mover {
                         rightImpossible = true;
                 }
                 break;
-                case 3: // Tries to move back
+                case BACK: // Tries to move back
 
                     count = rand.nextInt(maxBack) + 1;
 
@@ -644,39 +655,40 @@ public class Mover {
 
     boolean moveKnight( Square[][] board,  Square square,  SingleGame singleGame)
     {
+        List<Direction> options = new ArrayList<>();
+
         boolean moveSuccess = false;
         boolean _2R1U, _1R2U, _1L2U, _2L1U, _2L1D, _1L2D, _1R2D, _2R1D; // true means move is impossible
         _2R1U = _1R2U = _1L2U = _2L1U = _2L1D = _1L2D = _1R2D = _2R1D = false;
-
 
 
         rand.nextInt();
 
         while (!moveSuccess && (!_2R1U || !_1R2U || !_1L2U || !_2L1U || !_2L1D || !_1L2D || !_1R2D || !_2R1D))
         {
-            List<Integer> options = new ArrayList<>();
+            options.clear();
 
             if (!_2R1U)
-                options.add(0);
+                options.add(Direction._2R1U);
             if (!_1R2U)
-                options.add(1);
+                options.add(Direction._1R2U);
             if (!_1L2U)
-                options.add(2);
+                options.add(Direction._1L2U);
             if (!_2L1U)
-                options.add(3);
+                options.add(Direction._2L1U);
             if (!_2L1D)
-                options.add(4);
+                options.add(Direction._2L1D);
             if (!_1L2D)
-                options.add(5);
+                options.add(Direction._1L2D);
             if (!_1R2D)
-                options.add(6);
+                options.add(Direction._1R2D);
             if (!_2R1D)
-                options.add(7);
+                options.add(Direction._2R1D);
 
 
             switch (options.get(rand.nextInt(options.size())))
             {
-                case 0:
+                case _2R1U:
                     try
                     {
                         destination = board[square.getI() - square.getTeam() * 2][ square.getJ() + square.getTeam()];
@@ -705,7 +717,7 @@ public class Mover {
                     _2R1U = true;
                 }
                 break;
-                case 1:
+                case _1R2U:
                     try
                     {
                         destination = board[square.getI() - square.getTeam()][ square.getJ() + square.getTeam() * 2];
@@ -734,7 +746,7 @@ public class Mover {
                     _1R2U = true;
                 }
                 break;
-                case 2:
+                case _1L2U:
                     try
                     {
                         destination = board[square.getI() + square.getTeam()][ square.getJ() + square.getTeam() * 2];
@@ -763,7 +775,7 @@ public class Mover {
                     _1L2U = true;
                 }
                 break;
-                case 3:
+                case _2L1U:
                     try
                     {
                         destination = board[square.getI() + square.getTeam() * 2][ square.getJ() + square.getTeam()];
@@ -792,7 +804,7 @@ public class Mover {
                     _2L1U = true;
                 }
                 break;
-                case 4:
+                case _2L1D:
                     try
                     {
                         destination = board[square.getI() + square.getTeam() * 2][ square.getJ() - square.getTeam()];
@@ -821,7 +833,7 @@ public class Mover {
                     _2L1D = true;
                 }
                 break;
-                case 5:
+                case _1L2D:
                     try
                     {
                         destination = board[square.getI() + square.getTeam()][ square.getJ() - square.getTeam() * 2];
@@ -850,7 +862,7 @@ public class Mover {
                     _1L2D = true;
                 }
                 break;
-                case 6:
+                case _1R2D:
                     try
                     {
                         destination = board[square.getI() - square.getTeam()][ square.getJ() - square.getTeam() * 2];
@@ -879,7 +891,7 @@ public class Mover {
                     _1R2D = true;
                 }
                 break;
-                case 7:
+                case _2R1D:
                     try
                     {
                         destination = board[square.getI() - square.getTeam() * 2][ square.getJ() - square.getTeam()];
@@ -920,6 +932,8 @@ public class Mover {
 
     boolean moveBishop(Square[][] board, Square square, SingleGame singleGame, int max)
     {
+        List<Direction> options = new ArrayList<>();
+
         boolean moveSuccess = false;
         boolean rightUpImpossible = false;
         boolean leftUpImpossible = false;
@@ -933,23 +947,25 @@ public class Mover {
 
         rand.nextInt();
 
+        int count;
+
         while (!moveSuccess && (!rightUpImpossible || !leftUpImpossible || !leftDownImpossible || !rightDownImpossible))
         {
-            List<Integer> options = new ArrayList<>();
-            int count;
+
+            options.clear();
 
             if (!rightUpImpossible)
-                options.add(0);
+                options.add(Direction.RIGHTUP);
             if (!leftUpImpossible)
-                options.add(1);
+                options.add(Direction.LEFTUP);
             if (!leftDownImpossible)
-                options.add(2);
+                options.add(Direction.LEFTBACK);
             if (!rightDownImpossible)
-                options.add(3);
+                options.add(Direction.RIGHTBACK);
 
             switch (options.get(rand.nextInt(options.size())))
             {
-                case 0: // Tries to move right and up
+                case RIGHTUP: // Tries to move right and up
 
                     count = rand.nextInt(maxRightUp)+1;
 
@@ -994,7 +1010,7 @@ public class Mover {
                             rightUpImpossible = true;
                     }
                     break;
-                case 1: // Tries to move left and up
+                case LEFTUP: // Tries to move left and up
 
                     count = rand.nextInt(maxLeftUp)+1;
 
@@ -1040,7 +1056,7 @@ public class Mover {
                             leftUpImpossible = true;
                     }
                     break;
-                case 2: // Tries to move left and down
+                case LEFTBACK: // Tries to move left and down
 
 
                     count = rand.nextInt(maxLeftDown)+1;
@@ -1087,7 +1103,7 @@ public class Mover {
                             leftDownImpossible = true;
                     }
                     break;
-                case 3: // Tries to move right and down
+                case RIGHTBACK: // Tries to move right and down
 
                     count = rand.nextInt(maxRightDown)+1;
 
@@ -1142,6 +1158,8 @@ public class Mover {
 
     boolean moveBishop( Square[][] board,  Square square,  SingleGame singleGame)
     {
+        List<Direction> options = new ArrayList<>();
+
         boolean moveSuccess = false;
         boolean rightUpImpossible = false;
         boolean leftUpImpossible = false;
@@ -1151,27 +1169,26 @@ public class Mover {
         int maxLeftUp = 8;
         int maxLeftDown = 8;
         int maxRightDown = 8;
-
+        int count;
 
         rand.nextInt();
 
         while (!moveSuccess && (!rightUpImpossible || !leftUpImpossible || !leftDownImpossible || !rightDownImpossible))
         {
-            List<Integer> options = new ArrayList<>();
-            int count;
+            options.clear();
 
             if (!rightUpImpossible)
-                options.add(0);
+                options.add(Direction.RIGHTUP);
             if (!leftUpImpossible)
-                options.add(1);
+                options.add(Direction.LEFTUP);
             if (!leftDownImpossible)
-                options.add(2);
+                options.add(Direction.LEFTBACK);
             if (!rightDownImpossible)
-                options.add(3);
+                options.add(Direction.RIGHTBACK);
 
             switch (options.get(rand.nextInt(options.size())))
             {
-                case 0: // Tries to move right and up
+                case RIGHTUP: // Tries to move right and up
 
                     count = rand.nextInt(maxRightUp)+1;
 
@@ -1216,7 +1233,7 @@ public class Mover {
                         rightUpImpossible = true;
                 }
                 break;
-                case 1: // Tries to move left and up
+                case LEFTUP: // Tries to move left and up
 
                     count = rand.nextInt(maxLeftUp)+1;
 
@@ -1262,7 +1279,7 @@ public class Mover {
                         leftUpImpossible = true;
                 }
                 break;
-                case 2: // Tries to move left and down
+                case LEFTBACK: // Tries to move left and down
 
 
                     count = rand.nextInt(maxLeftDown)+1;
@@ -1309,7 +1326,7 @@ public class Mover {
                         leftDownImpossible = true;
                 }
                 break;
-                case 3: // Tries to move right and down
+                case RIGHTBACK: // Tries to move right and down
 
                     count = rand.nextInt(maxRightDown)+1;
 
@@ -1364,27 +1381,29 @@ public class Mover {
 
     boolean moveKing( Square[][] board,  Square square,  SingleGame singleGame)
     {
+        List<KQMODE> options = new ArrayList<>();
+
         boolean moveSuccess = false;
         boolean bishopImpossible = false;
         boolean rookImpossible = false;
         while (!moveSuccess && (!bishopImpossible || !rookImpossible))
         {
-            List<Integer> options = new ArrayList<>();
-
+            options.clear();
             if (!bishopImpossible)
-                options.add(0);
+                options.add(KQMODE.BISHOP);
             if (!rookImpossible)
-                options.add(1);
+                options.add(KQMODE.ROOK);
 
-            if (options.get(rand.nextInt(options.size())) == 0)
+            switch (options.get(rand.nextInt(options.size())))
             {
-                moveSuccess = moveBishop( board,  square, singleGame,1);
-                bishopImpossible = !moveSuccess;
-            }
-            else
-            {
-                moveSuccess = moveRook( board,  square, singleGame, 1);
-                rookImpossible = !moveSuccess;
+                case BISHOP:
+                    moveSuccess = moveBishop( board,  square, singleGame,1);
+                    bishopImpossible = !moveSuccess;
+                    break;
+                case ROOK:
+                    moveSuccess = moveRook( board,  square, singleGame, 1);
+                    rookImpossible = !moveSuccess;
+                    break;
             }
         }
 
@@ -1446,30 +1465,32 @@ public class Mover {
 
     boolean canPawnMove( Square[][] board,  Square square,  SingleGame singleGame)
     {
+        List<Direction> options = new ArrayList<>();
+
         boolean moveSuccess = false;
         boolean forwardImpossible = false;
         boolean leftImpossible = false;
         boolean rightImpossible = false;
-
+        int count;
 
         rand.nextInt();
 
         while (!moveSuccess && (!forwardImpossible || !leftImpossible || !rightImpossible))
         {
-            List<Integer> options = new ArrayList<>();
+            options.clear();
 
             if (!forwardImpossible)
-                options.add(0);
+                options.add(Direction.UP);
             if (!leftImpossible)
-                options.add(1);
+                options.add(Direction.LEFT);
             if (!rightImpossible)
-                options.add(2);
+                options.add(Direction.RIGHT);
 
             switch(options.get(rand.nextInt(options.size())))
             {
-                case 0: // tries to move forward
+                case UP: // tries to move forward
 
-                    int count;
+
                     if (square.getPieceCount() == 0)
                         count = rand.nextInt(2)+1;
                     else
@@ -1497,7 +1518,7 @@ public class Mover {
                         forwardImpossible = true;
                     }
                     break;
-                case 1: // tries to capture diagonally to left
+                case LEFT: // tries to capture diagonally to left
                     try
                     {
                         destination = board[square.getI() + square.getTeam()][ square.getJ() + square.getTeam()];
@@ -1515,7 +1536,7 @@ public class Mover {
                         leftImpossible = true;
                     }
                     break;
-                case 2: // tries to capture diagonally to right
+                case RIGHT: // tries to capture diagonally to right
                     try
                     {
                         destination = board[square.getI() - square.getTeam()][ square.getJ() + square.getTeam()];
@@ -1541,6 +1562,8 @@ public class Mover {
     }
 
     boolean canRookMove(Square[][] board, Square square, SingleGame singleGame, int max) {
+        List<Direction> options = new ArrayList<>();
+
         boolean moveSuccess = false;
         boolean forwardImpossible = false;
         boolean leftImpossible = false;
@@ -1556,20 +1579,20 @@ public class Mover {
         rand.nextInt();
 
         while (!moveSuccess && (!forwardImpossible || !leftImpossible || !rightImpossible || !backImpossible)) {
-            List<Integer> options = new ArrayList<>();
+            options.clear();
 
 
             if (!forwardImpossible)
-                options.add(0);
+                options.add(Direction.UP);
             if (!leftImpossible)
-                options.add(1);
+                options.add(Direction.LEFT);
             if (!rightImpossible)
-                options.add(2);
+                options.add(Direction.RIGHT);
             if (!backImpossible)
-                options.add(3);
+                options.add(Direction.BACK);
 
             switch (options.get(rand.nextInt(options.size()))) {
-                case 0: // Tries to move forward
+                case UP: // Tries to move forward
 
                     count = rand.nextInt(maxForward) + 1;
 
@@ -1599,7 +1622,7 @@ public class Mover {
                             forwardImpossible = true;
                     }
                     break;
-                case 1: // Tries to move left
+                case LEFT: // Tries to move left
 
                     count = rand.nextInt(maxLeft) + 1;
 
@@ -1629,7 +1652,7 @@ public class Mover {
                             leftImpossible = true;
                     }
                     break;
-                case 2: // Tries to move right
+                case RIGHT: // Tries to move right
 
                     count = rand.nextInt(maxRight) + 1;
 
@@ -1659,7 +1682,7 @@ public class Mover {
                             rightImpossible = true;
                     }
                     break;
-                case 3: // Tries to move back
+                case BACK: // Tries to move back
 
                     count = rand.nextInt(maxBack) + 1;
 
@@ -1698,6 +1721,8 @@ public class Mover {
 
     boolean canRookMove( Square[][] board,  Square square,  SingleGame singleGame)
     {
+        List<Direction> options = new ArrayList<>();
+
         boolean moveSuccess = false;
         boolean forwardImpossible = false;
         boolean leftImpossible = false;
@@ -1715,21 +1740,21 @@ public class Mover {
 
         while(!moveSuccess && (!forwardImpossible || !leftImpossible || !rightImpossible || !backImpossible))
         {
-            List<Integer> options = new ArrayList<>();
+            options.clear();
 
 
             if (!forwardImpossible)
-                options.add(0);
+                options.add(Direction.UP);
             if (!leftImpossible)
-                options.add(1);
+                options.add(Direction.LEFT);
             if (!rightImpossible)
-                options.add(2);
+                options.add(Direction.RIGHT);
             if (!backImpossible)
-                options.add(3);
+                options.add(Direction.BACK);
 
             switch (options.get(rand.nextInt(options.size())))
             {
-                case 0: // Tries to move forward
+                case UP: // Tries to move forward
 
                     count = rand.nextInt(maxForward)+1;
 
@@ -1767,7 +1792,7 @@ public class Mover {
                             forwardImpossible = true;
                     }
                     break;
-                case 1: // Tries to move left
+                case LEFT: // Tries to move left
 
                     count = rand.nextInt(maxLeft)+1;
 
@@ -1805,7 +1830,7 @@ public class Mover {
                             leftImpossible = true;
                     }
                     break;
-                case 2: // Tries to move right
+                case RIGHT: // Tries to move right
 
                     count = rand.nextInt(maxRight)+1;
 
@@ -1843,7 +1868,7 @@ public class Mover {
                             rightImpossible = true;
                     }
                     break;
-                case 3: // Tries to move back
+                case BACK: // Tries to move back
 
                     count = rand.nextInt(maxBack) + 1;
 
@@ -1891,6 +1916,8 @@ public class Mover {
 
     boolean canKnightMove( Square[][] board,  Square square,  SingleGame singleGame)
     {
+        List<Direction> options = new ArrayList<>();
+
         boolean moveSuccess = false;
         boolean _2R1U, _1R2U, _1L2U, _2L1U, _2L1D, _1L2D, _1R2D, _2R1D; // true means move is impossible
         _2R1U = _1R2U = _1L2U = _2L1U = _2L1D = _1L2D = _1R2D = _2R1D = false;
@@ -1901,29 +1928,29 @@ public class Mover {
 
         while (!moveSuccess && (!_2R1U || !_1R2U || !_1L2U || !_2L1U || !_2L1D || !_1L2D || !_1R2D || !_2R1D))
         {
-            List<Integer> options = new ArrayList<>();
+            options.clear();
 
             if (!_2R1U)
-                options.add(0);
+                options.add(Direction._2R1U);
             if (!_1R2U)
-                options.add(1);
+                options.add(Direction._1R2U);
             if (!_1L2U)
-                options.add(2);
+                options.add(Direction._1L2U);
             if (!_2L1U)
-                options.add(3);
+                options.add(Direction._2L1U);
             if (!_2L1D)
-                options.add(4);
+                options.add(Direction._2L1D);
             if (!_1L2D)
-                options.add(5);
+                options.add(Direction._1L2D);
             if (!_1R2D)
-                options.add(6);
+                options.add(Direction._1R2D);
             if (!_2R1D)
-                options.add(7);
+                options.add(Direction._2R1D);
 
 
             switch (options.get(rand.nextInt(options.size())))
             {
-                case 0:
+                case _2R1U:
                     try
                     {
                         destination = board[square.getI() - square.getTeam() * 2][ square.getJ() + square.getTeam()];
@@ -1941,7 +1968,7 @@ public class Mover {
                         _2R1U = true;
                     }
                     break;
-                case 1:
+                case _1R2U:
                     try
                     {
                         destination = board[square.getI() - square.getTeam()][ square.getJ() + square.getTeam() * 2];
@@ -1959,7 +1986,7 @@ public class Mover {
                         _1R2U = true;
                     }
                     break;
-                case 2:
+                case _1L2U:
                     try
                     {
                         destination = board[square.getI() + square.getTeam()][ square.getJ() + square.getTeam() * 2];
@@ -1977,7 +2004,7 @@ public class Mover {
                         _1L2U = true;
                     }
                     break;
-                case 3:
+                case _2L1U:
                     try
                     {
                         destination = board[square.getI() + square.getTeam() * 2][ square.getJ() + square.getTeam()];
@@ -1995,7 +2022,7 @@ public class Mover {
                         _2L1U = true;
                     }
                     break;
-                case 4:
+                case _2L1D:
                     try
                     {
                         destination = board[square.getI() + square.getTeam() * 2][ square.getJ() - square.getTeam()];
@@ -2013,7 +2040,7 @@ public class Mover {
                         _2L1D = true;
                     }
                     break;
-                case 5:
+                case _1L2D:
                     try
                     {
                         destination = board[square.getI() + square.getTeam()][ square.getJ() - square.getTeam() * 2];
@@ -2031,7 +2058,7 @@ public class Mover {
                         _1L2D = true;
                     }
                     break;
-                case 6:
+                case _1R2D:
                     try
                     {
                         destination = board[square.getI() - square.getTeam()][ square.getJ() - square.getTeam() * 2];
@@ -2049,7 +2076,7 @@ public class Mover {
                         _1R2D = true;
                     }
                     break;
-                case 7:
+                case _2R1D:
                     try
                     {
                         destination = board[square.getI() - square.getTeam() * 2][ square.getJ() - square.getTeam()];
@@ -2095,21 +2122,21 @@ public class Mover {
 
         while (!moveSuccess && (!rightUpImpossible || !leftUpImpossible || !leftDownImpossible || !rightDownImpossible))
         {
-            List<Integer> options = new ArrayList<>();
+            List<Direction> options = new ArrayList<>();
             int count;
 
             if (!rightUpImpossible)
-                options.add(0);
+                options.add(Direction.RIGHTUP);
             if (!leftUpImpossible)
-                options.add(1);
+                options.add(Direction.LEFTUP);
             if (!leftDownImpossible)
-                options.add(2);
+                options.add(Direction.LEFTBACK);
             if (!rightDownImpossible)
-                options.add(3);
+                options.add(Direction.RIGHTBACK);
 
             switch (options.get(rand.nextInt(options.size())))
             {
-                case 0: // Tries to move right and up
+                case RIGHTUP: // Tries to move right and up
 
                     count = rand.nextInt(maxRightUp)+1;
 
@@ -2143,7 +2170,7 @@ public class Mover {
                             rightUpImpossible = true;
                     }
                     break;
-                case 1: // Tries to move left and up
+                case LEFTUP: // Tries to move left and up
 
                     count = rand.nextInt(maxLeftUp)+1;
 
@@ -2178,7 +2205,7 @@ public class Mover {
                             leftUpImpossible = true;
                     }
                     break;
-                case 2: // Tries to move left and down
+                case LEFTBACK: // Tries to move left and down
 
 
                     count = rand.nextInt(maxLeftDown)+1;
@@ -2214,7 +2241,7 @@ public class Mover {
                             leftDownImpossible = true;
                     }
                     break;
-                case 3: // Tries to move right and down
+                case RIGHTBACK: // Tries to move right and down
 
                     count = rand.nextInt(maxRightDown)+1;
 
@@ -2258,6 +2285,8 @@ public class Mover {
 
     boolean canBishopMove( Square[][] board,  Square square,  SingleGame singleGame)
     {
+        List<Direction> options = new ArrayList<>();
+
         boolean moveSuccess = false;
         boolean rightUpImpossible = false;
         boolean leftUpImpossible = false;
@@ -2267,28 +2296,28 @@ public class Mover {
         int maxLeftUp = 8;
         int maxLeftDown = 8;
         int maxRightDown = 8;
-
+        int count;
 
 
         rand.nextInt();
 
         while (!moveSuccess && (!rightUpImpossible || !leftUpImpossible || !leftDownImpossible || !rightDownImpossible))
         {
-            List<Integer> options = new ArrayList<>();
-            int count;
+            options.clear();
+
 
             if (!rightUpImpossible)
-                options.add(0);
+                options.add(Direction.RIGHTUP);
             if (!leftUpImpossible)
-                options.add(1);
+                options.add(Direction.LEFTUP);
             if (!leftDownImpossible)
-                options.add(2);
+                options.add(Direction.LEFTBACK);
             if (!rightDownImpossible)
-                options.add(3);
+                options.add(Direction.RIGHTBACK);
 
             switch (options.get(rand.nextInt(options.size())))
             {
-                case 0: // Tries to move right and up
+                case RIGHTUP: // Tries to move right and up
 
                     count = rand.nextInt(maxRightUp)+1;
 
@@ -2322,7 +2351,7 @@ public class Mover {
                             rightUpImpossible = true;
                     }
                     break;
-                case 1: // Tries to move left and up
+                case LEFTUP: // Tries to move left and up
 
                     count = rand.nextInt(maxLeftUp)+1;
 
@@ -2357,7 +2386,7 @@ public class Mover {
                             leftUpImpossible = true;
                     }
                     break;
-                case 2: // Tries to move left and down
+                case LEFTBACK: // Tries to move left and down
 
 
                     count = rand.nextInt(maxLeftDown)+1;
@@ -2393,7 +2422,7 @@ public class Mover {
                             leftDownImpossible = true;
                     }
                     break;
-                case 3: // Tries to move right and down
+                case RIGHTBACK: // Tries to move right and down
 
                     count = rand.nextInt(maxRightDown)+1;
 
@@ -2437,27 +2466,29 @@ public class Mover {
 
     boolean canKingMove( Square[][] board,  Square square,  SingleGame singleGame)
     {
+        List<KQMODE> options = new ArrayList<>();
+
         boolean moveSuccess = false;
         boolean bishopImpossible = false;
         boolean rookImpossible = false;
+
         while (!moveSuccess && (!bishopImpossible || !rookImpossible))
         {
-            List<Integer> options = new ArrayList<>();
-
             if (!bishopImpossible)
-                options.add(0);
+                options.add(KQMODE.BISHOP);
             if (!rookImpossible)
-                options.add(1);
+                options.add(KQMODE.ROOK);
 
-            if (options.get(rand.nextInt(options.size())) == 0)
+            switch (options.get(rand.nextInt(options.size())))
             {
-                moveSuccess = canBishopMove( board,  square, singleGame,1);
-                bishopImpossible = !moveSuccess;
-            }
-            else
-            {
-                moveSuccess = canRookMove( board,  square, singleGame, 1);
-                rookImpossible = !moveSuccess;
+                case BISHOP:
+                    moveSuccess = canBishopMove( board,  square, singleGame,1);
+                    bishopImpossible = !moveSuccess;
+                    break;
+                case ROOK:
+                    moveSuccess = canRookMove( board,  square, singleGame, 1);
+                    rookImpossible = !moveSuccess;
+                    break;
             }
         }
 
@@ -2466,20 +2497,28 @@ public class Mover {
 
     boolean canQueenMove( Square[][] board,  Square square,  SingleGame singleGame)
     {
+        List<KQMODE> options = new ArrayList<>();
+
         boolean moveSuccess = false;
         boolean bishopImpossible = false;
         boolean rookImpossible = false;
         while (!moveSuccess && (!bishopImpossible || !rookImpossible))
         {
-            if (rand.nextInt(2) == 0 && !bishopImpossible)
+            if (!bishopImpossible)
+                options.add(KQMODE.BISHOP);
+            if (!rookImpossible)
+                options.add(KQMODE.ROOK);
+
+            switch (options.get(rand.nextInt(options.size())))
             {
-                moveSuccess = canBishopMove( board,  square, singleGame);
-                bishopImpossible = !moveSuccess;
-            }
-            else if (!rookImpossible)
-            {
-                moveSuccess = canRookMove( board,  square, singleGame);
-                rookImpossible = !moveSuccess;
+                case BISHOP:
+                    moveSuccess = canBishopMove( board,  square, singleGame);
+                    bishopImpossible = !moveSuccess;
+                    break;
+                case ROOK:
+                    moveSuccess = canRookMove( board,  square, singleGame);
+                    rookImpossible = !moveSuccess;
+                    break;
             }
         }
 
@@ -2488,35 +2527,7 @@ public class Mover {
     //Single game functions end
 
     //Multi game functions start
-
-    public synchronized void forceMove(Square[][] board, Square start, Square end, MultiGame multiGame)
-    {
-        Square square = board[start.getI()][start.getJ()];
-        destination = board[end.getI()][end.getJ()];
-        if (destination.getTeam() != square.getTeam()) {
-            if (destination.getTeam() == OPPONENT)
-                multiGame.incrementYourPoints();
-            else if (destination.getTeam() == YOU)
-                multiGame.incrementOpponentPoints();
-
-            destination.setTeam(square.getTeam());
-            destination.setPiece(square.getPiece());
-            destination.setPieceCount(square.getPieceCount() + 1);
-            square.setPieceCount(0);
-            square.setTeam(NONE);
-            square.setPiece(" ");
-
-            if(destination.getPiece() == "P" && destination.getJ() == 7 && destination.getTeam() == OPPONENT)
-            {
-                destination.setPiece("Q");
-            }
-            else if(destination.getPiece() == "P" && destination.getJ() == 0 && destination.getTeam() == YOU)
-            {
-                destination.setPiece("Q");
-            }
-        }
-    }
-
+    
     public synchronized boolean movePiece(Square[][] board, Square square, MultiGame multiGame)
     {
         boolean moveSuccess;
@@ -2550,6 +2561,9 @@ public class Mover {
 
     boolean movePawn( Square[][] board,  Square square,  MultiGame multiGame)
     {
+        List<Direction> options = new ArrayList<>();
+
+
         boolean moveSuccess = false;
         boolean forwardImpossible = false;
         boolean leftImpossible = false;
@@ -2557,23 +2571,24 @@ public class Mover {
         destination = new Square(context,0xffffffff);
 
         rand.nextInt();
+        int count;
 
         while (!moveSuccess && (!forwardImpossible || !leftImpossible || !rightImpossible))
         {
-            List<Integer> options = new ArrayList<>();
+            options.clear();
 
             if (!forwardImpossible)
-                options.add(0);
+                options.add(Direction.UP);
             if (!leftImpossible)
-                options.add(1);
+                options.add(Direction.LEFT);
             if (!rightImpossible)
-                options.add(2);
+                options.add(Direction.RIGHT);
+
 
             switch(options.get(rand.nextInt(options.size())))
             {
-                case 0: // tries to move forward
+                case UP: // tries to move forward
 
-                    int count;
                     if (square.getPieceCount() == 0)
                         count = rand.nextInt(2)+1;
                     else
@@ -2608,7 +2623,7 @@ public class Mover {
                         forwardImpossible = true;
                     }
                     break;
-                case 1: // tries to capture diagonally to left
+                case LEFT: // tries to capture diagonally to left
                     try
                     {
                         destination = board[square.getI() + square.getTeam()][ square.getJ() + square.getTeam()];
@@ -2637,7 +2652,7 @@ public class Mover {
                         leftImpossible = true;
                     }
                     break;
-                case 2: // tries to capture diagonally to right
+                case RIGHT: // tries to capture diagonally to right
                     try
                     {
                         destination = board[square.getI() - square.getTeam()][ square.getJ() + square.getTeam()];
@@ -2683,6 +2698,8 @@ public class Mover {
 
     boolean moveRook(Square[][] board, Square square, MultiGame multiGame, int max)
     {
+        List<Direction> options = new ArrayList<>();
+
         boolean moveSuccess = false;
         boolean forwardImpossible = false;
         boolean leftImpossible = false;
@@ -2694,24 +2711,23 @@ public class Mover {
         int maxBack = max;
         int count;
 
-
         rand.nextInt();
 
         while (!moveSuccess && (!forwardImpossible || !leftImpossible || !rightImpossible || !backImpossible)) {
-            List<Integer> options = new ArrayList<>();
 
+            options.clear();
 
             if (!forwardImpossible)
-                options.add(0);
+                options.add(Direction.UP);
             if (!leftImpossible)
-                options.add(1);
+                options.add(Direction.LEFT);
             if (!rightImpossible)
-                options.add(2);
+                options.add(Direction.RIGHT);
             if (!backImpossible)
-                options.add(3);
+                options.add(Direction.BACK);
 
             switch (options.get(rand.nextInt(options.size()))) {
-                case 0: // Tries to move forward
+                case UP: // Tries to move forward
 
                     count = rand.nextInt(maxForward) + 1;
 
@@ -2752,7 +2768,7 @@ public class Mover {
                             forwardImpossible = true;
                     }
                     break;
-                case 1: // Tries to move left
+                case LEFT: // Tries to move left
 
                     count = rand.nextInt(maxLeft) + 1;
 
@@ -2793,7 +2809,7 @@ public class Mover {
                             leftImpossible = true;
                     }
                     break;
-                case 2: // Tries to move right
+                case RIGHT: // Tries to move right
 
                     count = rand.nextInt(maxRight) + 1;
 
@@ -2834,7 +2850,7 @@ public class Mover {
                             rightImpossible = true;
                     }
                     break;
-                case 3: // Tries to move back
+                case BACK: // Tries to move back
 
                     count = rand.nextInt(maxBack) + 1;
 
@@ -2884,6 +2900,8 @@ public class Mover {
 
     boolean moveRook( Square[][] board,  Square square,  MultiGame multiGame)
     {
+        List<Direction> options = new ArrayList<>();
+
         boolean moveSuccess = false;
         boolean forwardImpossible = false;
         boolean leftImpossible = false;
@@ -2896,26 +2914,25 @@ public class Mover {
         int count;
 
 
-
         rand.nextInt();
 
         while(!moveSuccess && (!forwardImpossible || !leftImpossible || !rightImpossible || !backImpossible))
         {
-            List<Integer> options = new ArrayList<>();
+            options.clear();
 
 
             if (!forwardImpossible)
-                options.add(0);
+                options.add(Direction.UP);
             if (!leftImpossible)
-                options.add(1);
+                options.add(Direction.LEFT);
             if (!rightImpossible)
-                options.add(2);
+                options.add(Direction.RIGHT);
             if (!backImpossible)
-                options.add(3);
+                options.add(Direction.BACK);
 
             switch (options.get(rand.nextInt(options.size())))
             {
-                case 0: // Tries to move forward
+                case UP: // Tries to move forward
 
                     count = rand.nextInt(maxForward)+1;
 
@@ -2963,7 +2980,7 @@ public class Mover {
                             forwardImpossible = true;
                     }
                     break;
-                case 1: // Tries to move left
+                case LEFT: // Tries to move left
 
                     count = rand.nextInt(maxLeft)+1;
 
@@ -3011,7 +3028,7 @@ public class Mover {
                             leftImpossible = true;
                     }
                     break;
-                case 2: // Tries to move right
+                case RIGHT: // Tries to move right
 
                     count = rand.nextInt(maxRight)+1;
 
@@ -3059,7 +3076,7 @@ public class Mover {
                             rightImpossible = true;
                     }
                     break;
-                case 3: // Tries to move back
+                case BACK: // Tries to move back
 
                     count = rand.nextInt(maxBack) + 1;
 
@@ -3118,39 +3135,40 @@ public class Mover {
 
     boolean moveKnight( Square[][] board,  Square square,  MultiGame multiGame)
     {
+        List<Direction> options = new ArrayList<>();
+
         boolean moveSuccess = false;
         boolean _2R1U, _1R2U, _1L2U, _2L1U, _2L1D, _1L2D, _1R2D, _2R1D; // true means move is impossible
         _2R1U = _1R2U = _1L2U = _2L1U = _2L1D = _1L2D = _1R2D = _2R1D = false;
-
 
 
         rand.nextInt();
 
         while (!moveSuccess && (!_2R1U || !_1R2U || !_1L2U || !_2L1U || !_2L1D || !_1L2D || !_1R2D || !_2R1D))
         {
-            List<Integer> options = new ArrayList<>();
+            options.clear();
 
             if (!_2R1U)
-                options.add(0);
+                options.add(Direction._2R1U);
             if (!_1R2U)
-                options.add(1);
+                options.add(Direction._1R2U);
             if (!_1L2U)
-                options.add(2);
+                options.add(Direction._1L2U);
             if (!_2L1U)
-                options.add(3);
+                options.add(Direction._2L1U);
             if (!_2L1D)
-                options.add(4);
+                options.add(Direction._2L1D);
             if (!_1L2D)
-                options.add(5);
+                options.add(Direction._1L2D);
             if (!_1R2D)
-                options.add(6);
+                options.add(Direction._1R2D);
             if (!_2R1D)
-                options.add(7);
+                options.add(Direction._2R1D);
 
 
             switch (options.get(rand.nextInt(options.size())))
             {
-                case 0:
+                case _2R1U:
                     try
                     {
                         destination = board[square.getI() - square.getTeam() * 2][ square.getJ() + square.getTeam()];
@@ -3179,7 +3197,7 @@ public class Mover {
                         _2R1U = true;
                     }
                     break;
-                case 1:
+                case _1R2U:
                     try
                     {
                         destination = board[square.getI() - square.getTeam()][ square.getJ() + square.getTeam() * 2];
@@ -3208,7 +3226,7 @@ public class Mover {
                         _1R2U = true;
                     }
                     break;
-                case 2:
+                case _1L2U:
                     try
                     {
                         destination = board[square.getI() + square.getTeam()][ square.getJ() + square.getTeam() * 2];
@@ -3237,7 +3255,7 @@ public class Mover {
                         _1L2U = true;
                     }
                     break;
-                case 3:
+                case _2L1U:
                     try
                     {
                         destination = board[square.getI() + square.getTeam() * 2][ square.getJ() + square.getTeam()];
@@ -3266,7 +3284,7 @@ public class Mover {
                         _2L1U = true;
                     }
                     break;
-                case 4:
+                case _2L1D:
                     try
                     {
                         destination = board[square.getI() + square.getTeam() * 2][ square.getJ() - square.getTeam()];
@@ -3295,7 +3313,7 @@ public class Mover {
                         _2L1D = true;
                     }
                     break;
-                case 5:
+                case _1L2D:
                     try
                     {
                         destination = board[square.getI() + square.getTeam()][ square.getJ() - square.getTeam() * 2];
@@ -3324,7 +3342,7 @@ public class Mover {
                         _1L2D = true;
                     }
                     break;
-                case 6:
+                case _1R2D:
                     try
                     {
                         destination = board[square.getI() - square.getTeam()][ square.getJ() - square.getTeam() * 2];
@@ -3353,7 +3371,7 @@ public class Mover {
                         _1R2D = true;
                     }
                     break;
-                case 7:
+                case _2R1D:
                     try
                     {
                         destination = board[square.getI() - square.getTeam() * 2][ square.getJ() - square.getTeam()];
@@ -3394,6 +3412,8 @@ public class Mover {
 
     boolean moveBishop(Square[][] board, Square square, MultiGame multiGame, int max)
     {
+        List<Direction> options = new ArrayList<>();
+
         boolean moveSuccess = false;
         boolean rightUpImpossible = false;
         boolean leftUpImpossible = false;
@@ -3405,26 +3425,27 @@ public class Mover {
         int maxRightDown = max;
 
 
-
         rand.nextInt();
+
+        int count;
 
         while (!moveSuccess && (!rightUpImpossible || !leftUpImpossible || !leftDownImpossible || !rightDownImpossible))
         {
-            List<Integer> options = new ArrayList<>();
-            int count;
+
+            options.clear();
 
             if (!rightUpImpossible)
-                options.add(0);
+                options.add(Direction.RIGHTUP);
             if (!leftUpImpossible)
-                options.add(1);
+                options.add(Direction.LEFTUP);
             if (!leftDownImpossible)
-                options.add(2);
+                options.add(Direction.LEFTBACK);
             if (!rightDownImpossible)
-                options.add(3);
+                options.add(Direction.RIGHTBACK);
 
             switch (options.get(rand.nextInt(options.size())))
             {
-                case 0: // Tries to move right and up
+                case RIGHTUP: // Tries to move right and up
 
                     count = rand.nextInt(maxRightUp)+1;
 
@@ -3469,7 +3490,7 @@ public class Mover {
                             rightUpImpossible = true;
                     }
                     break;
-                case 1: // Tries to move left and up
+                case LEFTUP: // Tries to move left and up
 
                     count = rand.nextInt(maxLeftUp)+1;
 
@@ -3515,7 +3536,7 @@ public class Mover {
                             leftUpImpossible = true;
                     }
                     break;
-                case 2: // Tries to move left and down
+                case LEFTBACK: // Tries to move left and down
 
 
                     count = rand.nextInt(maxLeftDown)+1;
@@ -3562,7 +3583,7 @@ public class Mover {
                             leftDownImpossible = true;
                     }
                     break;
-                case 3: // Tries to move right and down
+                case RIGHTBACK: // Tries to move right and down
 
                     count = rand.nextInt(maxRightDown)+1;
 
@@ -3617,6 +3638,8 @@ public class Mover {
 
     boolean moveBishop( Square[][] board,  Square square,  MultiGame multiGame)
     {
+        List<Direction> options = new ArrayList<>();
+
         boolean moveSuccess = false;
         boolean rightUpImpossible = false;
         boolean leftUpImpossible = false;
@@ -3626,28 +3649,26 @@ public class Mover {
         int maxLeftUp = 8;
         int maxLeftDown = 8;
         int maxRightDown = 8;
-
-
+        int count;
 
         rand.nextInt();
 
         while (!moveSuccess && (!rightUpImpossible || !leftUpImpossible || !leftDownImpossible || !rightDownImpossible))
         {
-            List<Integer> options = new ArrayList<>();
-            int count;
+            options.clear();
 
             if (!rightUpImpossible)
-                options.add(0);
+                options.add(Direction.RIGHTUP);
             if (!leftUpImpossible)
-                options.add(1);
+                options.add(Direction.LEFTUP);
             if (!leftDownImpossible)
-                options.add(2);
+                options.add(Direction.LEFTBACK);
             if (!rightDownImpossible)
-                options.add(3);
+                options.add(Direction.RIGHTBACK);
 
             switch (options.get(rand.nextInt(options.size())))
             {
-                case 0: // Tries to move right and up
+                case RIGHTUP: // Tries to move right and up
 
                     count = rand.nextInt(maxRightUp)+1;
 
@@ -3692,7 +3713,7 @@ public class Mover {
                             rightUpImpossible = true;
                     }
                     break;
-                case 1: // Tries to move left and up
+                case LEFTUP: // Tries to move left and up
 
                     count = rand.nextInt(maxLeftUp)+1;
 
@@ -3738,7 +3759,7 @@ public class Mover {
                             leftUpImpossible = true;
                     }
                     break;
-                case 2: // Tries to move left and down
+                case LEFTBACK: // Tries to move left and down
 
 
                     count = rand.nextInt(maxLeftDown)+1;
@@ -3785,7 +3806,7 @@ public class Mover {
                             leftDownImpossible = true;
                     }
                     break;
-                case 3: // Tries to move right and down
+                case RIGHTBACK: // Tries to move right and down
 
                     count = rand.nextInt(maxRightDown)+1;
 
@@ -3819,10 +3840,10 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount()+ 1);
                             square.setPieceCount(0);
-                        square.setTeam(NONE);
-                        square.setPiece(" ");
-                        moveSuccess = true;
-                    }
+                            square.setTeam(NONE);
+                            square.setPiece(" ");
+                            moveSuccess = true;
+                        }
                     }
                     catch (Exception e)
                     {
@@ -3840,27 +3861,29 @@ public class Mover {
 
     boolean moveKing( Square[][] board,  Square square,  MultiGame multiGame)
     {
+        List<KQMODE> options = new ArrayList<>();
+
         boolean moveSuccess = false;
         boolean bishopImpossible = false;
         boolean rookImpossible = false;
         while (!moveSuccess && (!bishopImpossible || !rookImpossible))
         {
-            List<Integer> options = new ArrayList<>();
-
+            options.clear();
             if (!bishopImpossible)
-                options.add(0);
+                options.add(KQMODE.BISHOP);
             if (!rookImpossible)
-                options.add(1);
+                options.add(KQMODE.ROOK);
 
-            if (options.get(rand.nextInt(options.size())) == 0)
+            switch (options.get(rand.nextInt(options.size())))
             {
-                moveSuccess = moveBishop( board,  square, multiGame,1);
-                bishopImpossible = !moveSuccess;
-            }
-            else
-            {
-                moveSuccess = moveRook( board,  square, multiGame, 1);
-                rookImpossible = !moveSuccess;
+                case BISHOP:
+                    moveSuccess = moveBishop( board,  square, multiGame,1);
+                    bishopImpossible = !moveSuccess;
+                    break;
+                case ROOK:
+                    moveSuccess = moveRook( board,  square, multiGame, 1);
+                    rookImpossible = !moveSuccess;
+                    break;
             }
         }
 
@@ -3922,30 +3945,32 @@ public class Mover {
 
     boolean canPawnMove( Square[][] board,  Square square,  MultiGame multiGame)
     {
+        List<Direction> options = new ArrayList<>();
+
         boolean moveSuccess = false;
         boolean forwardImpossible = false;
         boolean leftImpossible = false;
         boolean rightImpossible = false;
-
+        int count;
 
         rand.nextInt();
 
         while (!moveSuccess && (!forwardImpossible || !leftImpossible || !rightImpossible))
         {
-            List<Integer> options = new ArrayList<>();
+            options.clear();
 
             if (!forwardImpossible)
-                options.add(0);
+                options.add(Direction.UP);
             if (!leftImpossible)
-                options.add(1);
+                options.add(Direction.LEFT);
             if (!rightImpossible)
-                options.add(2);
+                options.add(Direction.RIGHT);
 
             switch(options.get(rand.nextInt(options.size())))
             {
-                case 0: // tries to move forward
+                case UP: // tries to move forward
 
-                    int count;
+
                     if (square.getPieceCount() == 0)
                         count = rand.nextInt(2)+1;
                     else
@@ -3973,7 +3998,7 @@ public class Mover {
                         forwardImpossible = true;
                     }
                     break;
-                case 1: // tries to capture diagonally to left
+                case LEFT: // tries to capture diagonally to left
                     try
                     {
                         destination = board[square.getI() + square.getTeam()][ square.getJ() + square.getTeam()];
@@ -3991,7 +4016,7 @@ public class Mover {
                         leftImpossible = true;
                     }
                     break;
-                case 2: // tries to capture diagonally to right
+                case RIGHT: // tries to capture diagonally to right
                     try
                     {
                         destination = board[square.getI() - square.getTeam()][ square.getJ() + square.getTeam()];
@@ -4017,6 +4042,8 @@ public class Mover {
     }
 
     boolean canRookMove(Square[][] board, Square square, MultiGame multiGame, int max) {
+        List<Direction> options = new ArrayList<>();
+
         boolean moveSuccess = false;
         boolean forwardImpossible = false;
         boolean leftImpossible = false;
@@ -4029,24 +4056,23 @@ public class Mover {
         int count;
 
 
-
         rand.nextInt();
 
         while (!moveSuccess && (!forwardImpossible || !leftImpossible || !rightImpossible || !backImpossible)) {
-            List<Integer> options = new ArrayList<>();
+            options.clear();
 
 
             if (!forwardImpossible)
-                options.add(0);
+                options.add(Direction.UP);
             if (!leftImpossible)
-                options.add(1);
+                options.add(Direction.LEFT);
             if (!rightImpossible)
-                options.add(2);
+                options.add(Direction.RIGHT);
             if (!backImpossible)
-                options.add(3);
+                options.add(Direction.BACK);
 
             switch (options.get(rand.nextInt(options.size()))) {
-                case 0: // Tries to move forward
+                case UP: // Tries to move forward
 
                     count = rand.nextInt(maxForward) + 1;
 
@@ -4076,7 +4102,7 @@ public class Mover {
                             forwardImpossible = true;
                     }
                     break;
-                case 1: // Tries to move left
+                case LEFT: // Tries to move left
 
                     count = rand.nextInt(maxLeft) + 1;
 
@@ -4106,7 +4132,7 @@ public class Mover {
                             leftImpossible = true;
                     }
                     break;
-                case 2: // Tries to move right
+                case RIGHT: // Tries to move right
 
                     count = rand.nextInt(maxRight) + 1;
 
@@ -4136,7 +4162,7 @@ public class Mover {
                             rightImpossible = true;
                     }
                     break;
-                case 3: // Tries to move back
+                case BACK: // Tries to move back
 
                     count = rand.nextInt(maxBack) + 1;
 
@@ -4175,6 +4201,8 @@ public class Mover {
 
     boolean canRookMove( Square[][] board,  Square square,  MultiGame multiGame)
     {
+        List<Direction> options = new ArrayList<>();
+
         boolean moveSuccess = false;
         boolean forwardImpossible = false;
         boolean leftImpossible = false;
@@ -4192,21 +4220,21 @@ public class Mover {
 
         while(!moveSuccess && (!forwardImpossible || !leftImpossible || !rightImpossible || !backImpossible))
         {
-            List<Integer> options = new ArrayList<>();
+            options.clear();
 
 
             if (!forwardImpossible)
-                options.add(0);
+                options.add(Direction.UP);
             if (!leftImpossible)
-                options.add(1);
+                options.add(Direction.LEFT);
             if (!rightImpossible)
-                options.add(2);
+                options.add(Direction.RIGHT);
             if (!backImpossible)
-                options.add(3);
+                options.add(Direction.BACK);
 
             switch (options.get(rand.nextInt(options.size())))
             {
-                case 0: // Tries to move forward
+                case UP: // Tries to move forward
 
                     count = rand.nextInt(maxForward)+1;
 
@@ -4244,7 +4272,7 @@ public class Mover {
                             forwardImpossible = true;
                     }
                     break;
-                case 1: // Tries to move left
+                case LEFT: // Tries to move left
 
                     count = rand.nextInt(maxLeft)+1;
 
@@ -4282,7 +4310,7 @@ public class Mover {
                             leftImpossible = true;
                     }
                     break;
-                case 2: // Tries to move right
+                case RIGHT: // Tries to move right
 
                     count = rand.nextInt(maxRight)+1;
 
@@ -4320,7 +4348,7 @@ public class Mover {
                             rightImpossible = true;
                     }
                     break;
-                case 3: // Tries to move back
+                case BACK: // Tries to move back
 
                     count = rand.nextInt(maxBack) + 1;
 
@@ -4368,6 +4396,8 @@ public class Mover {
 
     boolean canKnightMove( Square[][] board,  Square square,  MultiGame multiGame)
     {
+        List<Direction> options = new ArrayList<>();
+
         boolean moveSuccess = false;
         boolean _2R1U, _1R2U, _1L2U, _2L1U, _2L1D, _1L2D, _1R2D, _2R1D; // true means move is impossible
         _2R1U = _1R2U = _1L2U = _2L1U = _2L1D = _1L2D = _1R2D = _2R1D = false;
@@ -4378,29 +4408,29 @@ public class Mover {
 
         while (!moveSuccess && (!_2R1U || !_1R2U || !_1L2U || !_2L1U || !_2L1D || !_1L2D || !_1R2D || !_2R1D))
         {
-            List<Integer> options = new ArrayList<>();
+            options.clear();
 
             if (!_2R1U)
-                options.add(0);
+                options.add(Direction._2R1U);
             if (!_1R2U)
-                options.add(1);
+                options.add(Direction._1R2U);
             if (!_1L2U)
-                options.add(2);
+                options.add(Direction._1L2U);
             if (!_2L1U)
-                options.add(3);
+                options.add(Direction._2L1U);
             if (!_2L1D)
-                options.add(4);
+                options.add(Direction._2L1D);
             if (!_1L2D)
-                options.add(5);
+                options.add(Direction._1L2D);
             if (!_1R2D)
-                options.add(6);
+                options.add(Direction._1R2D);
             if (!_2R1D)
-                options.add(7);
+                options.add(Direction._2R1D);
 
 
             switch (options.get(rand.nextInt(options.size())))
             {
-                case 0:
+                case _2R1U:
                     try
                     {
                         destination = board[square.getI() - square.getTeam() * 2][ square.getJ() + square.getTeam()];
@@ -4418,7 +4448,7 @@ public class Mover {
                         _2R1U = true;
                     }
                     break;
-                case 1:
+                case _1R2U:
                     try
                     {
                         destination = board[square.getI() - square.getTeam()][ square.getJ() + square.getTeam() * 2];
@@ -4436,7 +4466,7 @@ public class Mover {
                         _1R2U = true;
                     }
                     break;
-                case 2:
+                case _1L2U:
                     try
                     {
                         destination = board[square.getI() + square.getTeam()][ square.getJ() + square.getTeam() * 2];
@@ -4454,7 +4484,7 @@ public class Mover {
                         _1L2U = true;
                     }
                     break;
-                case 3:
+                case _2L1U:
                     try
                     {
                         destination = board[square.getI() + square.getTeam() * 2][ square.getJ() + square.getTeam()];
@@ -4472,7 +4502,7 @@ public class Mover {
                         _2L1U = true;
                     }
                     break;
-                case 4:
+                case _2L1D:
                     try
                     {
                         destination = board[square.getI() + square.getTeam() * 2][ square.getJ() - square.getTeam()];
@@ -4490,7 +4520,7 @@ public class Mover {
                         _2L1D = true;
                     }
                     break;
-                case 5:
+                case _1L2D:
                     try
                     {
                         destination = board[square.getI() + square.getTeam()][ square.getJ() - square.getTeam() * 2];
@@ -4508,7 +4538,7 @@ public class Mover {
                         _1L2D = true;
                     }
                     break;
-                case 6:
+                case _1R2D:
                     try
                     {
                         destination = board[square.getI() - square.getTeam()][ square.getJ() - square.getTeam() * 2];
@@ -4526,7 +4556,7 @@ public class Mover {
                         _1R2D = true;
                     }
                     break;
-                case 7:
+                case _2R1D:
                     try
                     {
                         destination = board[square.getI() - square.getTeam() * 2][ square.getJ() - square.getTeam()];
@@ -4572,21 +4602,21 @@ public class Mover {
 
         while (!moveSuccess && (!rightUpImpossible || !leftUpImpossible || !leftDownImpossible || !rightDownImpossible))
         {
-            List<Integer> options = new ArrayList<>();
+            List<Direction> options = new ArrayList<>();
             int count;
 
             if (!rightUpImpossible)
-                options.add(0);
+                options.add(Direction.RIGHTUP);
             if (!leftUpImpossible)
-                options.add(1);
+                options.add(Direction.LEFTUP);
             if (!leftDownImpossible)
-                options.add(2);
+                options.add(Direction.LEFTBACK);
             if (!rightDownImpossible)
-                options.add(3);
+                options.add(Direction.RIGHTBACK);
 
             switch (options.get(rand.nextInt(options.size())))
             {
-                case 0: // Tries to move right and up
+                case RIGHTUP: // Tries to move right and up
 
                     count = rand.nextInt(maxRightUp)+1;
 
@@ -4620,7 +4650,7 @@ public class Mover {
                             rightUpImpossible = true;
                     }
                     break;
-                case 1: // Tries to move left and up
+                case LEFTUP: // Tries to move left and up
 
                     count = rand.nextInt(maxLeftUp)+1;
 
@@ -4655,7 +4685,7 @@ public class Mover {
                             leftUpImpossible = true;
                     }
                     break;
-                case 2: // Tries to move left and down
+                case LEFTBACK: // Tries to move left and down
 
 
                     count = rand.nextInt(maxLeftDown)+1;
@@ -4691,7 +4721,7 @@ public class Mover {
                             leftDownImpossible = true;
                     }
                     break;
-                case 3: // Tries to move right and down
+                case RIGHTBACK: // Tries to move right and down
 
                     count = rand.nextInt(maxRightDown)+1;
 
@@ -4735,6 +4765,8 @@ public class Mover {
 
     boolean canBishopMove( Square[][] board,  Square square,  MultiGame multiGame)
     {
+        List<Direction> options = new ArrayList<>();
+
         boolean moveSuccess = false;
         boolean rightUpImpossible = false;
         boolean leftUpImpossible = false;
@@ -4744,28 +4776,28 @@ public class Mover {
         int maxLeftUp = 8;
         int maxLeftDown = 8;
         int maxRightDown = 8;
-
+        int count;
 
 
         rand.nextInt();
 
         while (!moveSuccess && (!rightUpImpossible || !leftUpImpossible || !leftDownImpossible || !rightDownImpossible))
         {
-            List<Integer> options = new ArrayList<>();
-            int count;
+            options.clear();
+
 
             if (!rightUpImpossible)
-                options.add(0);
+                options.add(Direction.RIGHTUP);
             if (!leftUpImpossible)
-                options.add(1);
+                options.add(Direction.LEFTUP);
             if (!leftDownImpossible)
-                options.add(2);
+                options.add(Direction.LEFTBACK);
             if (!rightDownImpossible)
-                options.add(3);
+                options.add(Direction.RIGHTBACK);
 
             switch (options.get(rand.nextInt(options.size())))
             {
-                case 0: // Tries to move right and up
+                case RIGHTUP: // Tries to move right and up
 
                     count = rand.nextInt(maxRightUp)+1;
 
@@ -4799,7 +4831,7 @@ public class Mover {
                             rightUpImpossible = true;
                     }
                     break;
-                case 1: // Tries to move left and up
+                case LEFTUP: // Tries to move left and up
 
                     count = rand.nextInt(maxLeftUp)+1;
 
@@ -4834,7 +4866,7 @@ public class Mover {
                             leftUpImpossible = true;
                     }
                     break;
-                case 2: // Tries to move left and down
+                case LEFTBACK: // Tries to move left and down
 
 
                     count = rand.nextInt(maxLeftDown)+1;
@@ -4870,7 +4902,7 @@ public class Mover {
                             leftDownImpossible = true;
                     }
                     break;
-                case 3: // Tries to move right and down
+                case RIGHTBACK: // Tries to move right and down
 
                     count = rand.nextInt(maxRightDown)+1;
 
@@ -4914,27 +4946,29 @@ public class Mover {
 
     boolean canKingMove( Square[][] board,  Square square,  MultiGame multiGame)
     {
+        List<KQMODE> options = new ArrayList<>();
+
         boolean moveSuccess = false;
         boolean bishopImpossible = false;
         boolean rookImpossible = false;
+
         while (!moveSuccess && (!bishopImpossible || !rookImpossible))
         {
-            List<Integer> options = new ArrayList<>();
-
             if (!bishopImpossible)
-                options.add(0);
+                options.add(KQMODE.BISHOP);
             if (!rookImpossible)
-                options.add(1);
+                options.add(KQMODE.ROOK);
 
-            if (options.get(rand.nextInt(options.size())) == 0)
+            switch (options.get(rand.nextInt(options.size())))
             {
-                moveSuccess = canBishopMove( board,  square, multiGame,1);
-                bishopImpossible = !moveSuccess;
-            }
-            else
-            {
-                moveSuccess = canRookMove( board,  square, multiGame, 1);
-                rookImpossible = !moveSuccess;
+                case BISHOP:
+                    moveSuccess = canBishopMove( board,  square, multiGame,1);
+                    bishopImpossible = !moveSuccess;
+                    break;
+                case ROOK:
+                    moveSuccess = canRookMove( board,  square, multiGame, 1);
+                    rookImpossible = !moveSuccess;
+                    break;
             }
         }
 
@@ -4943,25 +4977,34 @@ public class Mover {
 
     boolean canQueenMove( Square[][] board,  Square square,  MultiGame multiGame)
     {
+        List<KQMODE> options = new ArrayList<>();
+
         boolean moveSuccess = false;
         boolean bishopImpossible = false;
         boolean rookImpossible = false;
         while (!moveSuccess && (!bishopImpossible || !rookImpossible))
         {
-            if (rand.nextInt(2) == 0 && !bishopImpossible)
+            if (!bishopImpossible)
+                options.add(KQMODE.BISHOP);
+            if (!rookImpossible)
+                options.add(KQMODE.ROOK);
+
+            switch (options.get(rand.nextInt(options.size())))
             {
-                moveSuccess = canBishopMove( board,  square, multiGame);
-                bishopImpossible = !moveSuccess;
-            }
-            else if (!rookImpossible)
-            {
-                moveSuccess = canRookMove( board,  square, multiGame);
-                rookImpossible = !moveSuccess;
+                case BISHOP:
+                    moveSuccess = canBishopMove( board,  square, multiGame);
+                    bishopImpossible = !moveSuccess;
+                    break;
+                case ROOK:
+                    moveSuccess = canRookMove( board,  square, multiGame);
+                    rookImpossible = !moveSuccess;
+                    break;
             }
         }
 
         return moveSuccess;
     }
+    
     //Multi game functions end
 
     boolean nothingInWayForward( Square[][] board,  Square square, int count)
