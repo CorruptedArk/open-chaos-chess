@@ -31,24 +31,25 @@ public class AchievementHandler {
 
     private Context context;
 
-    public static final Achievement STARTED_GAME = new Achievement(0,1,"Started Game","You opened the game! Congratulations!");
-    public static final Achievement WON_A_GAME = new Achievement(1,1,"Noice Dude!","You won a game!");
-    public static final Achievement LOST_A_GAME = new Achievement(2, 1,"Bruh.", "You lost a game, I had such high hopes for you.");
-    public static final Achievement TIED_A_GAME = new Achievement(3, 1,"Breaking Even","Tied a game, I'm honestly not sure how you did it.");
-    public static final Achievement WON_10_GAMES = new Achievement(4, 10, "Winner", "Won ten games.");
-    public static final Achievement LOST_10_GAMES = new Achievement(5,10,"Loser","Lost ten games.");
-    public static final Achievement TIED_10_GAMES = new Achievement(6,10,"Exceptionally Average","Tied ten games. I'm not sure how I feel about you.");
-    public static final Achievement PLAYED_10_GAMES = new Achievement(7,10,"Hooked","Played ten games.");
-    public static final Achievement PLAYED_50_GAMES = new Achievement(8,50,"Chaos Junkie","Played 50 games. You're developing an unhealthy habit.");
-    public static final Achievement PLAYED_100_GAMES = new Achievement(9,100,"Get Help","Played 100 games. Seriously, you have a problem.");
-    public static final Achievement WON_50_GAMES = new Achievement(10,50,"Master of Chaos","Won 50 games. Impressive.");
-    public static final Achievement TIED_50_GAMES = new Achievement(11,50,"Master of Balance","Tied 50 games. I'm as confused as you are.");
-    public static final Achievement LOST_50_GAMES = new Achievement(12,50,"Master of Failure","Lost 50 times. You must've tried to be this bad.");
-    public static final Achievement OPENED_ABOUT = new Achievement(13,1,"Informed Player","Opened the \"About\" page. Thanks for caring. I hope it was worth the read.");
-    public static final Achievement UNTOUCHABLE = new Achievement(14,1,"Untouchable","Won a game without losing any pieces. You deserve a round of applause.");
-    public static final Achievement SLAUGHTERED = new Achievement(15,1,"Slaughtered","Lost without capturing a single piece. Ouch. I hope you don't uninstall the game for this.");
-    public static final Achievement SECRET_KNOCK = new Achievement(16,1,"Secret Knock","Found a secret by using the secret knock.");
-    public static final Achievement HORSING_AROUND = new Achievement(17,1,"Horsing Around","Accessed the Knights Only mode. Good luck finishing a match.");
+    private static int currentIndex = 0;
+    public static final Achievement STARTED_GAME = new Achievement(currentIndex++,1,"Started Game","You opened the game! Congratulations!");
+    public static final Achievement WON_A_GAME = new Achievement(currentIndex++,1,"Noice Dude!","You won a game!");
+    public static final Achievement LOST_A_GAME = new Achievement(currentIndex++, 1,"Bruh.", "You lost a game, I had such high hopes for you.");
+    public static final Achievement TIED_A_GAME = new Achievement(currentIndex++, 1,"Breaking Even","Tied a game, I'm honestly not sure how you did it.");
+    public static final Achievement WON_10_GAMES = new Achievement(currentIndex++, 10, "Winner", "Won ten games.");
+    public static final Achievement LOST_10_GAMES = new Achievement(currentIndex++,10,"Loser","Lost ten games.");
+    public static final Achievement TIED_10_GAMES = new Achievement(currentIndex++,10,"Exceptionally Average","Tied ten games. I'm not sure how I feel about you.");
+    public static final Achievement PLAYED_10_GAMES = new Achievement(currentIndex++,10,"Hooked","Played ten games.");
+    public static final Achievement PLAYED_50_GAMES = new Achievement(currentIndex++,50,"Chaos Junkie","Played 50 games. You're developing an unhealthy habit.");
+    public static final Achievement PLAYED_100_GAMES = new Achievement(currentIndex++,100,"Get Help","Played 100 games. Seriously, you have a problem.");
+    public static final Achievement WON_50_GAMES = new Achievement(currentIndex++,50,"Master of Chaos","Won 50 games. Impressive.");
+    public static final Achievement TIED_50_GAMES = new Achievement(currentIndex++,50,"Master of Balance","Tied 50 games. I'm as confused as you are.");
+    public static final Achievement LOST_50_GAMES = new Achievement(currentIndex++,50,"Master of Failure","Lost 50 times. You must've tried to be this bad.");
+    public static final Achievement OPENED_ABOUT = new Achievement(currentIndex++,1,"Informed Player","Opened the \"About\" page. Thanks for caring. I hope it was worth the read.");
+    public static final Achievement UNTOUCHABLE = new Achievement(currentIndex++,1,"Untouchable","Won a game without losing any pieces. You deserve a round of applause.");
+    public static final Achievement SLAUGHTERED = new Achievement(currentIndex++,1,"Slaughtered","Lost without capturing a single piece. Ouch. I hope you don't uninstall the game for this.");
+    public static final Achievement SECRET_KNOCK = new Achievement(currentIndex++,1,"Secret Knock","Found a secret by using the secret knock.");
+    public static final Achievement HORSING_AROUND = new Achievement(currentIndex++,1,"Horsing Around","Accessed the Knights Only mode. Good luck finishing a match.");
 
     public static final int ACHIEVEMENT_COUNT = 18;
 
