@@ -20,12 +20,20 @@
 package dev.corruptedark.openchaoschess;
 
 import android.content.Context;
+import android.net.Uri;
+import android.os.ParcelFileDescriptor;
+import android.widget.Toast;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 
 public class AchievementHandler {
 
@@ -193,5 +201,74 @@ public class AchievementHandler {
     public ArrayList<Achievement> getList()
     {
         return new ArrayList<>(Arrays.asList(achievementList));
+    }
+
+    private String readTextFromUri(Uri uri) throws Exception {
+
+        String contents;
+
+        try {
+            ParcelFileDescriptor pfd = context.getContentResolver().openFileDescriptor(uri, "r");
+            fileReader = new FileInputStream(pfd.getFileDescriptor());
+            bytes = new byte[(int) pfd.getStatSize()];
+            fileReader.read(bytes);
+            fileReader.close();
+            contents = new String(bytes);
+        }
+        catch (Exception e)
+        {
+            throw e;
+        }
+
+        return contents;
+    }
+
+    public void importAchievementsFromUri(Uri uri) {
+        try
+        {
+            String achievementText = readTextFromUri(uri);
+
+            String[] contentArray = achievementText.split("\n");
+
+            for(int i = 0; i < contentArray.length; i++)
+            {
+                achievementValueList[i] = Integer.parseInt(contentArray[i]);
+            }
+
+            saveValues();
+            Toast.makeText(context, "Achievements imported successfully", Toast.LENGTH_SHORT).show();
+        }
+        catch (Exception e)
+        {
+            Toast.makeText(context,"Failed to import achievements", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+
+    }
+
+    public void exportAchievementsToDirectory(Uri uri) {
+
+
+        StringBuilder builder = new StringBuilder();
+
+        for (int i = 0; i < achievementValueList.length; i++)
+        {
+            if(i == achievementValueList.length - 1)
+                builder.append(achievementValueList[i]);
+            else
+                builder.append(achievementValueList[i]).append("\n");
+        }
+
+        try {
+            ParcelFileDescriptor pfd = context.getContentResolver().openFileDescriptor(uri, "rwt");
+            fileWriter = new FileOutputStream(pfd.getFileDescriptor());
+            fileWriter.write(builder.toString().getBytes());
+            fileWriter.close();
+            Toast.makeText(context, "Achievements exported successfully", Toast.LENGTH_SHORT).show();
+        }
+        catch (Exception e) {
+            Toast.makeText(context,"Failed to export achievements", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
     }
 }

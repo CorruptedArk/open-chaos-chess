@@ -19,14 +19,21 @@
 
 package dev.corruptedark.openchaoschess;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Build;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -44,6 +51,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 
 public class SettingsActivity extends AppCompatActivity {
     TextView backgroundColorLabel;
@@ -68,8 +76,12 @@ public class SettingsActivity extends AppCompatActivity {
     ColorPicker colorPicker;
     RelativeLayout layout;
 
+    Toolbar toolbar;
+
 
     ColorManager colorManager;
+
+    private enum Requests{IMPORT, EXPORT}
 
 
     @Override
@@ -100,6 +112,17 @@ public class SettingsActivity extends AppCompatActivity {
         layout = (RelativeLayout) findViewById(R.id.settings_layout);
 
         colorManager = ColorManager.getInstance(this);
+
+        toolbar = (Toolbar) findViewById(R.id.settings_toolbar);
+        toolbar.setTitle("Settings");
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        colorManager = ColorManager.getInstance(this);
+
+        toolbar.setTitleTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        toolbar.setBackgroundColor(colorManager.getColorFromFile(ColorManager.SECONDARY_COLOR));
 
         backgroundColorButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BACKGROUND_COLOR));
         barColorButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BAR_COLOR));
@@ -207,7 +230,72 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public int getColorInt(View view) {
-       return ((ColorDrawable)view.getBackground()).getColor();
+        return ((ColorDrawable)view.getBackground()).getColor();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.import_export_menu, menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return super.onOptionsItemSelected(item);
+            case R.id.import_file:
+                importSettings();
+                return true;
+            case R.id.export_file:
+                exportSettings();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void importSettings()
+    {
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("text/plain");
+
+        startActivityForResult(intent, Requests.IMPORT.ordinal());
+    }
+
+    private void exportSettings()
+    {
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TITLE, "colors.txt");
+
+
+        startActivityForResult(intent, Requests.EXPORT.ordinal());
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == Requests.IMPORT.ordinal() && resultCode == Activity.RESULT_OK) {
+            Uri uri = null;
+            if (data != null) {
+                uri = data.getData();
+                colorManager.importColorsFromUri(uri);
+            }
+        }
+        else if (requestCode == Requests.EXPORT.ordinal() && resultCode == Activity.RESULT_OK) {
+            Uri uri = null;
+            if (data != null) {
+                uri = data.getData();
+                colorManager.exportColorsToDirectory(uri);
+            }
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
+
     }
 }
 

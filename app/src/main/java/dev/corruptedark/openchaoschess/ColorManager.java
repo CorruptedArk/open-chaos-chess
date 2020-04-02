@@ -21,6 +21,9 @@ package dev.corruptedark.openchaoschess;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.net.Uri;
+import android.os.ParcelFileDescriptor;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -39,6 +42,7 @@ public class ColorManager {
     public static final int SELECTION_COLOR = 6;
     public static final int TEXT_COLOR = 7;
 
+    private Context context;
     private static ColorManager instance;
     private File settingsFile;
     private InputStream fileReader;
@@ -48,6 +52,7 @@ public class ColorManager {
 
     private ColorManager(Context context) {
 
+        this.context = context;
         settingsFile = new File(context.getApplicationContext().getFilesDir(),context.getString(R.string.settings_file));
         if(settingsFile.exists()) {
             try{
@@ -124,5 +129,66 @@ public class ColorManager {
 
         return successful;
     }
+
+    private String readTextFromUri(Uri uri) throws Exception {
+
+        String contents;
+
+        try {
+            ParcelFileDescriptor pfd = context.getContentResolver().openFileDescriptor(uri, "r");
+            fileReader = new FileInputStream(pfd.getFileDescriptor());
+            bytes = new byte[(int) pfd.getStatSize()];
+            fileReader.read(bytes);
+            fileReader.close();
+            contents = new String(bytes);
+        }
+        catch (Exception e)
+        {
+            throw e;
+        }
+
+        return contents;
+    }
+
+    public void importColorsFromUri(Uri uri) {
+        try
+        {
+            String colorText = readTextFromUri(uri);
+            contentArray = colorText.split(" ");
+
+            Toast.makeText(context, "Colors imported successfully", Toast.LENGTH_SHORT).show();
+        }
+        catch (Exception e)
+        {
+            Toast.makeText(context,"Failed to import colors", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+
+    }
+
+    public void exportColorsToDirectory(Uri uri) {
+        StringBuilder contents = new StringBuilder();
+
+        for(int i = 0; i < contentArray.length; i++)
+        {
+            contents.append(contentArray[i]).append(" ");
+        }
+
+        contents.deleteCharAt(contents.length()-1);
+
+        try{
+            ParcelFileDescriptor pfd = context.getContentResolver().openFileDescriptor(uri, "rwt");
+            fileWriter = new FileOutputStream(pfd.getFileDescriptor());
+            fileWriter.write(contents.toString().getBytes());
+            fileWriter.close();
+            Toast.makeText(context, "Colors exported successfully", Toast.LENGTH_SHORT).show();
+        }
+        catch (Exception e)
+        {
+            Toast.makeText(context,"Failed to export colors", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+    }
+
 
 }
