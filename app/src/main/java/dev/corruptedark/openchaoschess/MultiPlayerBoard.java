@@ -1305,8 +1305,10 @@ public class MultiPlayerBoard extends AppCompatActivity {
                     board[i][ j].setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            moveThread = new MoveThread(view,context,boardColor1,boardColor2,selectColor);
-                            moveThread.start();
+                            if(moveThread == null || !moveThread.isAlive()) {
+                                moveThread = new MoveThread(view, context, boardColor1, boardColor2, selectColor);
+                                moveThread.start();
+                            }
                         }
                     });
                     boardMain.addView(board[i][j]);
