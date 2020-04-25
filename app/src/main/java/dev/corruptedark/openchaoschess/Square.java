@@ -32,6 +32,10 @@ import java.io.Serializable;
 
 public class Square extends AppCompatImageView implements Serializable {
 
+    public final int YOU = -1;
+    public final int OPPONENT = 1;
+    public final int NONE = 0;
+
     private int pieceColor;
     private boolean color;
     private int team;
@@ -64,8 +68,8 @@ public class Square extends AppCompatImageView implements Serializable {
 
     public Square(Context context,int pieceColor) {
         super(context, null);
-        team = 0;
-        piece = " ";
+        team = NONE;
+        piece = Piece.NONE;
         pieceCount = 0;
         i = -1;
         j = -1;
@@ -133,26 +137,26 @@ public class Square extends AppCompatImageView implements Serializable {
         super.onDraw(canvas);
         int image;
 
-        if (getTeam() == -1)
+        if (getTeam() == YOU)
         {
             switch (getPiece())
             {
-                case "P":
+                case Piece.PAWN:
                     image = R.drawable.ic_filledpawn;
                     break;
-                case "R":
+                case Piece.ROOK:
                     image = R.drawable.ic_filledrook;
                     break;
-                case "Kn":
+                case Piece.KNIGHT:
                     image = R.drawable.ic_filledknight;
                     break;
-                case "B":
+                case Piece.BISHOP:
                     image = R.drawable.ic_filledbishop;
                     break;
-                case "Ki":
+                case Piece.KING:
                     image = R.drawable.ic_filledking;
                     break;
-                case "Q":
+                case Piece.QUEEN:
                     image = R.drawable.ic_filledqueen;
                     break;
                 default:
@@ -160,26 +164,26 @@ public class Square extends AppCompatImageView implements Serializable {
                     break;
             }
         }
-        else if (getTeam() == 1)
+        else if (getTeam() == OPPONENT)
         {
             switch (getPiece())
             {
-                case "P":
+                case Piece.PAWN:
                     image = R.drawable.ic_hollowpawn;
                     break;
-                case "R":
+                case Piece.ROOK:
                     image = R.drawable.ic_hollowrook;
                     break;
-                case "Kn":
+                case Piece.KNIGHT:
                     image = R.drawable.ic_hollowknight;
                     break;
-                case "B":
+                case Piece.BISHOP:
                     image = R.drawable.ic_hollowbishop;
                     break;
-                case "Ki":
+                case Piece.KING:
                     image = R.drawable.ic_hollowking;
                     break;
-                case "Q":
+                case Piece.QUEEN:
                     image = R.drawable.ic_hollowqueen;
                     break;
                 default:

@@ -19,7 +19,12 @@
 
 package dev.corruptedark.openchaoschess;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
+import android.widget.ViewAnimator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +47,122 @@ public class Mover {
         this.context = context;
     }
 
+    private void animateMove(final Square start, final Square end, final SingleGame singleGame)
+    {
+        final Square animatedSquare = singleGame.getAnimatedSquare();
+
+        final int team = start.getTeam();
+        final String piece = start.getPiece();
+        final int pieceCount = start.getPieceCount() + 1;
+
+
+        TranslateAnimation animation = new TranslateAnimation(0, end.getX() - start.getX(), 0, end.getY() - start.getY());
+
+        animatedSquare.setPiece(piece);
+        animatedSquare.setTeam(team);
+        animatedSquare.setX(start.getX());
+        animatedSquare.setY(start.getY());
+
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+                animatedSquare.setVisibility(View.VISIBLE);
+                start.setPieceCount(0);
+                start.setTeam(NONE);
+                start.setPiece(Piece.NONE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                end.setTeam(team);
+                end.setPiece(piece);
+                end.setPieceCount(pieceCount);
+
+                animatedSquare.setVisibility(View.GONE);
+                animatedSquare.setPiece(Piece.NONE);
+
+                if(piece == Piece.PAWN && end.getJ() == 7 && end.getTeam() == OPPONENT)
+                {
+                    end.setPiece(Piece.QUEEN);
+                }
+                else if(piece == Piece.PAWN && end.getJ() == 0 && end.getTeam() == YOU)
+                {
+                    end.setPiece(Piece.QUEEN);
+                }
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        animation.setDuration(500);
+        animatedSquare.startAnimation(animation);
+
+        while(!animation.hasEnded());
+
+    }
+
+    private void animateMove(final Square start, final Square end, final MultiGame multiGame)
+    {
+        final Square animatedSquare = multiGame.getAnimatedSquare();
+
+        final int team = start.getTeam();
+        final String piece = start.getPiece();
+        final int pieceCount = start.getPieceCount() + 1;
+
+
+        TranslateAnimation animation = new TranslateAnimation(0, end.getX() - start.getX(), 0, end.getY() - start.getY());
+
+        animatedSquare.setPiece(piece);
+        animatedSquare.setTeam(team);
+        animatedSquare.setX(start.getX());
+        animatedSquare.setY(start.getY());
+
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+                animatedSquare.setVisibility(View.VISIBLE);
+                start.setPieceCount(0);
+                start.setTeam(NONE);
+                start.setPiece(Piece.NONE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                end.setTeam(team);
+                end.setPiece(piece);
+                end.setPieceCount(pieceCount);
+
+                animatedSquare.setVisibility(View.GONE);
+                animatedSquare.setPiece(Piece.NONE);
+
+                if(piece == Piece.PAWN && end.getJ() == 7 && end.getTeam() == OPPONENT)
+                {
+                    end.setPiece(Piece.QUEEN);
+                }
+                else if(piece == Piece.PAWN && end.getJ() == 0 && end.getTeam() == YOU)
+                {
+                    end.setPiece(Piece.QUEEN);
+                }
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        animation.setDuration(500);
+        animatedSquare.startAnimation(animation);
+
+        while(!animation.hasEnded());
+
+    }
+
     public synchronized Square getLastDestination()
     {
         return destination;
@@ -53,22 +174,22 @@ public class Mover {
         boolean moveSuccess;
         switch(square.getPiece())
         {
-            case "P":
+            case Piece.PAWN:
                 moveSuccess = movePawn(board, square, singleGame);
                 break;
-            case "R":
+            case Piece.ROOK:
                 moveSuccess = moveRook(board, square, singleGame);
                 break;
-            case "Kn":
+            case Piece.KNIGHT:
                 moveSuccess = moveKnight( board,  square, singleGame);
                 break;
-            case "B":
+            case Piece.BISHOP:
                 moveSuccess = moveBishop( board,  square, singleGame);
                 break;
-            case "Ki":
+            case Piece.KING:
                 moveSuccess = moveKing( board,  square, singleGame);
                 break;
-            case "Q":
+            case Piece.QUEEN:
                 moveSuccess = moveQueen( board,  square, singleGame);
                 break;
             default:
@@ -129,12 +250,7 @@ public class Mover {
                         if(count > 0)
                         {
                             destination = board[square.getI()][square.getJ() + square.getTeam() * count];
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount() + 1);
-                            square.setPieceCount(0);
-                            square.setPiece(" ");
-                            square.setTeam(NONE);
+                            animateMove(square, destination, singleGame);
                             moveSuccess = true;
                         }
                     }
@@ -154,12 +270,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 singleGame.incrementComputerPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount()+ 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, singleGame);
                             moveSuccess = true;
                         }
                         else
@@ -183,12 +294,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 singleGame.incrementComputerPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount()+ 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, singleGame);
                             moveSuccess = true;
                         }
                         else
@@ -205,11 +311,11 @@ public class Mover {
 
             if(destination.getJ() == 7 && destination.getTeam() == OPPONENT && moveSuccess)
             {
-                destination.setPiece("Q");
+                destination.setPiece(Piece.QUEEN);
             }
             else if(destination.getJ() == 0 && destination.getTeam() == YOU && moveSuccess)
             {
-                destination.setPiece("Q");
+                destination.setPiece(Piece.QUEEN);
             }
         }
 
@@ -274,12 +380,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 singleGame.incrementComputerPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount() + 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, singleGame);
                             moveSuccess = true;
                         }
                     } catch (Exception e) {
@@ -315,12 +416,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 singleGame.incrementComputerPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount() + 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, singleGame);
                             moveSuccess = true;
                         }
                     } catch (Exception e) {
@@ -356,12 +452,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 singleGame.incrementComputerPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount() + 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, singleGame);
                             moveSuccess = true;
                         }
                     } catch (Exception e) {
@@ -397,12 +488,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 singleGame.incrementComputerPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount() + 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, singleGame);
                             moveSuccess = true;
                         }
                     } catch (Exception e) {
@@ -484,12 +570,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 singleGame.incrementComputerPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount()+ 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, singleGame);
                             moveSuccess = true;
                         }
                     }
@@ -532,12 +613,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 singleGame.incrementComputerPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount()+ 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, singleGame);
                             moveSuccess = true;
                         }
                     }
@@ -580,12 +656,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 singleGame.incrementComputerPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount()+ 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, singleGame);
                             moveSuccess = true;
                         }
                     }
@@ -628,12 +699,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 singleGame.incrementComputerPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount()+ 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, singleGame);
                             moveSuccess = true;
                         }
                     }
@@ -699,12 +765,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 singleGame.incrementComputerPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount()+ 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, singleGame);
                             moveSuccess = true;
                         }
                         else
@@ -728,12 +789,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 singleGame.incrementComputerPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount()+ 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, singleGame);
                             moveSuccess = true;
                         }
                         else
@@ -757,12 +813,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 singleGame.incrementComputerPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount()+ 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, singleGame);
                             moveSuccess = true;
                         }
                         else
@@ -786,12 +837,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 singleGame.incrementComputerPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount()+ 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, singleGame);
                             moveSuccess = true;
                         }
                         else
@@ -815,12 +861,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 singleGame.incrementComputerPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount()+ 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, singleGame);
                             moveSuccess = true;
                         }
                         else
@@ -844,12 +885,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 singleGame.incrementComputerPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount()+ 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, singleGame);
                             moveSuccess = true;
                         }
                         else
@@ -873,12 +909,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 singleGame.incrementComputerPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount()+ 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, singleGame);
                             moveSuccess = true;
                         }
                         else
@@ -902,12 +933,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 singleGame.incrementComputerPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount()+ 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, singleGame);
                             moveSuccess = true;
                         }
                         else
@@ -994,12 +1020,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 singleGame.incrementComputerPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount()+ 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, singleGame);
                             moveSuccess = true;
                         }
                     }
@@ -1040,12 +1061,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 singleGame.incrementComputerPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount()+ 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, singleGame);
                             moveSuccess = true;
                         }
                     }
@@ -1087,12 +1103,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 singleGame.incrementComputerPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount()+ 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, singleGame);
                             moveSuccess = true;
                         }
                     }
@@ -1133,12 +1144,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 singleGame.incrementComputerPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount()+ 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, singleGame);
                             moveSuccess = true;
                         }
                     }
@@ -1217,12 +1223,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 singleGame.incrementComputerPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount()+ 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, singleGame);
                             moveSuccess = true;
                         }
                     }
@@ -1263,12 +1264,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 singleGame.incrementComputerPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount()+ 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, singleGame);
                             moveSuccess = true;
                         }
                     }
@@ -1310,12 +1306,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 singleGame.incrementComputerPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount()+ 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, singleGame);
                             moveSuccess = true;
                         }
                     }
@@ -1356,12 +1347,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 singleGame.incrementComputerPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount()+ 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, singleGame);
                             moveSuccess = true;
                         }
                     }
@@ -1437,22 +1423,22 @@ public class Mover {
         boolean moveSuccess;
         switch(square.getPiece())
         {
-            case "P":
+            case Piece.PAWN:
                 moveSuccess = canPawnMove(board, square, singleGame);
                 break;
-            case "R":
+            case Piece.ROOK:
                 moveSuccess = canRookMove(board, square, singleGame);
                 break;
-            case "Kn":
+            case Piece.KNIGHT:
                 moveSuccess = canKnightMove( board,  square, singleGame);
                 break;
-            case "B":
+            case Piece.BISHOP:
                 moveSuccess = canBishopMove( board,  square, singleGame);
                 break;
-            case "Ki":
+            case Piece.KING:
                 moveSuccess = canKingMove( board,  square, singleGame);
                 break;
-            case "Q":
+            case Piece.QUEEN:
                 moveSuccess = canQueenMove( board,  square, singleGame);
                 break;
             default:
@@ -2533,22 +2519,22 @@ public class Mover {
         boolean moveSuccess;
         switch(square.getPiece())
         {
-            case "P":
+            case Piece.PAWN:
                 moveSuccess = movePawn(board, square, multiGame);
                 break;
-            case "R":
+            case Piece.ROOK:
                 moveSuccess = moveRook(board, square, multiGame);
                 break;
-            case "Kn":
+            case Piece.KNIGHT:
                 moveSuccess = moveKnight( board,  square, multiGame);
                 break;
-            case "B":
+            case Piece.BISHOP:
                 moveSuccess = moveBishop( board,  square, multiGame);
                 break;
-            case "Ki":
+            case Piece.KING:
                 moveSuccess = moveKing( board,  square, multiGame);
                 break;
-            case "Q":
+            case Piece.QUEEN:
                 moveSuccess = moveQueen( board,  square, multiGame);
                 break;
             default:
@@ -2613,7 +2599,7 @@ public class Mover {
                             destination.setPiece(square.getPiece());
                             destination.setPieceCount(square.getPieceCount() + 1);
                             square.setPieceCount(0);
-                            square.setPiece(" ");
+                            square.setPiece(Piece.NONE);
                             square.setTeam(NONE);
                             moveSuccess = true;
                         }
@@ -2634,12 +2620,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 multiGame.incrementOpponentPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount()+ 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, multiGame);
                             moveSuccess = true;
                         }
                         else
@@ -2663,12 +2644,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 multiGame.incrementOpponentPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount()+ 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, multiGame);
                             moveSuccess = true;
                         }
                         else
@@ -2685,11 +2661,11 @@ public class Mover {
 
             if(destination.getJ() == 7 && destination.getTeam() == OPPONENT && moveSuccess)
             {
-                destination.setPiece("Q");
+                destination.setPiece(Piece.QUEEN);
             }
             else if(destination.getJ() == 0 && destination.getTeam() == YOU && moveSuccess)
             {
-                destination.setPiece("Q");
+                destination.setPiece(Piece.QUEEN);
             }
         }
 
@@ -2759,7 +2735,7 @@ public class Mover {
                             destination.setPieceCount(square.getPieceCount() + 1);
                             square.setPieceCount(0);
                             square.setTeam(NONE);
-                            square.setPiece(" ");
+                            square.setPiece(Piece.NONE);
                             moveSuccess = true;
                         }
                     } catch (Exception e) {
@@ -2800,7 +2776,7 @@ public class Mover {
                             destination.setPieceCount(square.getPieceCount() + 1);
                             square.setPieceCount(0);
                             square.setTeam(NONE);
-                            square.setPiece(" ");
+                            square.setPiece(Piece.NONE);
                             moveSuccess = true;
                         }
                     } catch (Exception e) {
@@ -2841,7 +2817,7 @@ public class Mover {
                             destination.setPieceCount(square.getPieceCount() + 1);
                             square.setPieceCount(0);
                             square.setTeam(NONE);
-                            square.setPiece(" ");
+                            square.setPiece(Piece.NONE);
                             moveSuccess = true;
                         }
                     } catch (Exception e) {
@@ -2882,7 +2858,7 @@ public class Mover {
                             destination.setPieceCount(square.getPieceCount() + 1);
                             square.setPieceCount(0);
                             square.setTeam(NONE);
-                            square.setPiece(" ");
+                            square.setPiece(Piece.NONE);
                             moveSuccess = true;
                         }
                     } catch (Exception e) {
@@ -2964,12 +2940,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 multiGame.incrementOpponentPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount()+ 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, multiGame);
                             moveSuccess = true;
                         }
                     }
@@ -3012,12 +2983,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 multiGame.incrementOpponentPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount()+ 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, multiGame);
                             moveSuccess = true;
                         }
                     }
@@ -3060,12 +3026,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 multiGame.incrementOpponentPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount()+ 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, multiGame);
                             moveSuccess = true;
                         }
                     }
@@ -3108,12 +3069,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 multiGame.incrementOpponentPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount()+ 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, multiGame);
                             moveSuccess = true;
                         }
                     }
@@ -3179,12 +3135,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 multiGame.incrementOpponentPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount()+ 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, multiGame);
                             moveSuccess = true;
                         }
                         else
@@ -3208,12 +3159,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 multiGame.incrementOpponentPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount()+ 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, multiGame);
                             moveSuccess = true;
                         }
                         else
@@ -3237,12 +3183,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 multiGame.incrementOpponentPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount()+ 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, multiGame);
                             moveSuccess = true;
                         }
                         else
@@ -3266,12 +3207,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 multiGame.incrementOpponentPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount()+ 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, multiGame);
                             moveSuccess = true;
                         }
                         else
@@ -3295,12 +3231,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 multiGame.incrementOpponentPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount()+ 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, multiGame);
                             moveSuccess = true;
                         }
                         else
@@ -3324,12 +3255,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 multiGame.incrementOpponentPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount()+ 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, multiGame);
                             moveSuccess = true;
                         }
                         else
@@ -3353,12 +3279,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 multiGame.incrementOpponentPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount()+ 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, multiGame);
                             moveSuccess = true;
                         }
                         else
@@ -3382,12 +3303,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 multiGame.incrementOpponentPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount()+ 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, multiGame);
                             moveSuccess = true;
                         }
                         else
@@ -3474,12 +3390,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 multiGame.incrementOpponentPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount()+ 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, multiGame);
                             moveSuccess = true;
                         }
                     }
@@ -3520,12 +3431,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 multiGame.incrementOpponentPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount()+ 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, multiGame);
                             moveSuccess = true;
                         }
                     }
@@ -3567,12 +3473,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 multiGame.incrementOpponentPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount()+ 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, multiGame);
                             moveSuccess = true;
                         }
                     }
@@ -3613,12 +3514,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 multiGame.incrementOpponentPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount()+ 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, multiGame);
                             moveSuccess = true;
                         }
                     }
@@ -3697,12 +3593,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 multiGame.incrementOpponentPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount()+ 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, multiGame);
                             moveSuccess = true;
                         }
                     }
@@ -3743,12 +3634,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 multiGame.incrementOpponentPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount()+ 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, multiGame);
                             moveSuccess = true;
                         }
                     }
@@ -3790,12 +3676,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 multiGame.incrementOpponentPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount()+ 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, multiGame);
                             moveSuccess = true;
                         }
                     }
@@ -3836,12 +3717,7 @@ public class Mover {
                             else if (destination.getTeam() == YOU)
                                 multiGame.incrementOpponentPoints();
 
-                            destination.setTeam(square.getTeam());
-                            destination.setPiece(square.getPiece());
-                            destination.setPieceCount(square.getPieceCount()+ 1);
-                            square.setPieceCount(0);
-                            square.setTeam(NONE);
-                            square.setPiece(" ");
+                            animateMove(square, destination, multiGame);
                             moveSuccess = true;
                         }
                     }
@@ -3917,22 +3793,22 @@ public class Mover {
         boolean moveSuccess;
         switch(square.getPiece())
         {
-            case "P":
+            case Piece.PAWN:
                 moveSuccess = canPawnMove(board, square, multiGame);
                 break;
-            case "R":
+            case Piece.ROOK:
                 moveSuccess = canRookMove(board, square, multiGame);
                 break;
-            case "Kn":
+            case Piece.KNIGHT:
                 moveSuccess = canKnightMove( board,  square, multiGame);
                 break;
-            case "B":
+            case Piece.BISHOP:
                 moveSuccess = canBishopMove( board,  square, multiGame);
                 break;
-            case "Ki":
+            case Piece.KING:
                 moveSuccess = canKingMove( board,  square, multiGame);
                 break;
-            case "Q":
+            case Piece.QUEEN:
                 moveSuccess = canQueenMove( board,  square, multiGame);
                 break;
             default:
@@ -5013,7 +4889,7 @@ public class Mover {
 
         for(int j = 1; j <= count; j++)
         {
-            clear = board[square.getI()][ square.getJ() + square.getTeam()*j].getPiece() == " ";
+            clear = board[square.getI()][ square.getJ() + square.getTeam()*j].getPiece() == Piece.NONE;
             if (!clear)
                 break;
         }
@@ -5026,7 +4902,7 @@ public class Mover {
 
         for (int j = 1; j <= count; j++)
         {
-            clear = board[square.getI() + square.getTeam() * j][ square.getJ()].getPiece() == " ";
+            clear = board[square.getI() + square.getTeam() * j][ square.getJ()].getPiece() == Piece.NONE;
             if (!clear)
                 break;
         }
@@ -5039,7 +4915,7 @@ public class Mover {
 
         for (int j = 1; j <= count; j++)
         {
-            clear = board[square.getI() - square.getTeam() * j][ square.getJ()].getPiece() == " ";
+            clear = board[square.getI() - square.getTeam() * j][ square.getJ()].getPiece() == Piece.NONE;
             if (!clear)
                 break;
         }
@@ -5052,7 +4928,7 @@ public class Mover {
 
         for (int j = 1; j <= count; j++)
         {
-            clear = board[square.getI()][ square.getJ() - square.getTeam() * j].getPiece() == " ";
+            clear = board[square.getI()][ square.getJ() - square.getTeam() * j].getPiece() == Piece.NONE;
             if (!clear)
                 break;
         }
@@ -5068,7 +4944,7 @@ public class Mover {
         for (int j = 1; j <= count; j++)
         {
             destination = board[square.getI() - square.getTeam() * j][ square.getJ() + square.getTeam() * j];
-            clear = destination.getPiece() == " ";
+            clear = destination.getPiece() == Piece.NONE;
             if (!clear)
                 break;
         }
@@ -5084,7 +4960,7 @@ public class Mover {
         for (int j = 1; j <= count; j++)
         {
             destination = board[square.getI() + square.getTeam() * j][ square.getJ() + square.getTeam() * j];
-            clear = destination.getPiece() == " ";
+            clear = destination.getPiece() == Piece.NONE;
             if (!clear)
                 break;
         }
@@ -5100,7 +4976,7 @@ public class Mover {
         for (int j = 1; j <= count; j++)
         {
             destination = board[square.getI() + square.getTeam() * j][ square.getJ() - square.getTeam() * j];
-            clear = destination.getPiece() == " ";
+            clear = destination.getPiece() == Piece.NONE;
             if (!clear)
                 break;
         }
@@ -5116,7 +4992,7 @@ public class Mover {
         for (int j = 1; j <= count; j++)
         {
             destination = board[square.getI() - square.getTeam() * j][ square.getJ() - square.getTeam() * j];
-            clear = destination.getPiece() == " ";
+            clear = destination.getPiece() == Piece.NONE;
             if (!clear)
                 break;
         }

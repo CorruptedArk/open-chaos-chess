@@ -30,6 +30,8 @@ public class MultiGame {
 
     private static final int BOARD_SIZE = 8;
 
+    private Square animatedSquare = null;
+
     private int yourPoints;
     private int opponentPoints;
     private int moveCount;
@@ -229,6 +231,14 @@ public class MultiGame {
                 movablePieces.add(picked);
         }
         return  movablePieces;
+    }
+
+    public void setAnimatedSquare(Square animatedSquare){
+        this.animatedSquare = animatedSquare;
+    }
+
+    public Square getAnimatedSquare() {
+        return animatedSquare;
     }
 
     /*public void saveBoard(Square[][] board){

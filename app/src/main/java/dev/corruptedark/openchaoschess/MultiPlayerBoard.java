@@ -87,6 +87,8 @@ public class MultiPlayerBoard extends AppCompatActivity {
     RelativeLayout boardLayout;
     NewGameAlertFragment newGameAlertFragment;
 
+    private Square animatedSquare;
+
     private Thread newGameRequestThread;
     private Thread newGameListenerThread;
     private Thread moveOpponentThread;
@@ -145,7 +147,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
         context = this;
         defaultSquare = new Square(this,pieceColor);
         selected = defaultSquare;
-        selected.setPiece(" ");
+        selected.setPiece(Piece.NONE);
         boardSize = 8;
 
         Display display = getWindowManager().getDefaultDisplay();
@@ -178,6 +180,17 @@ public class MultiPlayerBoard extends AppCompatActivity {
             multiGame.setTurn(OPPONENT);
         }
 
+        animatedSquare = new Square(this,pieceColor);
+        animatedSquare.setPiece(Piece.NONE);
+        animatedSquare.setVisibility(View.GONE);
+        animatedSquare.setX(0);
+        animatedSquare.setY(0);
+        animatedSquare.setBackgroundColor(Color.TRANSPARENT);
+        animatedSquare.setLayoutParams(new RelativeLayout.LayoutParams(squareSize, squareSize));
+
+        multiGame.setAnimatedSquare(animatedSquare);
+
+        boardMain.addView(animatedSquare);
 
         yourPointLabel.setText(getResources().getText(R.string.your_points).toString()+ " " + multiGame.getYourPoints());
         opponentPointLabel.setText(getResources().getText(R.string.opponent_points).toString() + " " + multiGame.getOpponentPoints());
@@ -189,6 +202,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
         notYourTurnLabel.bringToFront();
         gameOverLabel.bringToFront();
         thatSucksLabel.bringToFront();
+        animatedSquare.bringToFront();
         boardLayout.invalidate();
 
     }
@@ -666,7 +680,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
             for (int j = 0; j < boardSize; j++)
             {
                 board[i][ j].setTeam(NONE);
-                board[i][ j].setPiece(" ");
+                board[i][ j].setPiece(Piece.NONE);
                 board[i][ j].setPieceCount(0);
             }
 
@@ -688,12 +702,12 @@ public class MultiPlayerBoard extends AppCompatActivity {
         boolean allOpponentsAreBishops = true;
 
         for(int i = 0; i < yous.size(); i++)
-            if(yous.get(i).getPiece() != "B"){
+            if(yous.get(i).getPiece() != Piece.BISHOP){
                 allYousAreBishops = false;
                 break;
             }
         for(int i = 0; i < opponents.size(); i++)
-            if(opponents.get(i).getPiece() != "B"){
+            if(opponents.get(i).getPiece() != Piece.BISHOP){
                 allOpponentsAreBishops = false;
                 break;
             }
@@ -1180,15 +1194,15 @@ public class MultiPlayerBoard extends AppCompatActivity {
                             @Override
                             public void run() {
                                 endSquare.setTeam(OPPONENT);
-                                if (startSquare.getPiece() == "P" && endJ == 7) {
-                                    endSquare.setPiece("Q");
+                                if (startSquare.getPiece() == Piece.PAWN && endJ == 7) {
+                                    endSquare.setPiece(Piece.QUEEN);
                                 } else {
                                     endSquare.setPiece(startSquare.getPiece());
                                 }
                                 endSquare.setPieceCount(startSquare.getPieceCount() + 1);
                                 startSquare.setPieceCount(0);
                                 startSquare.setTeam(NONE);
-                                startSquare.setPiece(" ");
+                                startSquare.setPiece(Piece.NONE);
 
 
                                 if (endSquareTeam == YOU) {
@@ -1313,13 +1327,13 @@ public class MultiPlayerBoard extends AppCompatActivity {
             // Set Teams and pieces
             for (int i = 0; i < size; i++) {
                 board[i][0].setTeam(OPPONENT);
-                board[i][0].setPiece("Kn");
+                board[i][0].setPiece(Piece.KNIGHT);
                 board[i][1].setTeam(OPPONENT);
-                board[i][1].setPiece("Kn");
+                board[i][1].setPiece(Piece.KNIGHT);
                 board[i][6].setTeam(YOU);
-                board[i][6].setPiece("Kn");
+                board[i][6].setPiece(Piece.KNIGHT);
                 board[i][7].setTeam(YOU);
-                board[i][7].setPiece("Kn");
+                board[i][7].setPiece(Piece.KNIGHT);
             }
 
         }
@@ -1334,46 +1348,47 @@ public class MultiPlayerBoard extends AppCompatActivity {
             }
 
             /*
-            board[5][0].setPiece("B");
-            board[5][7].setPiece("B");
+            board[5][0].setPiece(Piece.BISHOP);
+            board[5][7].setPiece(Piece.BISHOP);
              */
 
             // Set Pawns
             for (int i = 0; i < size; i++)
-                board[i][6].setPiece("P");
+                board[i][6].setPiece(Piece.PAWN);
 
             for (int i = 0; i < size; i++)
-                board[i][1].setPiece("P");
+                board[i][1].setPiece(Piece.PAWN);
 
             // Set Rooks
-            board[0][0].setPiece("R");
-            board[7][0].setPiece("R");
-            board[0][7].setPiece("R");
-            board[7][7].setPiece("R");
+            board[0][0].setPiece(Piece.ROOK);
+            board[7][0].setPiece(Piece.ROOK);
+            board[0][7].setPiece(Piece.ROOK);
+            board[7][7].setPiece(Piece.ROOK);
 
             // Set Knights
-            board[1][0].setPiece("Kn");
-            board[6][0].setPiece("Kn");
-            board[1][7].setPiece("Kn");
-            board[6][7].setPiece("Kn");
+            board[1][0].setPiece(Piece.KNIGHT);
+            board[6][0].setPiece(Piece.KNIGHT);
+            board[1][7].setPiece(Piece.KNIGHT);
+            board[6][7].setPiece(Piece.KNIGHT);
 
             // Set Bishops
-            board[2][0].setPiece("B");
-            board[5][0].setPiece("B");
-            board[2][7].setPiece("B");
-            board[5][7].setPiece("B");
+            board[2][0].setPiece(Piece.BISHOP);
+            board[5][0].setPiece(Piece.BISHOP);
+            board[2][7].setPiece(Piece.BISHOP);
+            board[5][7].setPiece(Piece.BISHOP);
 
             // Set Kings
-            board[3][0].setPiece("Ki");
-            board[3][7].setPiece("Ki");
+            board[3][0].setPiece(Piece.KING);
+            board[3][7].setPiece(Piece.KING);
 
             // Set Queens
-            board[4][0].setPiece("Q");
-            board[4][7].setPiece("Q");
+            board[4][0].setPiece(Piece.QUEEN);
+            board[4][7].setPiece(Piece.QUEEN);
 
         }
 
         return;
     }
+
 
 }

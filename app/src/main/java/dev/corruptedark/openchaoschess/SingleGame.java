@@ -30,6 +30,8 @@ public class SingleGame {
 
     private static final int BOARD_SIZE = 8;
 
+    private Square animatedSquare = null;
+
     private int playerPoints;
     private int computerPoints;
     private int moveCount;
@@ -38,6 +40,7 @@ public class SingleGame {
     private boolean canPlayerMove;
     private boolean canComputerMove;
     private static boolean hasBoard = false;
+
 
     static private SingleGame instance;
 
@@ -225,4 +228,12 @@ public class SingleGame {
         return hasBoard;
     }
 
+    public void setAnimatedSquare(Square animatedSquare) {
+        this.animatedSquare = animatedSquare;
+    }
+
+    public Square getAnimatedSquare() {
+        return animatedSquare;
+    }
 }
+

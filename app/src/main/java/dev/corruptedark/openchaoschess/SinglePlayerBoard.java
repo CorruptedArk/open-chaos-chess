@@ -54,6 +54,10 @@ import java.util.Random;
 
 public class SinglePlayerBoard extends AppCompatActivity{
 
+    public final int YOU = -1;
+    public final int OPPONENT = 1;
+    public final int NONE = 0;
+
     int boardSize, squareSize, xPosition, yPosition;
     Square[][] board;
     Square defaultSquare;
@@ -64,6 +68,8 @@ public class SinglePlayerBoard extends AppCompatActivity{
     SinglePlayerBoard context;
     MoveThread moveThread;
     RelativeLayout boardLayout;
+
+    private Square animatedSquare;
 
     Toolbar toolbar;
 
@@ -115,7 +121,7 @@ public class SinglePlayerBoard extends AppCompatActivity{
         context = this;
         defaultSquare = new Square(this,pieceColor);
         selected = defaultSquare;
-        selected.setPiece(" ");
+        selected.setPiece(Piece.NONE);
         boardSize = 8;
 
         Display display = getWindowManager().getDefaultDisplay();
@@ -155,6 +161,18 @@ public class SinglePlayerBoard extends AppCompatActivity{
             singleGame.newGame();
         }
 
+        animatedSquare = new Square(this,pieceColor);
+        animatedSquare.setPiece(Piece.NONE);
+        animatedSquare.setVisibility(View.GONE);
+        animatedSquare.setX(0);
+        animatedSquare.setY(0);
+        animatedSquare.setBackgroundColor(Color.TRANSPARENT);
+        animatedSquare.setLayoutParams(new RelativeLayout.LayoutParams(squareSize, squareSize));
+
+        singleGame.setAnimatedSquare(animatedSquare);
+
+        boardMain.addView(animatedSquare);
+
         playerPointLabel.setText(getResources().getText(R.string.player_points).toString()+ " " + singleGame.getPlayerPoints());
         computerPointLabel.setText(getResources().getText(R.string.computer_points).toString() + " " + singleGame.getComputerPoints());
 
@@ -165,8 +183,8 @@ public class SinglePlayerBoard extends AppCompatActivity{
         notYourTurnLabel.bringToFront();
         gameOverLabel.bringToFront();
         thatSucksLabel.bringToFront();
+        animatedSquare.bringToFront();
         boardMain.invalidate();
-
 
     }
 
@@ -354,8 +372,8 @@ public class SinglePlayerBoard extends AppCompatActivity{
         for (int i = 0; i < boardSize; i++)
             for (int j = 0; j < boardSize; j++)
             {
-                board[i][ j].setTeam(0);
-                board[i][ j].setPiece(" ");
+                board[i][ j].setTeam(NONE);
+                board[i][ j].setPiece(Piece.NONE);
                 board[i][ j].setPieceCount(0);
             }
 
@@ -377,12 +395,12 @@ public class SinglePlayerBoard extends AppCompatActivity{
         boolean allComputersAreBishops = true;
 
         for(int i = 0; i < players.size(); i++)
-            if(players.get(i).getPiece() != "B"){
+            if(players.get(i).getPiece() != Piece.BISHOP){
                 allPlayersAreBishops = false;
                 break;
             }
         for(int i = 0; i < computers.size(); i++)
-            if(computers.get(i).getPiece() != "B"){
+            if(computers.get(i).getPiece() != Piece.BISHOP){
                 allComputersAreBishops = false;
                 break;
             }
@@ -412,7 +430,7 @@ public class SinglePlayerBoard extends AppCompatActivity{
             }
         });
         int playerScore = singleGame.getPlayerPoints();
-        if (singleGame.getTurn() == -1)
+        if (singleGame.getTurn() == YOU)
         {
             if(!singleGame.getCanComputerMove(mover,board) && !singleGame.getCanPlayerMove(mover,board)){
                 cantMoveThatLabel.post(new Runnable() {
@@ -427,7 +445,7 @@ public class SinglePlayerBoard extends AppCompatActivity{
                         gameOverLabel.setVisibility(View.VISIBLE);
                     }
                 });
-                singleGame.setTurn(0);
+                singleGame.setTurn(NONE);
                 if(singleGame.getComputerPoints()== singleGame.getPlayerPoints())
                     tieLabel.post(new Runnable() {
                         @Override
@@ -492,7 +510,7 @@ public class SinglePlayerBoard extends AppCompatActivity{
                         gameOverLabel.setVisibility(View.VISIBLE);
                     }
                 });
-                singleGame.setTurn(0);
+                singleGame.setTurn(NONE);
                 if(singleGame.getComputerPoints()== singleGame.getPlayerPoints())
                     tieLabel.post(new Runnable() {
                         @Override
@@ -611,7 +629,7 @@ public class SinglePlayerBoard extends AppCompatActivity{
                     }
                 });
                 singleGame.incrementMoveCount();
-                singleGame.setTurn(1);
+                singleGame.setTurn(OPPONENT);
 
 
                 playerPointLabel.post(new Runnable() {
@@ -659,7 +677,7 @@ public class SinglePlayerBoard extends AppCompatActivity{
                         }
                     });
 
-                    singleGame.setTurn(0);
+                    singleGame.setTurn(NONE);
                 }
                 else if (singleGame.getComputerCount() == 0)
                 {
@@ -681,7 +699,7 @@ public class SinglePlayerBoard extends AppCompatActivity{
                         }
                     });
 
-                    singleGame.setTurn(0);
+                    singleGame.setTurn(NONE);
 
                 }
             }
@@ -703,7 +721,7 @@ public class SinglePlayerBoard extends AppCompatActivity{
 
 
         }
-        else if (singleGame.getTurn() == 1) {
+        else if (singleGame.getTurn() == OPPONENT) {
             if(singleGame.getCanComputerMove(mover,board)) {
                 cantMoveThatLabel.post(new Runnable() {
                     @Override
@@ -718,7 +736,7 @@ public class SinglePlayerBoard extends AppCompatActivity{
                     }
                 });
             }else{
-                singleGame.setTurn(-1);
+                singleGame.setTurn(YOU);
                 moveSelectedButton_Click(view);
             }
         }
@@ -756,7 +774,7 @@ public class SinglePlayerBoard extends AppCompatActivity{
 
         for (int i = 0; i < boardSize; i++)
             for (int j = 0; j < boardSize; j++)
-                if (board[i][ j].getTeam() == 1)
+                if (board[i][ j].getTeam() == OPPONENT)
         computerPieces.add(board[i][ j]);
         if (computerPieces.size() > 0)
         {
@@ -770,7 +788,7 @@ public class SinglePlayerBoard extends AppCompatActivity{
                 picked = computerPieces.get(rand.nextInt(computerPieces.size()));
             }
 
-            if(selected.getTeam() == 1)
+            if(selected.getTeam() == OPPONENT)
             {
                 selected.post(new Runnable() {
                     @Override
@@ -805,7 +823,7 @@ public class SinglePlayerBoard extends AppCompatActivity{
                 });
 
 
-            singleGame.setTurn(-1);
+            singleGame.setTurn(YOU);
 
             notYourTurnLabel.post(new Runnable() {
                 @Override
@@ -878,61 +896,62 @@ public class SinglePlayerBoard extends AppCompatActivity{
         {
             // Set Teams and pieces
             for (int i = 0; i < size; i++) {
-                board[i][0].setTeam(1);
-                board[i][0].setPiece("Kn");
-                board[i][1].setTeam(1);
-                board[i][1].setPiece("Kn");
-                board[i][6].setTeam(-1);
-                board[i][6].setPiece("Kn");
-                board[i][7].setTeam(-1);
-                board[i][7].setPiece("Kn");
+                board[i][0].setTeam(OPPONENT);
+                board[i][0].setPiece(Piece.KNIGHT);
+                board[i][1].setTeam(OPPONENT);
+                board[i][1].setPiece(Piece.KNIGHT);
+                board[i][6].setTeam(YOU);
+                board[i][6].setPiece(Piece.KNIGHT);
+                board[i][7].setTeam(YOU);
+                board[i][7].setPiece(Piece.KNIGHT);
             }
 
         }
         else {
             // Set Teams
             for (int i = 0; i < size; i++) {
-                board[i][0].setTeam(1);
-                board[i][1].setTeam(1);
-                board[i][6].setTeam(-1);
-                board[i][7].setTeam(-1);
+                board[i][0].setTeam(OPPONENT);
+                board[i][1].setTeam(OPPONENT);
+                board[i][6].setTeam(YOU);
+                board[i][7].setTeam(YOU);
             }
 
             // Set Pawns
             for (int i = 0; i < size; i++)
-                board[i][6].setPiece("P");
+                board[i][6].setPiece(Piece.PAWN);
 
             for (int i = 0; i < size; i++)
-                board[i][1].setPiece("P");
+                board[i][1].setPiece(Piece.PAWN);
 
             // Set Rooks
-            board[0][0].setPiece("R");
-            board[7][0].setPiece("R");
-            board[0][7].setPiece("R");
-            board[7][7].setPiece("R");
+            board[0][0].setPiece(Piece.ROOK);
+            board[7][0].setPiece(Piece.ROOK);
+            board[0][7].setPiece(Piece.ROOK);
+            board[7][7].setPiece(Piece.ROOK);
 
             // Set Knights
-            board[1][0].setPiece("Kn");
-            board[6][0].setPiece("Kn");
-            board[1][7].setPiece("Kn");
-            board[6][7].setPiece("Kn");
+            board[1][0].setPiece(Piece.KNIGHT);
+            board[6][0].setPiece(Piece.KNIGHT);
+            board[1][7].setPiece(Piece.KNIGHT);
+            board[6][7].setPiece(Piece.KNIGHT);
 
             // Set Bishops
-            board[2][0].setPiece("B");
-            board[5][0].setPiece("B");
-            board[2][7].setPiece("B");
-            board[5][7].setPiece("B");
+            board[2][0].setPiece(Piece.BISHOP);
+            board[5][0].setPiece(Piece.BISHOP);
+            board[2][7].setPiece(Piece.BISHOP);
+            board[5][7].setPiece(Piece.BISHOP);
 
             // Set Kings
-            board[3][0].setPiece("Ki");
-            board[3][7].setPiece("Ki");
+            board[3][0].setPiece(Piece.KING);
+            board[3][7].setPiece(Piece.KING);
 
             // Set Queens
-            board[4][0].setPiece("Q");
-            board[4][7].setPiece("Q");
+            board[4][0].setPiece(Piece.QUEEN);
+            board[4][7].setPiece(Piece.QUEEN);
         }
 
         return;
     }
+
 
 }
