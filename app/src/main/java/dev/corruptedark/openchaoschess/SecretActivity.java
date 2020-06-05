@@ -53,7 +53,7 @@ public class SecretActivity extends AppCompatActivity {
 
     int step = 0;
 
-    String blaineChant = "";
+    String blaineChant = "BREAK ME ";
 
 
     @Override
@@ -177,7 +177,7 @@ public class SecretActivity extends AppCompatActivity {
         switch (name){
             case BLAINE:
                 step--;
-                blaineChant += "BREAK ME. ";
+                blaineChant += blaineChant;
                 createComputerMessage(blaineChant);
                 break;
         }
