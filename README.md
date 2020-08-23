@@ -25,3 +25,10 @@ As of the most recent commit to the master branch, achievements and single playe
 <img src="https://i.imgur.com/NRuWsUf.png" alt="Knights Only Start" width="200" />
 <img src="https://i.imgur.com/HZlM2rV.png" alt="Knights Only Playing" width="200" />
 
+----
+
+## External Library Credits
+
+Android Material Color Picker Dialog is used for picking colors.
+
+Android Material Color Picker Dialog https://github.com/Pes8/android-material-color-picker-dialog Copyright © 2017 Simone Pessotto Licensed under The MIT License (MIT)
