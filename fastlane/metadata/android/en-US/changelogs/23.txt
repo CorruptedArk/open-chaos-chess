@@ -1,0 +1,6 @@
+v1.5.5
+Fix(es):
+-Set debuggable to true for release in build.gradle because setting debuggable to false made it impossible to play a second move. I still have no idea why that happened. If someone understands why, I would like an explanation.
+
+Change(s):
+-Set animations to happen at a constant speed for a given screen size rather than at a constant duration. I think they appear smoother now as a result.

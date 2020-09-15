@@ -21,6 +21,7 @@ package dev.corruptedark.openchaoschess;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
@@ -55,13 +56,16 @@ public class Mover {
         final String piece = start.getPiece();
         final int pieceCount = start.getPieceCount() + 1;
 
+        double distance = Math.sqrt((end.getX() - start.getX())*(end.getX() - start.getX()) + (end.getY() - start.getY())*(end.getY() - start.getY()));
+        double speed = 0.20 * convertDpToPx(1);
+        long duration = (long)(distance/speed);
 
         TranslateAnimation animation = new TranslateAnimation(0, end.getX() - start.getX(), 0, end.getY() - start.getY());
-
         animatedSquare.setPiece(piece);
         animatedSquare.setTeam(team);
         animatedSquare.setX(start.getX());
         animatedSquare.setY(start.getY());
+
 
         animation.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -94,11 +98,10 @@ public class Mover {
 
             @Override
             public void onAnimationRepeat(Animation animation) {
-
             }
         });
 
-        animation.setDuration(500);
+        animation.setDuration(duration);
         animatedSquare.startAnimation(animation);
 
         while(!animation.hasEnded());
@@ -113,6 +116,9 @@ public class Mover {
         final String piece = start.getPiece();
         final int pieceCount = start.getPieceCount() + 1;
 
+        double distance = Math.sqrt((end.getX() - start.getX())*(end.getX() - start.getX()) + (end.getY() - start.getY())*(end.getY() - start.getY()));
+        double speed = 0.20 * convertDpToPx(1);
+        long duration = (long)(distance/speed);
 
         TranslateAnimation animation = new TranslateAnimation(0, end.getX() - start.getX(), 0, end.getY() - start.getY());
 
@@ -156,7 +162,7 @@ public class Mover {
             }
         });
 
-        animation.setDuration(500);
+        animation.setDuration(duration);
         animatedSquare.startAnimation(animation);
 
         while(!animation.hasEnded());
@@ -5126,6 +5132,10 @@ public class Mover {
         }
 
         return enemy;
+    }
+
+    private int convertDpToPx(int dp){
+        return Math.round(dp*(context.getResources().getDisplayMetrics().xdpi/ DisplayMetrics.DENSITY_DEFAULT));
     }
 
 }
