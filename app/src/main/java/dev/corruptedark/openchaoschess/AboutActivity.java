@@ -39,7 +39,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -132,11 +131,14 @@ public class AboutActivity extends AppCompatActivity {
         aboutContact.setLinkTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         aboutContact.setHighlightColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
 
+        aboutCredits.setText(getString(R.string.credits, BuildConfig.VERSION_NAME));
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(colorManager.getColorFromFile(ColorManager.BAR_COLOR));
         }
+
     }
 
     @Override
