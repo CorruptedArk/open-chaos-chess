@@ -1,0 +1,6 @@
+v1.5.6
+Fix(es):
+-Removed excess layout variants in an attempt to fix issue #2
+
+Change(s):
+-Increased targetSdkVersion and compileSdkVersion to 30

@@ -25,7 +25,7 @@
         android:icon="@drawable/ic_icon"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
-        <activity android:name=".StartClientActivity"></activity>
+        <activity android:name=".StartClientActivity" />
         <activity android:name=".StartHostActivity" />
         <activity
             android:name=".AchievementDetailActivity"
