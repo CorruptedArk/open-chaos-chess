@@ -1,0 +1,5 @@
+v1.5.7
+Fix(es):
+-Fix for the problem where a player was unable to make a second move while also setting debuggable false in build.gradle for release build variant. I believe gradle was removing a while loop with an empty body in Mover.java. Adding an output to log fixed the unwanted behavior.
+-Setting debuggable to false should allow F-Droid to successfully build this release.
+
