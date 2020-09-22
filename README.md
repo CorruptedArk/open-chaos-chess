@@ -8,6 +8,11 @@
 [![Liberapay Patrons](https://img.shields.io/liberapay/patrons/CorruptedArk.svg?logo=liberapay")](https://liberapay.com/CorruptedArk/)
 [![F-Droid](https://img.shields.io/f-droid/v/dev.corruptedark.openchaoschess)](https://f-droid.org/en/packages/dev.corruptedark.openchaoschess/)
 
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+    alt="Get it on F-Droid"
+    height="80">](https://f-droid.org/packages/dev.corruptedark.openchaoschess)
+
+
 ## About
 Open Chaos Chess is a free and open source version of [Chaos Chess](https://play.google.com/store/apps/details?id=dev.corruptedark.chaoschess), stripped of Google Play Services. Chaos Chess is a variation of chess where you can pick the piece that moves, but the moves are random. As such, you no longer win by checkmates. Instead, you win by eliminating your opponent's pieces. Have fun, and may the RNG be ever in your favor. 
 
