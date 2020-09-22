@@ -22,6 +22,7 @@ package dev.corruptedark.openchaoschess;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
@@ -104,7 +105,10 @@ public class Mover {
         animation.setDuration(duration);
         animatedSquare.startAnimation(animation);
 
-        while(!animation.hasEnded());
+        while(!animation.hasEnded())
+        {
+            Log.v("Open Chaos Chess", "Animation still running.");
+        }
 
     }
 
@@ -165,7 +169,10 @@ public class Mover {
         animation.setDuration(duration);
         animatedSquare.startAnimation(animation);
 
-        while(!animation.hasEnded());
+        while(!animation.hasEnded())
+        {
+            Log.v("Open Chaos Chess", "Animation still running.");
+        }
 
     }
 
