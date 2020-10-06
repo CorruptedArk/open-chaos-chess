@@ -25,8 +25,8 @@ android {
         applicationId "dev.corruptedark.openchaoschess"
         minSdkVersion 16
         targetSdkVersion 30
-        versionCode 25
-        versionName "1.5.7"
+        versionCode 26
+        versionName "1.5.8"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         vectorDrawables {
