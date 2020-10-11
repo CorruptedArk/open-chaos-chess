@@ -38,6 +38,7 @@ public class Mover {
     public final int NONE = 0;
 
     private enum Direction {UP, BACK, LEFT, RIGHT, LEFTUP, RIGHTUP, LEFTBACK, RIGHTBACK, _2R1U, _1R2U, _1L2U, _2L1U, _2L1D, _1L2D, _1R2D, _2R1D}
+
     private enum KQMODE {ROOK, BISHOP}
 
     Random rand = new Random();
@@ -49,17 +50,16 @@ public class Mover {
         this.context = context;
     }
 
-    private void animateMove(final Square start, final Square end, final SingleGame singleGame)
-    {
+    private void animateMove(final Square start, final Square end, final SingleGame singleGame) {
         final Square animatedSquare = singleGame.getAnimatedSquare();
 
         final int team = start.getTeam();
         final String piece = start.getPiece();
         final int pieceCount = start.getPieceCount() + 1;
 
-        double distance = Math.sqrt((end.getX() - start.getX())*(end.getX() - start.getX()) + (end.getY() - start.getY())*(end.getY() - start.getY()));
+        double distance = Math.sqrt((end.getX() - start.getX()) * (end.getX() - start.getX()) + (end.getY() - start.getY()) * (end.getY() - start.getY()));
         double speed = 0.20 * convertDpToPx(1);
-        long duration = (long)(distance/speed);
+        long duration = (long) (distance / speed);
 
         TranslateAnimation animation = new TranslateAnimation(0, end.getX() - start.getX(), 0, end.getY() - start.getY());
         animatedSquare.setPiece(piece);
@@ -87,12 +87,9 @@ public class Mover {
                 animatedSquare.setVisibility(View.GONE);
                 animatedSquare.setPiece(Piece.NONE);
 
-                if(piece == Piece.PAWN && end.getJ() == 7 && end.getTeam() == OPPONENT)
-                {
+                if (piece == Piece.PAWN && end.getJ() == 7 && end.getTeam() == OPPONENT) {
                     end.setPiece(Piece.QUEEN);
-                }
-                else if(piece == Piece.PAWN && end.getJ() == 0 && end.getTeam() == YOU)
-                {
+                } else if (piece == Piece.PAWN && end.getJ() == 0 && end.getTeam() == YOU) {
                     end.setPiece(Piece.QUEEN);
                 }
             }
@@ -105,24 +102,22 @@ public class Mover {
         animation.setDuration(duration);
         animatedSquare.startAnimation(animation);
 
-        while(!animation.hasEnded())
-        {
+        while (!animation.hasEnded()) {
             Log.v("Open Chaos Chess", "Animation still running.");
         }
 
     }
 
-    private void animateMove(final Square start, final Square end, final MultiGame multiGame)
-    {
+    private void animateMove(final Square start, final Square end, final MultiGame multiGame) {
         final Square animatedSquare = multiGame.getAnimatedSquare();
 
         final int team = start.getTeam();
         final String piece = start.getPiece();
         final int pieceCount = start.getPieceCount() + 1;
 
-        double distance = Math.sqrt((end.getX() - start.getX())*(end.getX() - start.getX()) + (end.getY() - start.getY())*(end.getY() - start.getY()));
+        double distance = Math.sqrt((end.getX() - start.getX()) * (end.getX() - start.getX()) + (end.getY() - start.getY()) * (end.getY() - start.getY()));
         double speed = 0.20 * convertDpToPx(1);
-        long duration = (long)(distance/speed);
+        long duration = (long) (distance / speed);
 
         TranslateAnimation animation = new TranslateAnimation(0, end.getX() - start.getX(), 0, end.getY() - start.getY());
 
@@ -150,12 +145,9 @@ public class Mover {
                 animatedSquare.setVisibility(View.GONE);
                 animatedSquare.setPiece(Piece.NONE);
 
-                if(piece == Piece.PAWN && end.getJ() == 7 && end.getTeam() == OPPONENT)
-                {
+                if (piece == Piece.PAWN && end.getJ() == 7 && end.getTeam() == OPPONENT) {
                     end.setPiece(Piece.QUEEN);
-                }
-                else if(piece == Piece.PAWN && end.getJ() == 0 && end.getTeam() == YOU)
-                {
+                } else if (piece == Piece.PAWN && end.getJ() == 0 && end.getTeam() == YOU) {
                     end.setPiece(Piece.QUEEN);
                 }
             }
@@ -169,41 +161,37 @@ public class Mover {
         animation.setDuration(duration);
         animatedSquare.startAnimation(animation);
 
-        while(!animation.hasEnded())
-        {
+        while (!animation.hasEnded()) {
             Log.v("Open Chaos Chess", "Animation still running.");
         }
 
     }
 
-    public synchronized Square getLastDestination()
-    {
+    public synchronized Square getLastDestination() {
         return destination;
     }
 
     //Single game functions start
-    public synchronized boolean movePiece(Square[][] board, Square square, SingleGame singleGame)
-    {
+    public synchronized boolean movePiece(Square[][] board, Square square, SingleGame singleGame, boolean bloodThirsty) {
         boolean moveSuccess;
-        switch(square.getPiece())
-        {
+        switch (square.getPiece()) {
             case Piece.PAWN:
-                moveSuccess = movePawn(board, square, singleGame);
+                moveSuccess = movePawn(board, square, singleGame, bloodThirsty);
                 break;
             case Piece.ROOK:
                 moveSuccess = moveRook(board, square, singleGame);
                 break;
             case Piece.KNIGHT:
-                moveSuccess = moveKnight( board,  square, singleGame);
+                moveSuccess = moveKnight(board, square, singleGame);
                 break;
             case Piece.BISHOP:
-                moveSuccess = moveBishop( board,  square, singleGame);
+                moveSuccess = moveBishop(board, square, singleGame);
                 break;
             case Piece.KING:
-                moveSuccess = moveKing( board,  square, singleGame);
+                moveSuccess = moveKing(board, square, singleGame);
                 break;
             case Piece.QUEEN:
-                moveSuccess = moveQueen( board,  square, singleGame);
+                moveSuccess = moveQueen(board, square, singleGame);
                 break;
             default:
                 moveSuccess = false;
@@ -213,22 +201,49 @@ public class Mover {
         return moveSuccess;
     }
 
-    boolean movePawn( Square[][] board,  Square square,  SingleGame singleGame)
-    {
+    boolean movePawn(Square[][] board, Square square, SingleGame singleGame, boolean bloodThirsty) {
         List<Direction> options = new ArrayList<>();
-
 
         boolean moveSuccess = false;
         boolean forwardImpossible = false;
         boolean leftImpossible = false;
         boolean rightImpossible = false;
-        destination = new Square(context,0xffffffff);
+        destination = new Square(context, 0xffffffff);
 
         rand.nextInt();
         int count;
+        int enemy = -square.getTeam();
 
-        while (!moveSuccess && (!forwardImpossible || !leftImpossible || !rightImpossible))
-        {
+        if (bloodThirsty) {
+            List<Square> enemySquares = new ArrayList<>();
+
+            try {
+                Square left = board[square.getI() + square.getTeam()][square.getJ() + square.getTeam()];
+                if (left.getTeam() == enemy) // left capture
+                {
+                    enemySquares.add(left);
+                }
+            } catch (Exception e) {
+            }
+
+            try {
+                Square right = board[square.getI() - square.getTeam()][square.getJ() + square.getTeam()];
+                if (right.getTeam() == enemy) // right capture
+                {
+                    enemySquares.add(right);
+                }
+            } catch (Exception e) {
+            }
+
+            if (!enemySquares.isEmpty()) {
+                destination = enemySquares.get(rand.nextInt(options.size()));
+                animateMove(square, destination, singleGame);
+                moveSuccess = true;
+            }
+
+        }
+
+        while (!moveSuccess && (!forwardImpossible || !leftImpossible || !rightImpossible)) {
             options.clear();
 
             if (!forwardImpossible)
@@ -239,45 +254,36 @@ public class Mover {
                 options.add(Direction.RIGHT);
 
 
-            switch(options.get(rand.nextInt(options.size())))
-            {
+            switch (options.get(rand.nextInt(options.size()))) {
                 case UP: // tries to move forward
 
                     if (square.getPieceCount() == 0)
-                        count = rand.nextInt(2)+1;
+                        count = rand.nextInt(2) + 1;
                     else
                         count = 1;
 
-                    try
-                    {
+                    try {
 
-                        while(!nothingInWayForward( board,  square, count))
-                        {
+                        while (!nothingInWayForward(board, square, count)) {
                             count--;
-                            if(count == 0)
-                            {
+                            if (count == 0) {
                                 forwardImpossible = true;
                                 break;
                             }
                         }
-                        if(count > 0)
-                        {
+                        if (count > 0) {
                             destination = board[square.getI()][square.getJ() + square.getTeam() * count];
                             animateMove(square, destination, singleGame);
                             moveSuccess = true;
                         }
+                    } catch (Exception e) {
+                        forwardImpossible = true;
                     }
-                    catch (Exception e)
-                {
-                    forwardImpossible = true;
-                }
-                break;
+                    break;
                 case LEFT: // tries to capture diagonally to left
-                    try
-                    {
-                        destination = board[square.getI() + square.getTeam()][ square.getJ() + square.getTeam()];
-                        if (destination.getTeam() == -square.getTeam())
-                        {
+                    try {
+                        destination = board[square.getI() + square.getTeam()][square.getJ() + square.getTeam()];
+                        if (destination.getTeam() == -square.getTeam()) {
                             if (destination.getTeam() == OPPONENT)
                                 singleGame.incrementPlayerPoints();
                             else if (destination.getTeam() == YOU)
@@ -285,23 +291,17 @@ public class Mover {
 
                             animateMove(square, destination, singleGame);
                             moveSuccess = true;
-                        }
-                        else
-                        {
+                        } else {
                             leftImpossible = true;
                         }
+                    } catch (Exception e) {
+                        leftImpossible = true;
                     }
-                    catch (Exception e)
-                {
-                    leftImpossible = true;
-                }
-                break;
+                    break;
                 case RIGHT: // tries to capture diagonally to right
-                    try
-                    {
-                        destination = board[square.getI() - square.getTeam()][ square.getJ() + square.getTeam()];
-                        if (destination.getTeam() == -square.getTeam())
-                        {
+                    try {
+                        destination = board[square.getI() - square.getTeam()][square.getJ() + square.getTeam()];
+                        if (destination.getTeam() == -square.getTeam()) {
                             if (destination.getTeam() == OPPONENT)
                                 singleGame.incrementPlayerPoints();
                             else if (destination.getTeam() == YOU)
@@ -309,34 +309,26 @@ public class Mover {
 
                             animateMove(square, destination, singleGame);
                             moveSuccess = true;
-                        }
-                        else
-                        {
+                        } else {
                             rightImpossible = true;
                         }
+                    } catch (Exception e) {
+                        rightImpossible = true;
                     }
-                    catch (Exception e)
-                {
-                    rightImpossible = true;
-                }
-                break;
+                    break;
             }
+        }
 
-            if(destination.getJ() == 7 && destination.getTeam() == OPPONENT && moveSuccess)
-            {
-                destination.setPiece(Piece.QUEEN);
-            }
-            else if(destination.getJ() == 0 && destination.getTeam() == YOU && moveSuccess)
-            {
-                destination.setPiece(Piece.QUEEN);
-            }
+        if (destination.getJ() == 7 && destination.getTeam() == OPPONENT && moveSuccess) {
+            destination.setPiece(Piece.QUEEN);
+        } else if (destination.getJ() == 0 && destination.getTeam() == YOU && moveSuccess) {
+            destination.setPiece(Piece.QUEEN);
         }
 
         return moveSuccess;
     }
 
-    boolean moveRook(Square[][] board, Square square, SingleGame singleGame, int max)
-    {
+    boolean moveRook(Square[][] board, Square square, SingleGame singleGame, int max) {
         List<Direction> options = new ArrayList<>();
 
         boolean moveSuccess = false;
@@ -510,15 +502,13 @@ public class Mover {
                             backImpossible = true;
                     }
                     break;
-
             }
         }
 
         return moveSuccess;
     }
 
-    boolean moveRook( Square[][] board,  Square square,  SingleGame singleGame)
-    {
+    boolean moveRook(Square[][] board, Square square, SingleGame singleGame) {
         List<Direction> options = new ArrayList<>();
 
         boolean moveSuccess = false;
@@ -532,11 +522,9 @@ public class Mover {
         int maxBack = 8;
         int count;
 
-
         rand.nextInt();
 
-        while(!moveSuccess && (!forwardImpossible || !leftImpossible || !rightImpossible || !backImpossible))
-        {
+        while (!moveSuccess && (!forwardImpossible || !leftImpossible || !rightImpossible || !backImpossible)) {
             options.clear();
 
 
@@ -549,35 +537,29 @@ public class Mover {
             if (!backImpossible)
                 options.add(Direction.BACK);
 
-            switch (options.get(rand.nextInt(options.size())))
-            {
+            switch (options.get(rand.nextInt(options.size()))) {
                 case UP: // Tries to move forward
 
-                    count = rand.nextInt(maxForward)+1;
+                    count = rand.nextInt(maxForward) + 1;
 
-                    try
-                    {
+                    try {
 
-                        while (!nothingInWayForward( board,  square, count))
-                        {
+                        while (!nothingInWayForward(board, square, count)) {
 
-                            if (enemyInWayForward( board,  square, count))
-                            {
-                                while (!nothingInWayForward( board,  square, count-1))
+                            if (enemyInWayForward(board, square, count)) {
+                                while (!nothingInWayForward(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 forwardImpossible = true;
                                 break;
                             }
 
                         }
-                        destination = board[square.getI()][ square.getJ() + square.getTeam() * count];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI()][square.getJ() + square.getTeam() * count];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
                             if (destination.getTeam() == OPPONENT)
                                 singleGame.incrementPlayerPoints();
                             else if (destination.getTeam() == YOU)
@@ -586,41 +568,34 @@ public class Mover {
                             animateMove(square, destination, singleGame);
                             moveSuccess = true;
                         }
+                    } catch (Exception e) {
+                        maxForward--;
+                        if (maxForward == 0)
+                            forwardImpossible = true;
                     }
-                    catch (Exception e)
-                {
-                    maxForward--;
-                    if (maxForward == 0)
-                        forwardImpossible = true;
-                }
-                break;
+                    break;
                 case LEFT: // Tries to move left
 
-                    count = rand.nextInt(maxLeft)+1;
+                    count = rand.nextInt(maxLeft) + 1;
 
-                    try
-                    {
+                    try {
 
-                        while (!nothingInWayLeft( board,  square, count))
-                        {
-                            if (enemyInWayLeft( board,  square, count))
-                            {
-                                while (!nothingInWayLeft( board,  square, count - 1))
+                        while (!nothingInWayLeft(board, square, count)) {
+                            if (enemyInWayLeft(board, square, count)) {
+                                while (!nothingInWayLeft(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
 
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 leftImpossible = true;
                                 break;
                             }
 
                         }
-                        destination = board[square.getI() + square.getTeam() * count][ square.getJ()];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI() + square.getTeam() * count][square.getJ()];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
                             if (destination.getTeam() == OPPONENT)
                                 singleGame.incrementPlayerPoints();
                             else if (destination.getTeam() == YOU)
@@ -629,41 +604,34 @@ public class Mover {
                             animateMove(square, destination, singleGame);
                             moveSuccess = true;
                         }
+                    } catch (Exception e) {
+                        maxLeft--;
+                        if (maxLeft == 0)
+                            leftImpossible = true;
                     }
-                    catch(Exception e)
-                {
-                    maxLeft--;
-                    if (maxLeft == 0)
-                        leftImpossible = true;
-                }
-                break;
+                    break;
                 case RIGHT: // Tries to move right
 
-                    count = rand.nextInt(maxRight)+1;
+                    count = rand.nextInt(maxRight) + 1;
 
-                    try
-                    {
+                    try {
 
-                        while (!nothingInWayRight( board,  square, count))
-                        {
-                            if (enemyInWayRight( board,  square, count))
-                            {
-                                while (!nothingInWayRight( board,  square, count - 1))
+                        while (!nothingInWayRight(board, square, count)) {
+                            if (enemyInWayRight(board, square, count)) {
+                                while (!nothingInWayRight(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
 
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 rightImpossible = true;
                                 break;
                             }
 
                         }
-                        destination = board[square.getI() - square.getTeam() * count][ square.getJ()];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI() - square.getTeam() * count][square.getJ()];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
                             if (destination.getTeam() == OPPONENT)
                                 singleGame.incrementPlayerPoints();
                             else if (destination.getTeam() == YOU)
@@ -672,41 +640,34 @@ public class Mover {
                             animateMove(square, destination, singleGame);
                             moveSuccess = true;
                         }
+                    } catch (Exception e) {
+                        maxRight--;
+                        if (maxRight == 0)
+                            rightImpossible = true;
                     }
-                    catch(Exception e)
-                {
-                    maxRight--;
-                    if (maxRight == 0)
-                        rightImpossible = true;
-                }
-                break;
+                    break;
                 case BACK: // Tries to move back
 
                     count = rand.nextInt(maxBack) + 1;
 
-                    try
-                    {
+                    try {
 
-                        while (!nothingInWayBack( board,  square, count))
-                        {
-                            if (enemyInWayBack( board,  square, count))
-                            {
-                                while (!nothingInWayBack( board,  square, count - 1))
+                        while (!nothingInWayBack(board, square, count)) {
+                            if (enemyInWayBack(board, square, count)) {
+                                while (!nothingInWayBack(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
 
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 backImpossible = true;
                                 break;
                             }
 
                         }
-                        destination = board[square.getI()][ square.getJ() - square.getTeam() * count];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI()][square.getJ() - square.getTeam() * count];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
                             if (destination.getTeam() == OPPONENT)
                                 singleGame.incrementPlayerPoints();
                             else if (destination.getTeam() == YOU)
@@ -715,25 +676,20 @@ public class Mover {
                             animateMove(square, destination, singleGame);
                             moveSuccess = true;
                         }
+                    } catch (Exception e) {
+                        maxBack--;
+                        if (maxBack == 0)
+                            backImpossible = true;
                     }
-                    catch(Exception e)
-                {
-                    maxBack--;
-                    if (maxBack == 0)
-                        backImpossible = true;
-                }
-                break;
+                    break;
 
             }
         }
 
-
-
         return moveSuccess;
     }
 
-    boolean moveKnight( Square[][] board,  Square square,  SingleGame singleGame)
-    {
+    boolean moveKnight(Square[][] board, Square square, SingleGame singleGame) {
         List<Direction> options = new ArrayList<>();
 
         boolean moveSuccess = false;
@@ -743,8 +699,7 @@ public class Mover {
 
         rand.nextInt();
 
-        while (!moveSuccess && (!_2R1U || !_1R2U || !_1L2U || !_2L1U || !_2L1D || !_1L2D || !_1R2D || !_2R1D))
-        {
+        while (!moveSuccess && (!_2R1U || !_1R2U || !_1L2U || !_2L1U || !_2L1D || !_1L2D || !_1R2D || !_2R1D)) {
             options.clear();
 
             if (!_2R1U)
@@ -765,14 +720,11 @@ public class Mover {
                 options.add(Direction._2R1D);
 
 
-            switch (options.get(rand.nextInt(options.size())))
-            {
+            switch (options.get(rand.nextInt(options.size()))) {
                 case _2R1U:
-                    try
-                    {
-                        destination = board[square.getI() - square.getTeam() * 2][ square.getJ() + square.getTeam()];
-                        if(destination.getTeam() != square.getTeam())
-                        {
+                    try {
+                        destination = board[square.getI() - square.getTeam() * 2][square.getJ() + square.getTeam()];
+                        if (destination.getTeam() != square.getTeam()) {
                             if (destination.getTeam() == OPPONENT)
                                 singleGame.incrementPlayerPoints();
                             else if (destination.getTeam() == YOU)
@@ -780,23 +732,17 @@ public class Mover {
 
                             animateMove(square, destination, singleGame);
                             moveSuccess = true;
-                        }
-                        else
-                        {
+                        } else {
                             _2R1U = true;
                         }
+                    } catch (Exception e) {
+                        _2R1U = true;
                     }
-                    catch (Exception e)
-                {
-                    _2R1U = true;
-                }
-                break;
+                    break;
                 case _1R2U:
-                    try
-                    {
-                        destination = board[square.getI() - square.getTeam()][ square.getJ() + square.getTeam() * 2];
-                        if (destination.getTeam() != square.getTeam())
-                        {
+                    try {
+                        destination = board[square.getI() - square.getTeam()][square.getJ() + square.getTeam() * 2];
+                        if (destination.getTeam() != square.getTeam()) {
                             if (destination.getTeam() == OPPONENT)
                                 singleGame.incrementPlayerPoints();
                             else if (destination.getTeam() == YOU)
@@ -804,23 +750,17 @@ public class Mover {
 
                             animateMove(square, destination, singleGame);
                             moveSuccess = true;
-                        }
-                        else
-                        {
+                        } else {
                             _1R2U = true;
                         }
+                    } catch (Exception e) {
+                        _1R2U = true;
                     }
-                    catch (Exception e)
-                {
-                    _1R2U = true;
-                }
-                break;
+                    break;
                 case _1L2U:
-                    try
-                    {
-                        destination = board[square.getI() + square.getTeam()][ square.getJ() + square.getTeam() * 2];
-                        if (destination.getTeam() != square.getTeam())
-                        {
+                    try {
+                        destination = board[square.getI() + square.getTeam()][square.getJ() + square.getTeam() * 2];
+                        if (destination.getTeam() != square.getTeam()) {
                             if (destination.getTeam() == OPPONENT)
                                 singleGame.incrementPlayerPoints();
                             else if (destination.getTeam() == YOU)
@@ -828,23 +768,17 @@ public class Mover {
 
                             animateMove(square, destination, singleGame);
                             moveSuccess = true;
-                        }
-                        else
-                        {
+                        } else {
                             _1L2U = true;
                         }
+                    } catch (Exception e) {
+                        _1L2U = true;
                     }
-                    catch (Exception e)
-                {
-                    _1L2U = true;
-                }
-                break;
+                    break;
                 case _2L1U:
-                    try
-                    {
-                        destination = board[square.getI() + square.getTeam() * 2][ square.getJ() + square.getTeam()];
-                        if (destination.getTeam() != square.getTeam())
-                        {
+                    try {
+                        destination = board[square.getI() + square.getTeam() * 2][square.getJ() + square.getTeam()];
+                        if (destination.getTeam() != square.getTeam()) {
                             if (destination.getTeam() == OPPONENT)
                                 singleGame.incrementPlayerPoints();
                             else if (destination.getTeam() == YOU)
@@ -852,23 +786,17 @@ public class Mover {
 
                             animateMove(square, destination, singleGame);
                             moveSuccess = true;
-                        }
-                        else
-                        {
+                        } else {
                             _2L1U = true;
                         }
+                    } catch (Exception e) {
+                        _2L1U = true;
                     }
-                    catch (Exception e)
-                {
-                    _2L1U = true;
-                }
-                break;
+                    break;
                 case _2L1D:
-                    try
-                    {
-                        destination = board[square.getI() + square.getTeam() * 2][ square.getJ() - square.getTeam()];
-                        if (destination.getTeam() != square.getTeam())
-                        {
+                    try {
+                        destination = board[square.getI() + square.getTeam() * 2][square.getJ() - square.getTeam()];
+                        if (destination.getTeam() != square.getTeam()) {
                             if (destination.getTeam() == OPPONENT)
                                 singleGame.incrementPlayerPoints();
                             else if (destination.getTeam() == YOU)
@@ -876,23 +804,17 @@ public class Mover {
 
                             animateMove(square, destination, singleGame);
                             moveSuccess = true;
-                        }
-                        else
-                        {
+                        } else {
                             _2L1D = true;
                         }
+                    } catch (Exception e) {
+                        _2L1D = true;
                     }
-                    catch (Exception e)
-                {
-                    _2L1D = true;
-                }
-                break;
+                    break;
                 case _1L2D:
-                    try
-                    {
-                        destination = board[square.getI() + square.getTeam()][ square.getJ() - square.getTeam() * 2];
-                        if (destination.getTeam() != square.getTeam())
-                        {
+                    try {
+                        destination = board[square.getI() + square.getTeam()][square.getJ() - square.getTeam() * 2];
+                        if (destination.getTeam() != square.getTeam()) {
                             if (destination.getTeam() == OPPONENT)
                                 singleGame.incrementPlayerPoints();
                             else if (destination.getTeam() == YOU)
@@ -900,23 +822,17 @@ public class Mover {
 
                             animateMove(square, destination, singleGame);
                             moveSuccess = true;
-                        }
-                        else
-                        {
+                        } else {
                             _1L2D = true;
                         }
+                    } catch (Exception e) {
+                        _1L2D = true;
                     }
-                    catch (Exception e)
-                {
-                    _1L2D = true;
-                }
-                break;
+                    break;
                 case _1R2D:
-                    try
-                    {
-                        destination = board[square.getI() - square.getTeam()][ square.getJ() - square.getTeam() * 2];
-                        if (destination.getTeam() != square.getTeam())
-                        {
+                    try {
+                        destination = board[square.getI() - square.getTeam()][square.getJ() - square.getTeam() * 2];
+                        if (destination.getTeam() != square.getTeam()) {
                             if (destination.getTeam() == OPPONENT)
                                 singleGame.incrementPlayerPoints();
                             else if (destination.getTeam() == YOU)
@@ -924,23 +840,17 @@ public class Mover {
 
                             animateMove(square, destination, singleGame);
                             moveSuccess = true;
-                        }
-                        else
-                        {
+                        } else {
                             _1R2D = true;
                         }
+                    } catch (Exception e) {
+                        _1R2D = true;
                     }
-                    catch (Exception e)
-                {
-                    _1R2D = true;
-                }
-                break;
+                    break;
                 case _2R1D:
-                    try
-                    {
-                        destination = board[square.getI() - square.getTeam() * 2][ square.getJ() - square.getTeam()];
-                        if (destination.getTeam() != square.getTeam())
-                        {
+                    try {
+                        destination = board[square.getI() - square.getTeam() * 2][square.getJ() - square.getTeam()];
+                        if (destination.getTeam() != square.getTeam()) {
                             if (destination.getTeam() == OPPONENT)
                                 singleGame.incrementPlayerPoints();
                             else if (destination.getTeam() == YOU)
@@ -948,17 +858,13 @@ public class Mover {
 
                             animateMove(square, destination, singleGame);
                             moveSuccess = true;
-                        }
-                        else
-                        {
+                        } else {
                             _2R1D = true;
                         }
+                    } catch (Exception e) {
+                        _2R1D = true;
                     }
-                    catch (Exception e)
-                {
-                    _2R1D = true;
-                }
-                break;
+                    break;
 
             }
 
@@ -969,8 +875,7 @@ public class Mover {
         return moveSuccess;
     }
 
-    boolean moveBishop(Square[][] board, Square square, SingleGame singleGame, int max)
-    {
+    boolean moveBishop(Square[][] board, Square square, SingleGame singleGame, int max) {
         List<Direction> options = new ArrayList<>();
 
         boolean moveSuccess = false;
@@ -988,8 +893,7 @@ public class Mover {
 
         int count;
 
-        while (!moveSuccess && (!rightUpImpossible || !leftUpImpossible || !leftDownImpossible || !rightDownImpossible))
-        {
+        while (!moveSuccess && (!rightUpImpossible || !leftUpImpossible || !leftDownImpossible || !rightDownImpossible)) {
 
             options.clear();
 
@@ -1002,32 +906,26 @@ public class Mover {
             if (!rightDownImpossible)
                 options.add(Direction.RIGHTBACK);
 
-            switch (options.get(rand.nextInt(options.size())))
-            {
+            switch (options.get(rand.nextInt(options.size()))) {
                 case RIGHTUP: // Tries to move right and up
 
-                    count = rand.nextInt(maxRightUp)+1;
+                    count = rand.nextInt(maxRightUp) + 1;
 
-                    try
-                    {
-                        while (!nothingInWayRightUp( board,  square, count))
-                        {
-                            if (enemyInWayRightUp( board,  square, count))
-                            {
-                                while (!nothingInWayRightUp( board,  square, count - 1))
+                    try {
+                        while (!nothingInWayRightUp(board, square, count)) {
+                            if (enemyInWayRightUp(board, square, count)) {
+                                while (!nothingInWayRightUp(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 rightUpImpossible = true;
                                 break;
                             }
                         }
-                        destination = board[square.getI() - square.getTeam() * count][ square.getJ() + square.getTeam() * count];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI() - square.getTeam() * count][square.getJ() + square.getTeam() * count];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
                             if (destination.getTeam() == OPPONENT)
                                 singleGame.incrementPlayerPoints();
                             else if (destination.getTeam() == YOU)
@@ -1036,9 +934,7 @@ public class Mover {
                             animateMove(square, destination, singleGame);
                             moveSuccess = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         maxRightUp--;
                         if (maxRightUp == 0)
                             rightUpImpossible = true;
@@ -1046,29 +942,24 @@ public class Mover {
                     break;
                 case LEFTUP: // Tries to move left and up
 
-                    count = rand.nextInt(maxLeftUp)+1;
+                    count = rand.nextInt(maxLeftUp) + 1;
 
-                    try
-                    {
+                    try {
 
-                        while (!nothingInWayLeftUp( board,  square, count))
-                        {
-                            if (enemyInWayLeftUp( board,  square, count))
-                            {
-                                while (!nothingInWayLeftUp( board,  square, count - 1))
+                        while (!nothingInWayLeftUp(board, square, count)) {
+                            if (enemyInWayLeftUp(board, square, count)) {
+                                while (!nothingInWayLeftUp(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 leftUpImpossible = true;
                                 break;
                             }
                         }
-                        destination = board[square.getI() + square.getTeam() * count][ square.getJ() + square.getTeam() * count];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI() + square.getTeam() * count][square.getJ() + square.getTeam() * count];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
                             if (destination.getTeam() == OPPONENT)
                                 singleGame.incrementPlayerPoints();
                             else if (destination.getTeam() == YOU)
@@ -1077,9 +968,7 @@ public class Mover {
                             animateMove(square, destination, singleGame);
                             moveSuccess = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         maxLeftUp--;
                         if (maxLeftUp == 0)
                             leftUpImpossible = true;
@@ -1088,29 +977,24 @@ public class Mover {
                 case LEFTBACK: // Tries to move left and down
 
 
-                    count = rand.nextInt(maxLeftDown)+1;
+                    count = rand.nextInt(maxLeftDown) + 1;
 
-                    try
-                    {
+                    try {
 
-                        while (!nothingInWayLeftDown( board,  square, count))
-                        {
-                            if (enemyInWayLeftDown( board,  square, count))
-                            {
-                                while (!nothingInWayLeftDown( board,  square, count - 1))
+                        while (!nothingInWayLeftDown(board, square, count)) {
+                            if (enemyInWayLeftDown(board, square, count)) {
+                                while (!nothingInWayLeftDown(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 leftDownImpossible = true;
                                 break;
                             }
                         }
-                        destination = board[square.getI() + square.getTeam() * count][ square.getJ() - square.getTeam() * count];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI() + square.getTeam() * count][square.getJ() - square.getTeam() * count];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
                             if (destination.getTeam() == OPPONENT)
                                 singleGame.incrementPlayerPoints();
                             else if (destination.getTeam() == YOU)
@@ -1119,9 +1003,7 @@ public class Mover {
                             animateMove(square, destination, singleGame);
                             moveSuccess = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         maxLeftDown--;
                         if (maxLeftDown == 0)
                             leftDownImpossible = true;
@@ -1129,29 +1011,24 @@ public class Mover {
                     break;
                 case RIGHTBACK: // Tries to move right and down
 
-                    count = rand.nextInt(maxRightDown)+1;
+                    count = rand.nextInt(maxRightDown) + 1;
 
-                    try
-                    {
+                    try {
 
-                        while (!nothingInWayRightDown( board,  square, count))
-                        {
-                            if (enemyInWayRightDown( board,  square, count))
-                            {
-                                while (!nothingInWayRightDown( board,  square, count - 1))
+                        while (!nothingInWayRightDown(board, square, count)) {
+                            if (enemyInWayRightDown(board, square, count)) {
+                                while (!nothingInWayRightDown(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 rightDownImpossible = true;
                                 break;
                             }
                         }
-                        destination = board[square.getI() - square.getTeam() * count][ square.getJ() - square.getTeam() * count];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI() - square.getTeam() * count][square.getJ() - square.getTeam() * count];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
                             if (destination.getTeam() == OPPONENT)
                                 singleGame.incrementPlayerPoints();
                             else if (destination.getTeam() == YOU)
@@ -1160,9 +1037,7 @@ public class Mover {
                             animateMove(square, destination, singleGame);
                             moveSuccess = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         maxRightDown--;
                         if (maxRightDown == 0)
                             rightDownImpossible = true;
@@ -1175,8 +1050,7 @@ public class Mover {
         return moveSuccess;
     }
 
-    boolean moveBishop( Square[][] board,  Square square,  SingleGame singleGame)
-    {
+    boolean moveBishop(Square[][] board, Square square, SingleGame singleGame) {
         List<Direction> options = new ArrayList<>();
 
         boolean moveSuccess = false;
@@ -1192,8 +1066,7 @@ public class Mover {
 
         rand.nextInt();
 
-        while (!moveSuccess && (!rightUpImpossible || !leftUpImpossible || !leftDownImpossible || !rightDownImpossible))
-        {
+        while (!moveSuccess && (!rightUpImpossible || !leftUpImpossible || !leftDownImpossible || !rightDownImpossible)) {
             options.clear();
 
             if (!rightUpImpossible)
@@ -1205,32 +1078,25 @@ public class Mover {
             if (!rightDownImpossible)
                 options.add(Direction.RIGHTBACK);
 
-            switch (options.get(rand.nextInt(options.size())))
-            {
+            switch (options.get(rand.nextInt(options.size()))) {
                 case RIGHTUP: // Tries to move right and up
+                    count = rand.nextInt(maxRightUp) + 1;
 
-                    count = rand.nextInt(maxRightUp)+1;
-
-                    try
-                    {
-                        while (!nothingInWayRightUp( board,  square, count))
-                        {
-                            if (enemyInWayRightUp( board,  square, count))
-                            {
-                                while (!nothingInWayRightUp( board,  square, count - 1))
+                    try {
+                        while (!nothingInWayRightUp(board, square, count)) {
+                            if (enemyInWayRightUp(board, square, count)) {
+                                while (!nothingInWayRightUp(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 rightUpImpossible = true;
                                 break;
                             }
                         }
-                        destination = board[square.getI() - square.getTeam() * count][ square.getJ() + square.getTeam() * count];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI() - square.getTeam() * count][square.getJ() + square.getTeam() * count];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
                             if (destination.getTeam() == OPPONENT)
                                 singleGame.incrementPlayerPoints();
                             else if (destination.getTeam() == YOU)
@@ -1239,39 +1105,31 @@ public class Mover {
                             animateMove(square, destination, singleGame);
                             moveSuccess = true;
                         }
+                    } catch (Exception e) {
+                        maxRightUp--;
+                        if (maxRightUp == 0)
+                            rightUpImpossible = true;
                     }
-                    catch (Exception e)
-                {
-                    maxRightUp--;
-                    if (maxRightUp == 0)
-                        rightUpImpossible = true;
-                }
-                break;
+                    break;
                 case LEFTUP: // Tries to move left and up
+                    count = rand.nextInt(maxLeftUp) + 1;
 
-                    count = rand.nextInt(maxLeftUp)+1;
+                    try {
 
-                    try
-                    {
-
-                        while (!nothingInWayLeftUp( board,  square, count))
-                        {
-                            if (enemyInWayLeftUp( board,  square, count))
-                            {
-                                while (!nothingInWayLeftUp( board,  square, count - 1))
+                        while (!nothingInWayLeftUp(board, square, count)) {
+                            if (enemyInWayLeftUp(board, square, count)) {
+                                while (!nothingInWayLeftUp(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 leftUpImpossible = true;
                                 break;
                             }
                         }
-                        destination = board[square.getI() + square.getTeam() * count][ square.getJ() + square.getTeam() * count];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI() + square.getTeam() * count][square.getJ() + square.getTeam() * count];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
                             if (destination.getTeam() == OPPONENT)
                                 singleGame.incrementPlayerPoints();
                             else if (destination.getTeam() == YOU)
@@ -1280,40 +1138,31 @@ public class Mover {
                             animateMove(square, destination, singleGame);
                             moveSuccess = true;
                         }
+                    } catch (Exception e) {
+                        maxLeftUp--;
+                        if (maxLeftUp == 0)
+                            leftUpImpossible = true;
                     }
-                    catch (Exception e)
-                {
-                    maxLeftUp--;
-                    if (maxLeftUp == 0)
-                        leftUpImpossible = true;
-                }
-                break;
+                    break;
                 case LEFTBACK: // Tries to move left and down
+                    count = rand.nextInt(maxLeftDown) + 1;
 
+                    try {
 
-                    count = rand.nextInt(maxLeftDown)+1;
-
-                    try
-                    {
-
-                        while (!nothingInWayLeftDown( board,  square, count))
-                        {
-                            if (enemyInWayLeftDown( board,  square, count))
-                            {
-                                while (!nothingInWayLeftDown( board,  square, count - 1))
+                        while (!nothingInWayLeftDown(board, square, count)) {
+                            if (enemyInWayLeftDown(board, square, count)) {
+                                while (!nothingInWayLeftDown(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 leftDownImpossible = true;
                                 break;
                             }
                         }
-                        destination = board[square.getI() + square.getTeam() * count][ square.getJ() - square.getTeam() * count];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI() + square.getTeam() * count][square.getJ() - square.getTeam() * count];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
                             if (destination.getTeam() == OPPONENT)
                                 singleGame.incrementPlayerPoints();
                             else if (destination.getTeam() == YOU)
@@ -1322,39 +1171,32 @@ public class Mover {
                             animateMove(square, destination, singleGame);
                             moveSuccess = true;
                         }
+                    } catch (Exception e) {
+                        maxLeftDown--;
+                        if (maxLeftDown == 0)
+                            leftDownImpossible = true;
                     }
-                    catch (Exception e)
-                {
-                    maxLeftDown--;
-                    if (maxLeftDown == 0)
-                        leftDownImpossible = true;
-                }
-                break;
+                    break;
                 case RIGHTBACK: // Tries to move right and down
 
-                    count = rand.nextInt(maxRightDown)+1;
+                    count = rand.nextInt(maxRightDown) + 1;
 
-                    try
-                    {
+                    try {
 
-                        while (!nothingInWayRightDown( board,  square, count))
-                        {
-                            if (enemyInWayRightDown( board,  square, count))
-                            {
-                                while (!nothingInWayRightDown( board,  square, count - 1))
+                        while (!nothingInWayRightDown(board, square, count)) {
+                            if (enemyInWayRightDown(board, square, count)) {
+                                while (!nothingInWayRightDown(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 rightDownImpossible = true;
                                 break;
                             }
                         }
-                        destination = board[square.getI() - square.getTeam() * count][ square.getJ() - square.getTeam() * count];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI() - square.getTeam() * count][square.getJ() - square.getTeam() * count];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
                             if (destination.getTeam() == OPPONENT)
                                 singleGame.incrementPlayerPoints();
                             else if (destination.getTeam() == YOU)
@@ -1363,14 +1205,12 @@ public class Mover {
                             animateMove(square, destination, singleGame);
                             moveSuccess = true;
                         }
+                    } catch (Exception e) {
+                        maxRightDown--;
+                        if (maxRightDown == 0)
+                            rightDownImpossible = true;
                     }
-                    catch (Exception e)
-                {
-                    maxRightDown--;
-                    if (maxRightDown == 0)
-                        rightDownImpossible = true;
-                }
-                break;
+                    break;
             }
 
         }
@@ -1378,29 +1218,26 @@ public class Mover {
         return moveSuccess;
     }
 
-    boolean moveKing( Square[][] board,  Square square,  SingleGame singleGame)
-    {
+    boolean moveKing(Square[][] board, Square square, SingleGame singleGame) {
         List<KQMODE> options = new ArrayList<>();
 
         boolean moveSuccess = false;
         boolean bishopImpossible = false;
         boolean rookImpossible = false;
-        while (!moveSuccess && (!bishopImpossible || !rookImpossible))
-        {
+        while (!moveSuccess && (!bishopImpossible || !rookImpossible)) {
             options.clear();
             if (!bishopImpossible)
                 options.add(KQMODE.BISHOP);
             if (!rookImpossible)
                 options.add(KQMODE.ROOK);
 
-            switch (options.get(rand.nextInt(options.size())))
-            {
+            switch (options.get(rand.nextInt(options.size()))) {
                 case BISHOP:
-                    moveSuccess = moveBishop( board,  square, singleGame,1);
+                    moveSuccess = moveBishop(board, square, singleGame, 1);
                     bishopImpossible = !moveSuccess;
                     break;
                 case ROOK:
-                    moveSuccess = moveRook( board,  square, singleGame, 1);
+                    moveSuccess = moveRook(board, square, singleGame, 1);
                     rookImpossible = !moveSuccess;
                     break;
             }
@@ -1409,21 +1246,16 @@ public class Mover {
         return moveSuccess;
     }
 
-    boolean moveQueen( Square[][] board,  Square square,  SingleGame singleGame)
-    {
+    boolean moveQueen(Square[][] board, Square square, SingleGame singleGame) {
         boolean moveSuccess = false;
         boolean bishopImpossible = false;
         boolean rookImpossible = false;
-        while (!moveSuccess && (!bishopImpossible || !rookImpossible))
-        {
-            if (rand.nextInt(2) == 0 && !bishopImpossible)
-            {
-                moveSuccess = moveBishop( board,  square, singleGame);
+        while (!moveSuccess && (!bishopImpossible || !rookImpossible)) {
+            if (rand.nextInt(2) == 0 && !bishopImpossible) {
+                moveSuccess = moveBishop(board, square, singleGame);
                 bishopImpossible = !moveSuccess;
-            }
-            else if (!rookImpossible)
-            {
-                moveSuccess = moveRook( board,  square, singleGame);
+            } else if (!rookImpossible) {
+                moveSuccess = moveRook(board, square, singleGame);
                 rookImpossible = !moveSuccess;
             }
         }
@@ -1431,11 +1263,9 @@ public class Mover {
         return moveSuccess;
     }
 
-    public synchronized boolean canPieceMove(Square[][] board, Square square, SingleGame singleGame)
-    {
+    public synchronized boolean canPieceMove(Square[][] board, Square square, SingleGame singleGame) {
         boolean moveSuccess;
-        switch(square.getPiece())
-        {
+        switch (square.getPiece()) {
             case Piece.PAWN:
                 moveSuccess = canPawnMove(board, square, singleGame);
                 break;
@@ -1443,16 +1273,16 @@ public class Mover {
                 moveSuccess = canRookMove(board, square, singleGame);
                 break;
             case Piece.KNIGHT:
-                moveSuccess = canKnightMove( board,  square, singleGame);
+                moveSuccess = canKnightMove(board, square, singleGame);
                 break;
             case Piece.BISHOP:
-                moveSuccess = canBishopMove( board,  square, singleGame);
+                moveSuccess = canBishopMove(board, square, singleGame);
                 break;
             case Piece.KING:
-                moveSuccess = canKingMove( board,  square, singleGame);
+                moveSuccess = canKingMove(board, square, singleGame);
                 break;
             case Piece.QUEEN:
-                moveSuccess = canQueenMove( board,  square, singleGame);
+                moveSuccess = canQueenMove(board, square, singleGame);
                 break;
             default:
                 moveSuccess = false;
@@ -1462,8 +1292,7 @@ public class Mover {
         return moveSuccess;
     }
 
-    boolean canPawnMove( Square[][] board,  Square square,  SingleGame singleGame)
-    {
+    boolean canPawnMove(Square[][] board, Square square, SingleGame singleGame) {
         List<Direction> options = new ArrayList<>();
 
         boolean moveSuccess = false;
@@ -1474,8 +1303,7 @@ public class Mover {
 
         rand.nextInt();
 
-        while (!moveSuccess && (!forwardImpossible || !leftImpossible || !rightImpossible))
-        {
+        while (!moveSuccess && (!forwardImpossible || !leftImpossible || !rightImpossible)) {
             options.clear();
 
             if (!forwardImpossible)
@@ -1485,71 +1313,52 @@ public class Mover {
             if (!rightImpossible)
                 options.add(Direction.RIGHT);
 
-            switch(options.get(rand.nextInt(options.size())))
-            {
+            switch (options.get(rand.nextInt(options.size()))) {
                 case UP: // tries to move forward
 
 
                     if (square.getPieceCount() == 0)
-                        count = rand.nextInt(2)+1;
+                        count = rand.nextInt(2) + 1;
                     else
                         count = 1;
 
-                    try
-                    {
+                    try {
 
-                        while(!nothingInWayForward( board,  square, count))
-                        {
+                        while (!nothingInWayForward(board, square, count)) {
                             count--;
-                            if(count == 0)
-                            {
+                            if (count == 0) {
                                 forwardImpossible = true;
                                 break;
                             }
                         }
-                        if(count > 0)
-                        {
+                        if (count > 0) {
                             moveSuccess = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         forwardImpossible = true;
                     }
                     break;
                 case LEFT: // tries to capture diagonally to left
-                    try
-                    {
-                        destination = board[square.getI() + square.getTeam()][ square.getJ() + square.getTeam()];
-                        if (destination.getTeam() == -square.getTeam())
-                        {
+                    try {
+                        destination = board[square.getI() + square.getTeam()][square.getJ() + square.getTeam()];
+                        if (destination.getTeam() == -square.getTeam()) {
                             moveSuccess = true;
-                        }
-                        else
-                        {
+                        } else {
                             leftImpossible = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         leftImpossible = true;
                     }
                     break;
                 case RIGHT: // tries to capture diagonally to right
-                    try
-                    {
-                        destination = board[square.getI() - square.getTeam()][ square.getJ() + square.getTeam()];
-                        if (destination.getTeam() == -square.getTeam())
-                        {
+                    try {
+                        destination = board[square.getI() - square.getTeam()][square.getJ() + square.getTeam()];
+                        if (destination.getTeam() == -square.getTeam()) {
                             moveSuccess = true;
-                        }
-                        else
-                        {
+                        } else {
                             rightImpossible = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         rightImpossible = true;
                     }
                     break;
@@ -1718,8 +1527,7 @@ public class Mover {
         return moveSuccess;
     }
 
-    boolean canRookMove( Square[][] board,  Square square,  SingleGame singleGame)
-    {
+    boolean canRookMove(Square[][] board, Square square, SingleGame singleGame) {
         List<Direction> options = new ArrayList<>();
 
         boolean moveSuccess = false;
@@ -1734,11 +1542,9 @@ public class Mover {
         int count;
 
 
-
         rand.nextInt();
 
-        while(!moveSuccess && (!forwardImpossible || !leftImpossible || !rightImpossible || !backImpossible))
-        {
+        while (!moveSuccess && (!forwardImpossible || !leftImpossible || !rightImpossible || !backImpossible)) {
             options.clear();
 
 
@@ -1751,41 +1557,33 @@ public class Mover {
             if (!backImpossible)
                 options.add(Direction.BACK);
 
-            switch (options.get(rand.nextInt(options.size())))
-            {
+            switch (options.get(rand.nextInt(options.size()))) {
                 case UP: // Tries to move forward
 
-                    count = rand.nextInt(maxForward)+1;
+                    count = rand.nextInt(maxForward) + 1;
 
-                    try
-                    {
+                    try {
 
-                        while (!nothingInWayForward( board,  square, count))
-                        {
+                        while (!nothingInWayForward(board, square, count)) {
 
-                            if (enemyInWayForward( board,  square, count))
-                            {
-                                while (!nothingInWayForward( board,  square, count-1))
+                            if (enemyInWayForward(board, square, count)) {
+                                while (!nothingInWayForward(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 forwardImpossible = true;
                                 break;
                             }
 
                         }
-                        destination = board[square.getI()][ square.getJ() + square.getTeam() * count];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI()][square.getJ() + square.getTeam() * count];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
 
                             moveSuccess = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         maxForward--;
                         if (maxForward == 0)
                             forwardImpossible = true;
@@ -1793,37 +1591,30 @@ public class Mover {
                     break;
                 case LEFT: // Tries to move left
 
-                    count = rand.nextInt(maxLeft)+1;
+                    count = rand.nextInt(maxLeft) + 1;
 
-                    try
-                    {
+                    try {
 
-                        while (!nothingInWayLeft( board,  square, count))
-                        {
-                            if (enemyInWayLeft( board,  square, count))
-                            {
-                                while (!nothingInWayLeft( board,  square, count - 1))
+                        while (!nothingInWayLeft(board, square, count)) {
+                            if (enemyInWayLeft(board, square, count)) {
+                                while (!nothingInWayLeft(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
 
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 leftImpossible = true;
                                 break;
                             }
 
                         }
-                        destination = board[square.getI() + square.getTeam() * count][ square.getJ()];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI() + square.getTeam() * count][square.getJ()];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
 
                             moveSuccess = true;
                         }
-                    }
-                    catch(Exception e)
-                    {
+                    } catch (Exception e) {
                         maxLeft--;
                         if (maxLeft == 0)
                             leftImpossible = true;
@@ -1831,37 +1622,30 @@ public class Mover {
                     break;
                 case RIGHT: // Tries to move right
 
-                    count = rand.nextInt(maxRight)+1;
+                    count = rand.nextInt(maxRight) + 1;
 
-                    try
-                    {
+                    try {
 
-                        while (!nothingInWayRight( board,  square, count))
-                        {
-                            if (enemyInWayRight( board,  square, count))
-                            {
-                                while (!nothingInWayRight( board,  square, count - 1))
+                        while (!nothingInWayRight(board, square, count)) {
+                            if (enemyInWayRight(board, square, count)) {
+                                while (!nothingInWayRight(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
 
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 rightImpossible = true;
                                 break;
                             }
 
                         }
-                        destination = board[square.getI() - square.getTeam() * count][ square.getJ()];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI() - square.getTeam() * count][square.getJ()];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
 
                             moveSuccess = true;
                         }
-                    }
-                    catch(Exception e)
-                    {
+                    } catch (Exception e) {
                         maxRight--;
                         if (maxRight == 0)
                             rightImpossible = true;
@@ -1871,34 +1655,27 @@ public class Mover {
 
                     count = rand.nextInt(maxBack) + 1;
 
-                    try
-                    {
+                    try {
 
-                        while (!nothingInWayBack( board,  square, count))
-                        {
-                            if (enemyInWayBack( board,  square, count))
-                            {
-                                while (!nothingInWayBack( board,  square, count - 1))
+                        while (!nothingInWayBack(board, square, count)) {
+                            if (enemyInWayBack(board, square, count)) {
+                                while (!nothingInWayBack(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
 
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 backImpossible = true;
                                 break;
                             }
 
                         }
-                        destination = board[square.getI()][ square.getJ() - square.getTeam() * count];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI()][square.getJ() - square.getTeam() * count];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
                             moveSuccess = true;
                         }
-                    }
-                    catch(Exception e)
-                    {
+                    } catch (Exception e) {
                         maxBack--;
                         if (maxBack == 0)
                             backImpossible = true;
@@ -1909,12 +1686,10 @@ public class Mover {
         }
 
 
-
         return moveSuccess;
     }
 
-    boolean canKnightMove( Square[][] board,  Square square,  SingleGame singleGame)
-    {
+    boolean canKnightMove(Square[][] board, Square square, SingleGame singleGame) {
         List<Direction> options = new ArrayList<>();
 
         boolean moveSuccess = false;
@@ -1922,11 +1697,9 @@ public class Mover {
         _2R1U = _1R2U = _1L2U = _2L1U = _2L1D = _1L2D = _1R2D = _2R1D = false;
 
 
-
         rand.nextInt();
 
-        while (!moveSuccess && (!_2R1U || !_1R2U || !_1L2U || !_2L1U || !_2L1D || !_1L2D || !_1R2D || !_2R1D))
-        {
+        while (!moveSuccess && (!_2R1U || !_1R2U || !_1L2U || !_2L1U || !_2L1D || !_1L2D || !_1R2D || !_2R1D)) {
             options.clear();
 
             if (!_2R1U)
@@ -1947,149 +1720,100 @@ public class Mover {
                 options.add(Direction._2R1D);
 
 
-            switch (options.get(rand.nextInt(options.size())))
-            {
+            switch (options.get(rand.nextInt(options.size()))) {
                 case _2R1U:
-                    try
-                    {
-                        destination = board[square.getI() - square.getTeam() * 2][ square.getJ() + square.getTeam()];
-                        if(destination.getTeam() != square.getTeam())
-                        {
+                    try {
+                        destination = board[square.getI() - square.getTeam() * 2][square.getJ() + square.getTeam()];
+                        if (destination.getTeam() != square.getTeam()) {
                             moveSuccess = true;
-                        }
-                        else
-                        {
+                        } else {
                             _2R1U = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         _2R1U = true;
                     }
                     break;
                 case _1R2U:
-                    try
-                    {
-                        destination = board[square.getI() - square.getTeam()][ square.getJ() + square.getTeam() * 2];
-                        if (destination.getTeam() != square.getTeam())
-                        {
+                    try {
+                        destination = board[square.getI() - square.getTeam()][square.getJ() + square.getTeam() * 2];
+                        if (destination.getTeam() != square.getTeam()) {
                             moveSuccess = true;
-                        }
-                        else
-                        {
+                        } else {
                             _1R2U = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         _1R2U = true;
                     }
                     break;
                 case _1L2U:
-                    try
-                    {
-                        destination = board[square.getI() + square.getTeam()][ square.getJ() + square.getTeam() * 2];
-                        if (destination.getTeam() != square.getTeam())
-                        {
+                    try {
+                        destination = board[square.getI() + square.getTeam()][square.getJ() + square.getTeam() * 2];
+                        if (destination.getTeam() != square.getTeam()) {
                             moveSuccess = true;
-                        }
-                        else
-                        {
+                        } else {
                             _1L2U = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         _1L2U = true;
                     }
                     break;
                 case _2L1U:
-                    try
-                    {
-                        destination = board[square.getI() + square.getTeam() * 2][ square.getJ() + square.getTeam()];
-                        if (destination.getTeam() != square.getTeam())
-                        {
+                    try {
+                        destination = board[square.getI() + square.getTeam() * 2][square.getJ() + square.getTeam()];
+                        if (destination.getTeam() != square.getTeam()) {
                             moveSuccess = true;
-                        }
-                        else
-                        {
+                        } else {
                             _2L1U = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         _2L1U = true;
                     }
                     break;
                 case _2L1D:
-                    try
-                    {
-                        destination = board[square.getI() + square.getTeam() * 2][ square.getJ() - square.getTeam()];
-                        if (destination.getTeam() != square.getTeam())
-                        {
+                    try {
+                        destination = board[square.getI() + square.getTeam() * 2][square.getJ() - square.getTeam()];
+                        if (destination.getTeam() != square.getTeam()) {
                             moveSuccess = true;
-                        }
-                        else
-                        {
+                        } else {
                             _2L1D = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         _2L1D = true;
                     }
                     break;
                 case _1L2D:
-                    try
-                    {
-                        destination = board[square.getI() + square.getTeam()][ square.getJ() - square.getTeam() * 2];
-                        if (destination.getTeam() != square.getTeam())
-                        {
+                    try {
+                        destination = board[square.getI() + square.getTeam()][square.getJ() - square.getTeam() * 2];
+                        if (destination.getTeam() != square.getTeam()) {
                             moveSuccess = true;
-                        }
-                        else
-                        {
+                        } else {
                             _1L2D = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         _1L2D = true;
                     }
                     break;
                 case _1R2D:
-                    try
-                    {
-                        destination = board[square.getI() - square.getTeam()][ square.getJ() - square.getTeam() * 2];
-                        if (destination.getTeam() != square.getTeam())
-                        {
+                    try {
+                        destination = board[square.getI() - square.getTeam()][square.getJ() - square.getTeam() * 2];
+                        if (destination.getTeam() != square.getTeam()) {
                             moveSuccess = true;
-                        }
-                        else
-                        {
+                        } else {
                             _1R2D = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         _1R2D = true;
                     }
                     break;
                 case _2R1D:
-                    try
-                    {
-                        destination = board[square.getI() - square.getTeam() * 2][ square.getJ() - square.getTeam()];
-                        if (destination.getTeam() != square.getTeam())
-                        {
+                    try {
+                        destination = board[square.getI() - square.getTeam() * 2][square.getJ() - square.getTeam()];
+                        if (destination.getTeam() != square.getTeam()) {
                             moveSuccess = true;
-                        }
-                        else
-                        {
+                        } else {
                             _2R1D = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         _2R1D = true;
                     }
                     break;
@@ -2103,8 +1827,7 @@ public class Mover {
         return moveSuccess;
     }
 
-    boolean canBishopMove(Square[][] board, Square square, SingleGame singleGame, int max)
-    {
+    boolean canBishopMove(Square[][] board, Square square, SingleGame singleGame, int max) {
         boolean moveSuccess = false;
         boolean rightUpImpossible = false;
         boolean leftUpImpossible = false;
@@ -2116,11 +1839,9 @@ public class Mover {
         int maxRightDown = max;
 
 
-
         rand.nextInt();
 
-        while (!moveSuccess && (!rightUpImpossible || !leftUpImpossible || !leftDownImpossible || !rightDownImpossible))
-        {
+        while (!moveSuccess && (!rightUpImpossible || !leftUpImpossible || !leftDownImpossible || !rightDownImpossible)) {
             List<Direction> options = new ArrayList<>();
             int count;
 
@@ -2133,37 +1854,29 @@ public class Mover {
             if (!rightDownImpossible)
                 options.add(Direction.RIGHTBACK);
 
-            switch (options.get(rand.nextInt(options.size())))
-            {
+            switch (options.get(rand.nextInt(options.size()))) {
                 case RIGHTUP: // Tries to move right and up
 
-                    count = rand.nextInt(maxRightUp)+1;
+                    count = rand.nextInt(maxRightUp) + 1;
 
-                    try
-                    {
-                        while (!nothingInWayRightUp( board,  square, count))
-                        {
-                            if (enemyInWayRightUp( board,  square, count))
-                            {
-                                while (!nothingInWayRightUp( board,  square, count - 1))
+                    try {
+                        while (!nothingInWayRightUp(board, square, count)) {
+                            if (enemyInWayRightUp(board, square, count)) {
+                                while (!nothingInWayRightUp(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 rightUpImpossible = true;
                                 break;
                             }
                         }
-                        destination = board[square.getI() - square.getTeam() * count][ square.getJ() + square.getTeam() * count];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI() - square.getTeam() * count][square.getJ() + square.getTeam() * count];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
                             moveSuccess = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         maxRightUp--;
                         if (maxRightUp == 0)
                             rightUpImpossible = true;
@@ -2171,34 +1884,27 @@ public class Mover {
                     break;
                 case LEFTUP: // Tries to move left and up
 
-                    count = rand.nextInt(maxLeftUp)+1;
+                    count = rand.nextInt(maxLeftUp) + 1;
 
-                    try
-                    {
+                    try {
 
-                        while (!nothingInWayLeftUp( board,  square, count))
-                        {
-                            if (enemyInWayLeftUp( board,  square, count))
-                            {
-                                while (!nothingInWayLeftUp( board,  square, count - 1))
+                        while (!nothingInWayLeftUp(board, square, count)) {
+                            if (enemyInWayLeftUp(board, square, count)) {
+                                while (!nothingInWayLeftUp(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 leftUpImpossible = true;
                                 break;
                             }
                         }
-                        destination = board[square.getI() + square.getTeam() * count][ square.getJ() + square.getTeam() * count];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI() + square.getTeam() * count][square.getJ() + square.getTeam() * count];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
                             moveSuccess = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         maxLeftUp--;
                         if (maxLeftUp == 0)
                             leftUpImpossible = true;
@@ -2207,34 +1913,27 @@ public class Mover {
                 case LEFTBACK: // Tries to move left and down
 
 
-                    count = rand.nextInt(maxLeftDown)+1;
+                    count = rand.nextInt(maxLeftDown) + 1;
 
-                    try
-                    {
+                    try {
 
-                        while (!nothingInWayLeftDown( board,  square, count))
-                        {
-                            if (enemyInWayLeftDown( board,  square, count))
-                            {
-                                while (!nothingInWayLeftDown( board,  square, count - 1))
+                        while (!nothingInWayLeftDown(board, square, count)) {
+                            if (enemyInWayLeftDown(board, square, count)) {
+                                while (!nothingInWayLeftDown(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 leftDownImpossible = true;
                                 break;
                             }
                         }
-                        destination = board[square.getI() + square.getTeam() * count][ square.getJ() - square.getTeam() * count];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI() + square.getTeam() * count][square.getJ() - square.getTeam() * count];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
                             moveSuccess = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         maxLeftDown--;
                         if (maxLeftDown == 0)
                             leftDownImpossible = true;
@@ -2242,34 +1941,27 @@ public class Mover {
                     break;
                 case RIGHTBACK: // Tries to move right and down
 
-                    count = rand.nextInt(maxRightDown)+1;
+                    count = rand.nextInt(maxRightDown) + 1;
 
-                    try
-                    {
+                    try {
 
-                        while (!nothingInWayRightDown( board,  square, count))
-                        {
-                            if (enemyInWayRightDown( board,  square, count))
-                            {
-                                while (!nothingInWayRightDown( board,  square, count - 1))
+                        while (!nothingInWayRightDown(board, square, count)) {
+                            if (enemyInWayRightDown(board, square, count)) {
+                                while (!nothingInWayRightDown(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 rightDownImpossible = true;
                                 break;
                             }
                         }
-                        destination = board[square.getI() - square.getTeam() * count][ square.getJ() - square.getTeam() * count];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI() - square.getTeam() * count][square.getJ() - square.getTeam() * count];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
                             moveSuccess = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         maxRightDown--;
                         if (maxRightDown == 0)
                             rightDownImpossible = true;
@@ -2282,8 +1974,7 @@ public class Mover {
         return moveSuccess;
     }
 
-    boolean canBishopMove( Square[][] board,  Square square,  SingleGame singleGame)
-    {
+    boolean canBishopMove(Square[][] board, Square square, SingleGame singleGame) {
         List<Direction> options = new ArrayList<>();
 
         boolean moveSuccess = false;
@@ -2300,8 +1991,7 @@ public class Mover {
 
         rand.nextInt();
 
-        while (!moveSuccess && (!rightUpImpossible || !leftUpImpossible || !leftDownImpossible || !rightDownImpossible))
-        {
+        while (!moveSuccess && (!rightUpImpossible || !leftUpImpossible || !leftDownImpossible || !rightDownImpossible)) {
             options.clear();
 
 
@@ -2314,37 +2004,29 @@ public class Mover {
             if (!rightDownImpossible)
                 options.add(Direction.RIGHTBACK);
 
-            switch (options.get(rand.nextInt(options.size())))
-            {
+            switch (options.get(rand.nextInt(options.size()))) {
                 case RIGHTUP: // Tries to move right and up
 
-                    count = rand.nextInt(maxRightUp)+1;
+                    count = rand.nextInt(maxRightUp) + 1;
 
-                    try
-                    {
-                        while (!nothingInWayRightUp( board,  square, count))
-                        {
-                            if (enemyInWayRightUp( board,  square, count))
-                            {
-                                while (!nothingInWayRightUp( board,  square, count - 1))
+                    try {
+                        while (!nothingInWayRightUp(board, square, count)) {
+                            if (enemyInWayRightUp(board, square, count)) {
+                                while (!nothingInWayRightUp(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 rightUpImpossible = true;
                                 break;
                             }
                         }
-                        destination = board[square.getI() - square.getTeam() * count][ square.getJ() + square.getTeam() * count];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI() - square.getTeam() * count][square.getJ() + square.getTeam() * count];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
                             moveSuccess = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         maxRightUp--;
                         if (maxRightUp == 0)
                             rightUpImpossible = true;
@@ -2352,34 +2034,27 @@ public class Mover {
                     break;
                 case LEFTUP: // Tries to move left and up
 
-                    count = rand.nextInt(maxLeftUp)+1;
+                    count = rand.nextInt(maxLeftUp) + 1;
 
-                    try
-                    {
+                    try {
 
-                        while (!nothingInWayLeftUp( board,  square, count))
-                        {
-                            if (enemyInWayLeftUp( board,  square, count))
-                            {
-                                while (!nothingInWayLeftUp( board,  square, count - 1))
+                        while (!nothingInWayLeftUp(board, square, count)) {
+                            if (enemyInWayLeftUp(board, square, count)) {
+                                while (!nothingInWayLeftUp(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 leftUpImpossible = true;
                                 break;
                             }
                         }
-                        destination = board[square.getI() + square.getTeam() * count][ square.getJ() + square.getTeam() * count];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI() + square.getTeam() * count][square.getJ() + square.getTeam() * count];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
                             moveSuccess = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         maxLeftUp--;
                         if (maxLeftUp == 0)
                             leftUpImpossible = true;
@@ -2388,34 +2063,27 @@ public class Mover {
                 case LEFTBACK: // Tries to move left and down
 
 
-                    count = rand.nextInt(maxLeftDown)+1;
+                    count = rand.nextInt(maxLeftDown) + 1;
 
-                    try
-                    {
+                    try {
 
-                        while (!nothingInWayLeftDown( board,  square, count))
-                        {
-                            if (enemyInWayLeftDown( board,  square, count))
-                            {
-                                while (!nothingInWayLeftDown( board,  square, count - 1))
+                        while (!nothingInWayLeftDown(board, square, count)) {
+                            if (enemyInWayLeftDown(board, square, count)) {
+                                while (!nothingInWayLeftDown(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 leftDownImpossible = true;
                                 break;
                             }
                         }
-                        destination = board[square.getI() + square.getTeam() * count][ square.getJ() - square.getTeam() * count];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI() + square.getTeam() * count][square.getJ() - square.getTeam() * count];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
                             moveSuccess = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         maxLeftDown--;
                         if (maxLeftDown == 0)
                             leftDownImpossible = true;
@@ -2423,34 +2091,27 @@ public class Mover {
                     break;
                 case RIGHTBACK: // Tries to move right and down
 
-                    count = rand.nextInt(maxRightDown)+1;
+                    count = rand.nextInt(maxRightDown) + 1;
 
-                    try
-                    {
+                    try {
 
-                        while (!nothingInWayRightDown( board,  square, count))
-                        {
-                            if (enemyInWayRightDown( board,  square, count))
-                            {
-                                while (!nothingInWayRightDown( board,  square, count - 1))
+                        while (!nothingInWayRightDown(board, square, count)) {
+                            if (enemyInWayRightDown(board, square, count)) {
+                                while (!nothingInWayRightDown(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 rightDownImpossible = true;
                                 break;
                             }
                         }
-                        destination = board[square.getI() - square.getTeam() * count][ square.getJ() - square.getTeam() * count];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI() - square.getTeam() * count][square.getJ() - square.getTeam() * count];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
                             moveSuccess = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         maxRightDown--;
                         if (maxRightDown == 0)
                             rightDownImpossible = true;
@@ -2463,29 +2124,26 @@ public class Mover {
         return moveSuccess;
     }
 
-    boolean canKingMove( Square[][] board,  Square square,  SingleGame singleGame)
-    {
+    boolean canKingMove(Square[][] board, Square square, SingleGame singleGame) {
         List<KQMODE> options = new ArrayList<>();
 
         boolean moveSuccess = false;
         boolean bishopImpossible = false;
         boolean rookImpossible = false;
 
-        while (!moveSuccess && (!bishopImpossible || !rookImpossible))
-        {
+        while (!moveSuccess && (!bishopImpossible || !rookImpossible)) {
             if (!bishopImpossible)
                 options.add(KQMODE.BISHOP);
             if (!rookImpossible)
                 options.add(KQMODE.ROOK);
 
-            switch (options.get(rand.nextInt(options.size())))
-            {
+            switch (options.get(rand.nextInt(options.size()))) {
                 case BISHOP:
-                    moveSuccess = canBishopMove( board,  square, singleGame,1);
+                    moveSuccess = canBishopMove(board, square, singleGame, 1);
                     bishopImpossible = !moveSuccess;
                     break;
                 case ROOK:
-                    moveSuccess = canRookMove( board,  square, singleGame, 1);
+                    moveSuccess = canRookMove(board, square, singleGame, 1);
                     rookImpossible = !moveSuccess;
                     break;
             }
@@ -2494,28 +2152,25 @@ public class Mover {
         return moveSuccess;
     }
 
-    boolean canQueenMove( Square[][] board,  Square square,  SingleGame singleGame)
-    {
+    boolean canQueenMove(Square[][] board, Square square, SingleGame singleGame) {
         List<KQMODE> options = new ArrayList<>();
 
         boolean moveSuccess = false;
         boolean bishopImpossible = false;
         boolean rookImpossible = false;
-        while (!moveSuccess && (!bishopImpossible || !rookImpossible))
-        {
+        while (!moveSuccess && (!bishopImpossible || !rookImpossible)) {
             if (!bishopImpossible)
                 options.add(KQMODE.BISHOP);
             if (!rookImpossible)
                 options.add(KQMODE.ROOK);
 
-            switch (options.get(rand.nextInt(options.size())))
-            {
+            switch (options.get(rand.nextInt(options.size()))) {
                 case BISHOP:
-                    moveSuccess = canBishopMove( board,  square, singleGame);
+                    moveSuccess = canBishopMove(board, square, singleGame);
                     bishopImpossible = !moveSuccess;
                     break;
                 case ROOK:
-                    moveSuccess = canRookMove( board,  square, singleGame);
+                    moveSuccess = canRookMove(board, square, singleGame);
                     rookImpossible = !moveSuccess;
                     break;
             }
@@ -2526,29 +2181,27 @@ public class Mover {
     //Single game functions end
 
     //Multi game functions start
-    
-    public synchronized boolean movePiece(Square[][] board, Square square, MultiGame multiGame)
-    {
+
+    public synchronized boolean movePiece(Square[][] board, Square square, MultiGame multiGame, boolean bloodThirsty) {
         boolean moveSuccess;
-        switch(square.getPiece())
-        {
+        switch (square.getPiece()) {
             case Piece.PAWN:
-                moveSuccess = movePawn(board, square, multiGame);
+                moveSuccess = movePawn(board, square, multiGame, bloodThirsty);
                 break;
             case Piece.ROOK:
                 moveSuccess = moveRook(board, square, multiGame);
                 break;
             case Piece.KNIGHT:
-                moveSuccess = moveKnight( board,  square, multiGame);
+                moveSuccess = moveKnight(board, square, multiGame);
                 break;
             case Piece.BISHOP:
-                moveSuccess = moveBishop( board,  square, multiGame);
+                moveSuccess = moveBishop(board, square, multiGame);
                 break;
             case Piece.KING:
-                moveSuccess = moveKing( board,  square, multiGame);
+                moveSuccess = moveKing(board, square, multiGame);
                 break;
             case Piece.QUEEN:
-                moveSuccess = moveQueen( board,  square, multiGame);
+                moveSuccess = moveQueen(board, square, multiGame);
                 break;
             default:
                 moveSuccess = false;
@@ -2558,8 +2211,7 @@ public class Mover {
         return moveSuccess;
     }
 
-    boolean movePawn( Square[][] board,  Square square,  MultiGame multiGame)
-    {
+    boolean movePawn(Square[][] board, Square square, MultiGame multiGame, boolean bloodThirsty) {
         List<Direction> options = new ArrayList<>();
 
 
@@ -2567,13 +2219,42 @@ public class Mover {
         boolean forwardImpossible = false;
         boolean leftImpossible = false;
         boolean rightImpossible = false;
-        destination = new Square(context,0xffffffff);
+        destination = new Square(context, 0xffffffff);
 
         rand.nextInt();
         int count;
+        int enemy = -square.getTeam();
 
-        while (!moveSuccess && (!forwardImpossible || !leftImpossible || !rightImpossible))
-        {
+        if (bloodThirsty) {
+            List<Square> enemySquares = new ArrayList<>();
+
+            try {
+                Square left = board[square.getI() + square.getTeam()][square.getJ() + square.getTeam()];
+                if (left.getTeam() == enemy) // left capture
+                {
+                    enemySquares.add(left);
+                }
+            } catch (Exception e) {
+            }
+
+            try {
+                Square right = board[square.getI() - square.getTeam()][square.getJ() + square.getTeam()];
+                if (right.getTeam() == enemy) // right capture
+                {
+                    enemySquares.add(right);
+                }
+            } catch (Exception e) {
+            }
+
+            if (!enemySquares.isEmpty()) {
+                destination = enemySquares.get(rand.nextInt(options.size()));
+                animateMove(square, destination, multiGame);
+                moveSuccess = true;
+            }
+
+        }
+
+        while (!moveSuccess && (!forwardImpossible || !leftImpossible || !rightImpossible)) {
             options.clear();
 
             if (!forwardImpossible)
@@ -2584,29 +2265,24 @@ public class Mover {
                 options.add(Direction.RIGHT);
 
 
-            switch(options.get(rand.nextInt(options.size())))
-            {
+            switch (options.get(rand.nextInt(options.size()))) {
                 case UP: // tries to move forward
 
                     if (square.getPieceCount() == 0)
-                        count = rand.nextInt(2)+1;
+                        count = rand.nextInt(2) + 1;
                     else
                         count = 1;
 
-                    try
-                    {
+                    try {
 
-                        while(!nothingInWayForward( board,  square, count))
-                        {
+                        while (!nothingInWayForward(board, square, count)) {
                             count--;
-                            if(count == 0)
-                            {
+                            if (count == 0) {
                                 forwardImpossible = true;
                                 break;
                             }
                         }
-                        if(count > 0)
-                        {
+                        if (count > 0) {
                             destination = board[square.getI()][square.getJ() + square.getTeam() * count];
                             destination.setTeam(square.getTeam());
                             destination.setPiece(square.getPiece());
@@ -2616,18 +2292,14 @@ public class Mover {
                             square.setTeam(NONE);
                             moveSuccess = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         forwardImpossible = true;
                     }
                     break;
                 case LEFT: // tries to capture diagonally to left
-                    try
-                    {
-                        destination = board[square.getI() + square.getTeam()][ square.getJ() + square.getTeam()];
-                        if (destination.getTeam() == -square.getTeam())
-                        {
+                    try {
+                        destination = board[square.getI() + square.getTeam()][square.getJ() + square.getTeam()];
+                        if (destination.getTeam() == -square.getTeam()) {
                             if (destination.getTeam() == OPPONENT)
                                 multiGame.incrementYourPoints();
                             else if (destination.getTeam() == YOU)
@@ -2635,23 +2307,17 @@ public class Mover {
 
                             animateMove(square, destination, multiGame);
                             moveSuccess = true;
-                        }
-                        else
-                        {
+                        } else {
                             leftImpossible = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         leftImpossible = true;
                     }
                     break;
                 case RIGHT: // tries to capture diagonally to right
-                    try
-                    {
-                        destination = board[square.getI() - square.getTeam()][ square.getJ() + square.getTeam()];
-                        if (destination.getTeam() == -square.getTeam())
-                        {
+                    try {
+                        destination = board[square.getI() - square.getTeam()][square.getJ() + square.getTeam()];
+                        if (destination.getTeam() == -square.getTeam()) {
                             if (destination.getTeam() == OPPONENT)
                                 multiGame.incrementYourPoints();
                             else if (destination.getTeam() == YOU)
@@ -2659,25 +2325,18 @@ public class Mover {
 
                             animateMove(square, destination, multiGame);
                             moveSuccess = true;
-                        }
-                        else
-                        {
+                        } else {
                             rightImpossible = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         rightImpossible = true;
                     }
                     break;
             }
 
-            if(destination.getJ() == 7 && destination.getTeam() == OPPONENT && moveSuccess)
-            {
+            if (destination.getJ() == 7 && destination.getTeam() == OPPONENT && moveSuccess) {
                 destination.setPiece(Piece.QUEEN);
-            }
-            else if(destination.getJ() == 0 && destination.getTeam() == YOU && moveSuccess)
-            {
+            } else if (destination.getJ() == 0 && destination.getTeam() == YOU && moveSuccess) {
                 destination.setPiece(Piece.QUEEN);
             }
         }
@@ -2685,8 +2344,7 @@ public class Mover {
         return moveSuccess;
     }
 
-    boolean moveRook(Square[][] board, Square square, MultiGame multiGame, int max)
-    {
+    boolean moveRook(Square[][] board, Square square, MultiGame multiGame, int max) {
         List<Direction> options = new ArrayList<>();
 
         boolean moveSuccess = false;
@@ -2887,8 +2545,7 @@ public class Mover {
         return moveSuccess;
     }
 
-    boolean moveRook( Square[][] board,  Square square,  MultiGame multiGame)
-    {
+    boolean moveRook(Square[][] board, Square square, MultiGame multiGame) {
         List<Direction> options = new ArrayList<>();
 
         boolean moveSuccess = false;
@@ -2905,8 +2562,7 @@ public class Mover {
 
         rand.nextInt();
 
-        while(!moveSuccess && (!forwardImpossible || !leftImpossible || !rightImpossible || !backImpossible))
-        {
+        while (!moveSuccess && (!forwardImpossible || !leftImpossible || !rightImpossible || !backImpossible)) {
             options.clear();
 
 
@@ -2919,35 +2575,29 @@ public class Mover {
             if (!backImpossible)
                 options.add(Direction.BACK);
 
-            switch (options.get(rand.nextInt(options.size())))
-            {
+            switch (options.get(rand.nextInt(options.size()))) {
                 case UP: // Tries to move forward
 
-                    count = rand.nextInt(maxForward)+1;
+                    count = rand.nextInt(maxForward) + 1;
 
-                    try
-                    {
+                    try {
 
-                        while (!nothingInWayForward( board,  square, count))
-                        {
+                        while (!nothingInWayForward(board, square, count)) {
 
-                            if (enemyInWayForward( board,  square, count))
-                            {
-                                while (!nothingInWayForward( board,  square, count-1))
+                            if (enemyInWayForward(board, square, count)) {
+                                while (!nothingInWayForward(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 forwardImpossible = true;
                                 break;
                             }
 
                         }
-                        destination = board[square.getI()][ square.getJ() + square.getTeam() * count];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI()][square.getJ() + square.getTeam() * count];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
                             if (destination.getTeam() == OPPONENT)
                                 multiGame.incrementYourPoints();
                             else if (destination.getTeam() == YOU)
@@ -2956,9 +2606,7 @@ public class Mover {
                             animateMove(square, destination, multiGame);
                             moveSuccess = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         maxForward--;
                         if (maxForward == 0)
                             forwardImpossible = true;
@@ -2966,31 +2614,26 @@ public class Mover {
                     break;
                 case LEFT: // Tries to move left
 
-                    count = rand.nextInt(maxLeft)+1;
+                    count = rand.nextInt(maxLeft) + 1;
 
-                    try
-                    {
+                    try {
 
-                        while (!nothingInWayLeft( board,  square, count))
-                        {
-                            if (enemyInWayLeft( board,  square, count))
-                            {
-                                while (!nothingInWayLeft( board,  square, count - 1))
+                        while (!nothingInWayLeft(board, square, count)) {
+                            if (enemyInWayLeft(board, square, count)) {
+                                while (!nothingInWayLeft(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
 
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 leftImpossible = true;
                                 break;
                             }
 
                         }
-                        destination = board[square.getI() + square.getTeam() * count][ square.getJ()];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI() + square.getTeam() * count][square.getJ()];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
                             if (destination.getTeam() == OPPONENT)
                                 multiGame.incrementYourPoints();
                             else if (destination.getTeam() == YOU)
@@ -2999,9 +2642,7 @@ public class Mover {
                             animateMove(square, destination, multiGame);
                             moveSuccess = true;
                         }
-                    }
-                    catch(Exception e)
-                    {
+                    } catch (Exception e) {
                         maxLeft--;
                         if (maxLeft == 0)
                             leftImpossible = true;
@@ -3009,31 +2650,26 @@ public class Mover {
                     break;
                 case RIGHT: // Tries to move right
 
-                    count = rand.nextInt(maxRight)+1;
+                    count = rand.nextInt(maxRight) + 1;
 
-                    try
-                    {
+                    try {
 
-                        while (!nothingInWayRight( board,  square, count))
-                        {
-                            if (enemyInWayRight( board,  square, count))
-                            {
-                                while (!nothingInWayRight( board,  square, count - 1))
+                        while (!nothingInWayRight(board, square, count)) {
+                            if (enemyInWayRight(board, square, count)) {
+                                while (!nothingInWayRight(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
 
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 rightImpossible = true;
                                 break;
                             }
 
                         }
-                        destination = board[square.getI() - square.getTeam() * count][ square.getJ()];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI() - square.getTeam() * count][square.getJ()];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
                             if (destination.getTeam() == OPPONENT)
                                 multiGame.incrementYourPoints();
                             else if (destination.getTeam() == YOU)
@@ -3042,9 +2678,7 @@ public class Mover {
                             animateMove(square, destination, multiGame);
                             moveSuccess = true;
                         }
-                    }
-                    catch(Exception e)
-                    {
+                    } catch (Exception e) {
                         maxRight--;
                         if (maxRight == 0)
                             rightImpossible = true;
@@ -3054,29 +2688,24 @@ public class Mover {
 
                     count = rand.nextInt(maxBack) + 1;
 
-                    try
-                    {
+                    try {
 
-                        while (!nothingInWayBack( board,  square, count))
-                        {
-                            if (enemyInWayBack( board,  square, count))
-                            {
-                                while (!nothingInWayBack( board,  square, count - 1))
+                        while (!nothingInWayBack(board, square, count)) {
+                            if (enemyInWayBack(board, square, count)) {
+                                while (!nothingInWayBack(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
 
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 backImpossible = true;
                                 break;
                             }
 
                         }
-                        destination = board[square.getI()][ square.getJ() - square.getTeam() * count];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI()][square.getJ() - square.getTeam() * count];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
                             if (destination.getTeam() == OPPONENT)
                                 multiGame.incrementYourPoints();
                             else if (destination.getTeam() == YOU)
@@ -3085,9 +2714,7 @@ public class Mover {
                             animateMove(square, destination, multiGame);
                             moveSuccess = true;
                         }
-                    }
-                    catch(Exception e)
-                    {
+                    } catch (Exception e) {
                         maxBack--;
                         if (maxBack == 0)
                             backImpossible = true;
@@ -3098,12 +2725,10 @@ public class Mover {
         }
 
 
-
         return moveSuccess;
     }
 
-    boolean moveKnight( Square[][] board,  Square square,  MultiGame multiGame)
-    {
+    boolean moveKnight(Square[][] board, Square square, MultiGame multiGame) {
         List<Direction> options = new ArrayList<>();
 
         boolean moveSuccess = false;
@@ -3113,8 +2738,7 @@ public class Mover {
 
         rand.nextInt();
 
-        while (!moveSuccess && (!_2R1U || !_1R2U || !_1L2U || !_2L1U || !_2L1D || !_1L2D || !_1R2D || !_2R1D))
-        {
+        while (!moveSuccess && (!_2R1U || !_1R2U || !_1L2U || !_2L1U || !_2L1D || !_1L2D || !_1R2D || !_2R1D)) {
             options.clear();
 
             if (!_2R1U)
@@ -3135,14 +2759,11 @@ public class Mover {
                 options.add(Direction._2R1D);
 
 
-            switch (options.get(rand.nextInt(options.size())))
-            {
+            switch (options.get(rand.nextInt(options.size()))) {
                 case _2R1U:
-                    try
-                    {
-                        destination = board[square.getI() - square.getTeam() * 2][ square.getJ() + square.getTeam()];
-                        if(destination.getTeam() != square.getTeam())
-                        {
+                    try {
+                        destination = board[square.getI() - square.getTeam() * 2][square.getJ() + square.getTeam()];
+                        if (destination.getTeam() != square.getTeam()) {
                             if (destination.getTeam() == OPPONENT)
                                 multiGame.incrementYourPoints();
                             else if (destination.getTeam() == YOU)
@@ -3150,23 +2771,17 @@ public class Mover {
 
                             animateMove(square, destination, multiGame);
                             moveSuccess = true;
-                        }
-                        else
-                        {
+                        } else {
                             _2R1U = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         _2R1U = true;
                     }
                     break;
                 case _1R2U:
-                    try
-                    {
-                        destination = board[square.getI() - square.getTeam()][ square.getJ() + square.getTeam() * 2];
-                        if (destination.getTeam() != square.getTeam())
-                        {
+                    try {
+                        destination = board[square.getI() - square.getTeam()][square.getJ() + square.getTeam() * 2];
+                        if (destination.getTeam() != square.getTeam()) {
                             if (destination.getTeam() == OPPONENT)
                                 multiGame.incrementYourPoints();
                             else if (destination.getTeam() == YOU)
@@ -3174,23 +2789,17 @@ public class Mover {
 
                             animateMove(square, destination, multiGame);
                             moveSuccess = true;
-                        }
-                        else
-                        {
+                        } else {
                             _1R2U = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         _1R2U = true;
                     }
                     break;
                 case _1L2U:
-                    try
-                    {
-                        destination = board[square.getI() + square.getTeam()][ square.getJ() + square.getTeam() * 2];
-                        if (destination.getTeam() != square.getTeam())
-                        {
+                    try {
+                        destination = board[square.getI() + square.getTeam()][square.getJ() + square.getTeam() * 2];
+                        if (destination.getTeam() != square.getTeam()) {
                             if (destination.getTeam() == OPPONENT)
                                 multiGame.incrementYourPoints();
                             else if (destination.getTeam() == YOU)
@@ -3198,23 +2807,17 @@ public class Mover {
 
                             animateMove(square, destination, multiGame);
                             moveSuccess = true;
-                        }
-                        else
-                        {
+                        } else {
                             _1L2U = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         _1L2U = true;
                     }
                     break;
                 case _2L1U:
-                    try
-                    {
-                        destination = board[square.getI() + square.getTeam() * 2][ square.getJ() + square.getTeam()];
-                        if (destination.getTeam() != square.getTeam())
-                        {
+                    try {
+                        destination = board[square.getI() + square.getTeam() * 2][square.getJ() + square.getTeam()];
+                        if (destination.getTeam() != square.getTeam()) {
                             if (destination.getTeam() == OPPONENT)
                                 multiGame.incrementYourPoints();
                             else if (destination.getTeam() == YOU)
@@ -3222,23 +2825,17 @@ public class Mover {
 
                             animateMove(square, destination, multiGame);
                             moveSuccess = true;
-                        }
-                        else
-                        {
+                        } else {
                             _2L1U = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         _2L1U = true;
                     }
                     break;
                 case _2L1D:
-                    try
-                    {
-                        destination = board[square.getI() + square.getTeam() * 2][ square.getJ() - square.getTeam()];
-                        if (destination.getTeam() != square.getTeam())
-                        {
+                    try {
+                        destination = board[square.getI() + square.getTeam() * 2][square.getJ() - square.getTeam()];
+                        if (destination.getTeam() != square.getTeam()) {
                             if (destination.getTeam() == OPPONENT)
                                 multiGame.incrementYourPoints();
                             else if (destination.getTeam() == YOU)
@@ -3246,23 +2843,17 @@ public class Mover {
 
                             animateMove(square, destination, multiGame);
                             moveSuccess = true;
-                        }
-                        else
-                        {
+                        } else {
                             _2L1D = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         _2L1D = true;
                     }
                     break;
                 case _1L2D:
-                    try
-                    {
-                        destination = board[square.getI() + square.getTeam()][ square.getJ() - square.getTeam() * 2];
-                        if (destination.getTeam() != square.getTeam())
-                        {
+                    try {
+                        destination = board[square.getI() + square.getTeam()][square.getJ() - square.getTeam() * 2];
+                        if (destination.getTeam() != square.getTeam()) {
                             if (destination.getTeam() == OPPONENT)
                                 multiGame.incrementYourPoints();
                             else if (destination.getTeam() == YOU)
@@ -3270,23 +2861,17 @@ public class Mover {
 
                             animateMove(square, destination, multiGame);
                             moveSuccess = true;
-                        }
-                        else
-                        {
+                        } else {
                             _1L2D = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         _1L2D = true;
                     }
                     break;
                 case _1R2D:
-                    try
-                    {
-                        destination = board[square.getI() - square.getTeam()][ square.getJ() - square.getTeam() * 2];
-                        if (destination.getTeam() != square.getTeam())
-                        {
+                    try {
+                        destination = board[square.getI() - square.getTeam()][square.getJ() - square.getTeam() * 2];
+                        if (destination.getTeam() != square.getTeam()) {
                             if (destination.getTeam() == OPPONENT)
                                 multiGame.incrementYourPoints();
                             else if (destination.getTeam() == YOU)
@@ -3294,23 +2879,17 @@ public class Mover {
 
                             animateMove(square, destination, multiGame);
                             moveSuccess = true;
-                        }
-                        else
-                        {
+                        } else {
                             _1R2D = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         _1R2D = true;
                     }
                     break;
                 case _2R1D:
-                    try
-                    {
-                        destination = board[square.getI() - square.getTeam() * 2][ square.getJ() - square.getTeam()];
-                        if (destination.getTeam() != square.getTeam())
-                        {
+                    try {
+                        destination = board[square.getI() - square.getTeam() * 2][square.getJ() - square.getTeam()];
+                        if (destination.getTeam() != square.getTeam()) {
                             if (destination.getTeam() == OPPONENT)
                                 multiGame.incrementYourPoints();
                             else if (destination.getTeam() == YOU)
@@ -3318,14 +2897,10 @@ public class Mover {
 
                             animateMove(square, destination, multiGame);
                             moveSuccess = true;
-                        }
-                        else
-                        {
+                        } else {
                             _2R1D = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         _2R1D = true;
                     }
                     break;
@@ -3339,8 +2914,7 @@ public class Mover {
         return moveSuccess;
     }
 
-    boolean moveBishop(Square[][] board, Square square, MultiGame multiGame, int max)
-    {
+    boolean moveBishop(Square[][] board, Square square, MultiGame multiGame, int max) {
         List<Direction> options = new ArrayList<>();
 
         boolean moveSuccess = false;
@@ -3358,8 +2932,7 @@ public class Mover {
 
         int count;
 
-        while (!moveSuccess && (!rightUpImpossible || !leftUpImpossible || !leftDownImpossible || !rightDownImpossible))
-        {
+        while (!moveSuccess && (!rightUpImpossible || !leftUpImpossible || !leftDownImpossible || !rightDownImpossible)) {
 
             options.clear();
 
@@ -3372,32 +2945,26 @@ public class Mover {
             if (!rightDownImpossible)
                 options.add(Direction.RIGHTBACK);
 
-            switch (options.get(rand.nextInt(options.size())))
-            {
+            switch (options.get(rand.nextInt(options.size()))) {
                 case RIGHTUP: // Tries to move right and up
 
-                    count = rand.nextInt(maxRightUp)+1;
+                    count = rand.nextInt(maxRightUp) + 1;
 
-                    try
-                    {
-                        while (!nothingInWayRightUp( board,  square, count))
-                        {
-                            if (enemyInWayRightUp( board,  square, count))
-                            {
-                                while (!nothingInWayRightUp( board,  square, count - 1))
+                    try {
+                        while (!nothingInWayRightUp(board, square, count)) {
+                            if (enemyInWayRightUp(board, square, count)) {
+                                while (!nothingInWayRightUp(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 rightUpImpossible = true;
                                 break;
                             }
                         }
-                        destination = board[square.getI() - square.getTeam() * count][ square.getJ() + square.getTeam() * count];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI() - square.getTeam() * count][square.getJ() + square.getTeam() * count];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
                             if (destination.getTeam() == OPPONENT)
                                 multiGame.incrementYourPoints();
                             else if (destination.getTeam() == YOU)
@@ -3406,9 +2973,7 @@ public class Mover {
                             animateMove(square, destination, multiGame);
                             moveSuccess = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         maxRightUp--;
                         if (maxRightUp == 0)
                             rightUpImpossible = true;
@@ -3416,29 +2981,24 @@ public class Mover {
                     break;
                 case LEFTUP: // Tries to move left and up
 
-                    count = rand.nextInt(maxLeftUp)+1;
+                    count = rand.nextInt(maxLeftUp) + 1;
 
-                    try
-                    {
+                    try {
 
-                        while (!nothingInWayLeftUp( board,  square, count))
-                        {
-                            if (enemyInWayLeftUp( board,  square, count))
-                            {
-                                while (!nothingInWayLeftUp( board,  square, count - 1))
+                        while (!nothingInWayLeftUp(board, square, count)) {
+                            if (enemyInWayLeftUp(board, square, count)) {
+                                while (!nothingInWayLeftUp(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 leftUpImpossible = true;
                                 break;
                             }
                         }
-                        destination = board[square.getI() + square.getTeam() * count][ square.getJ() + square.getTeam() * count];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI() + square.getTeam() * count][square.getJ() + square.getTeam() * count];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
                             if (destination.getTeam() == OPPONENT)
                                 multiGame.incrementYourPoints();
                             else if (destination.getTeam() == YOU)
@@ -3447,9 +3007,7 @@ public class Mover {
                             animateMove(square, destination, multiGame);
                             moveSuccess = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         maxLeftUp--;
                         if (maxLeftUp == 0)
                             leftUpImpossible = true;
@@ -3458,29 +3016,24 @@ public class Mover {
                 case LEFTBACK: // Tries to move left and down
 
 
-                    count = rand.nextInt(maxLeftDown)+1;
+                    count = rand.nextInt(maxLeftDown) + 1;
 
-                    try
-                    {
+                    try {
 
-                        while (!nothingInWayLeftDown( board,  square, count))
-                        {
-                            if (enemyInWayLeftDown( board,  square, count))
-                            {
-                                while (!nothingInWayLeftDown( board,  square, count - 1))
+                        while (!nothingInWayLeftDown(board, square, count)) {
+                            if (enemyInWayLeftDown(board, square, count)) {
+                                while (!nothingInWayLeftDown(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 leftDownImpossible = true;
                                 break;
                             }
                         }
-                        destination = board[square.getI() + square.getTeam() * count][ square.getJ() - square.getTeam() * count];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI() + square.getTeam() * count][square.getJ() - square.getTeam() * count];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
                             if (destination.getTeam() == OPPONENT)
                                 multiGame.incrementYourPoints();
                             else if (destination.getTeam() == YOU)
@@ -3489,9 +3042,7 @@ public class Mover {
                             animateMove(square, destination, multiGame);
                             moveSuccess = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         maxLeftDown--;
                         if (maxLeftDown == 0)
                             leftDownImpossible = true;
@@ -3499,29 +3050,24 @@ public class Mover {
                     break;
                 case RIGHTBACK: // Tries to move right and down
 
-                    count = rand.nextInt(maxRightDown)+1;
+                    count = rand.nextInt(maxRightDown) + 1;
 
-                    try
-                    {
+                    try {
 
-                        while (!nothingInWayRightDown( board,  square, count))
-                        {
-                            if (enemyInWayRightDown( board,  square, count))
-                            {
-                                while (!nothingInWayRightDown( board,  square, count - 1))
+                        while (!nothingInWayRightDown(board, square, count)) {
+                            if (enemyInWayRightDown(board, square, count)) {
+                                while (!nothingInWayRightDown(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 rightDownImpossible = true;
                                 break;
                             }
                         }
-                        destination = board[square.getI() - square.getTeam() * count][ square.getJ() - square.getTeam() * count];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI() - square.getTeam() * count][square.getJ() - square.getTeam() * count];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
                             if (destination.getTeam() == OPPONENT)
                                 multiGame.incrementYourPoints();
                             else if (destination.getTeam() == YOU)
@@ -3530,9 +3076,7 @@ public class Mover {
                             animateMove(square, destination, multiGame);
                             moveSuccess = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         maxRightDown--;
                         if (maxRightDown == 0)
                             rightDownImpossible = true;
@@ -3545,8 +3089,7 @@ public class Mover {
         return moveSuccess;
     }
 
-    boolean moveBishop( Square[][] board,  Square square,  MultiGame multiGame)
-    {
+    boolean moveBishop(Square[][] board, Square square, MultiGame multiGame) {
         List<Direction> options = new ArrayList<>();
 
         boolean moveSuccess = false;
@@ -3562,8 +3105,7 @@ public class Mover {
 
         rand.nextInt();
 
-        while (!moveSuccess && (!rightUpImpossible || !leftUpImpossible || !leftDownImpossible || !rightDownImpossible))
-        {
+        while (!moveSuccess && (!rightUpImpossible || !leftUpImpossible || !leftDownImpossible || !rightDownImpossible)) {
             options.clear();
 
             if (!rightUpImpossible)
@@ -3575,32 +3117,26 @@ public class Mover {
             if (!rightDownImpossible)
                 options.add(Direction.RIGHTBACK);
 
-            switch (options.get(rand.nextInt(options.size())))
-            {
+            switch (options.get(rand.nextInt(options.size()))) {
                 case RIGHTUP: // Tries to move right and up
 
-                    count = rand.nextInt(maxRightUp)+1;
+                    count = rand.nextInt(maxRightUp) + 1;
 
-                    try
-                    {
-                        while (!nothingInWayRightUp( board,  square, count))
-                        {
-                            if (enemyInWayRightUp( board,  square, count))
-                            {
-                                while (!nothingInWayRightUp( board,  square, count - 1))
+                    try {
+                        while (!nothingInWayRightUp(board, square, count)) {
+                            if (enemyInWayRightUp(board, square, count)) {
+                                while (!nothingInWayRightUp(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 rightUpImpossible = true;
                                 break;
                             }
                         }
-                        destination = board[square.getI() - square.getTeam() * count][ square.getJ() + square.getTeam() * count];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI() - square.getTeam() * count][square.getJ() + square.getTeam() * count];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
                             if (destination.getTeam() == OPPONENT)
                                 multiGame.incrementYourPoints();
                             else if (destination.getTeam() == YOU)
@@ -3609,9 +3145,7 @@ public class Mover {
                             animateMove(square, destination, multiGame);
                             moveSuccess = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         maxRightUp--;
                         if (maxRightUp == 0)
                             rightUpImpossible = true;
@@ -3619,29 +3153,24 @@ public class Mover {
                     break;
                 case LEFTUP: // Tries to move left and up
 
-                    count = rand.nextInt(maxLeftUp)+1;
+                    count = rand.nextInt(maxLeftUp) + 1;
 
-                    try
-                    {
+                    try {
 
-                        while (!nothingInWayLeftUp( board,  square, count))
-                        {
-                            if (enemyInWayLeftUp( board,  square, count))
-                            {
-                                while (!nothingInWayLeftUp( board,  square, count - 1))
+                        while (!nothingInWayLeftUp(board, square, count)) {
+                            if (enemyInWayLeftUp(board, square, count)) {
+                                while (!nothingInWayLeftUp(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 leftUpImpossible = true;
                                 break;
                             }
                         }
-                        destination = board[square.getI() + square.getTeam() * count][ square.getJ() + square.getTeam() * count];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI() + square.getTeam() * count][square.getJ() + square.getTeam() * count];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
                             if (destination.getTeam() == OPPONENT)
                                 multiGame.incrementYourPoints();
                             else if (destination.getTeam() == YOU)
@@ -3650,9 +3179,7 @@ public class Mover {
                             animateMove(square, destination, multiGame);
                             moveSuccess = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         maxLeftUp--;
                         if (maxLeftUp == 0)
                             leftUpImpossible = true;
@@ -3661,29 +3188,24 @@ public class Mover {
                 case LEFTBACK: // Tries to move left and down
 
 
-                    count = rand.nextInt(maxLeftDown)+1;
+                    count = rand.nextInt(maxLeftDown) + 1;
 
-                    try
-                    {
+                    try {
 
-                        while (!nothingInWayLeftDown( board,  square, count))
-                        {
-                            if (enemyInWayLeftDown( board,  square, count))
-                            {
-                                while (!nothingInWayLeftDown( board,  square, count - 1))
+                        while (!nothingInWayLeftDown(board, square, count)) {
+                            if (enemyInWayLeftDown(board, square, count)) {
+                                while (!nothingInWayLeftDown(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 leftDownImpossible = true;
                                 break;
                             }
                         }
-                        destination = board[square.getI() + square.getTeam() * count][ square.getJ() - square.getTeam() * count];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI() + square.getTeam() * count][square.getJ() - square.getTeam() * count];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
                             if (destination.getTeam() == OPPONENT)
                                 multiGame.incrementYourPoints();
                             else if (destination.getTeam() == YOU)
@@ -3692,9 +3214,7 @@ public class Mover {
                             animateMove(square, destination, multiGame);
                             moveSuccess = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         maxLeftDown--;
                         if (maxLeftDown == 0)
                             leftDownImpossible = true;
@@ -3702,29 +3222,24 @@ public class Mover {
                     break;
                 case RIGHTBACK: // Tries to move right and down
 
-                    count = rand.nextInt(maxRightDown)+1;
+                    count = rand.nextInt(maxRightDown) + 1;
 
-                    try
-                    {
+                    try {
 
-                        while (!nothingInWayRightDown( board,  square, count))
-                        {
-                            if (enemyInWayRightDown( board,  square, count))
-                            {
-                                while (!nothingInWayRightDown( board,  square, count - 1))
+                        while (!nothingInWayRightDown(board, square, count)) {
+                            if (enemyInWayRightDown(board, square, count)) {
+                                while (!nothingInWayRightDown(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 rightDownImpossible = true;
                                 break;
                             }
                         }
-                        destination = board[square.getI() - square.getTeam() * count][ square.getJ() - square.getTeam() * count];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI() - square.getTeam() * count][square.getJ() - square.getTeam() * count];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
                             if (destination.getTeam() == OPPONENT)
                                 multiGame.incrementYourPoints();
                             else if (destination.getTeam() == YOU)
@@ -3733,9 +3248,7 @@ public class Mover {
                             animateMove(square, destination, multiGame);
                             moveSuccess = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         maxRightDown--;
                         if (maxRightDown == 0)
                             rightDownImpossible = true;
@@ -3748,29 +3261,26 @@ public class Mover {
         return moveSuccess;
     }
 
-    boolean moveKing( Square[][] board,  Square square,  MultiGame multiGame)
-    {
+    boolean moveKing(Square[][] board, Square square, MultiGame multiGame) {
         List<KQMODE> options = new ArrayList<>();
 
         boolean moveSuccess = false;
         boolean bishopImpossible = false;
         boolean rookImpossible = false;
-        while (!moveSuccess && (!bishopImpossible || !rookImpossible))
-        {
+        while (!moveSuccess && (!bishopImpossible || !rookImpossible)) {
             options.clear();
             if (!bishopImpossible)
                 options.add(KQMODE.BISHOP);
             if (!rookImpossible)
                 options.add(KQMODE.ROOK);
 
-            switch (options.get(rand.nextInt(options.size())))
-            {
+            switch (options.get(rand.nextInt(options.size()))) {
                 case BISHOP:
-                    moveSuccess = moveBishop( board,  square, multiGame,1);
+                    moveSuccess = moveBishop(board, square, multiGame, 1);
                     bishopImpossible = !moveSuccess;
                     break;
                 case ROOK:
-                    moveSuccess = moveRook( board,  square, multiGame, 1);
+                    moveSuccess = moveRook(board, square, multiGame, 1);
                     rookImpossible = !moveSuccess;
                     break;
             }
@@ -3779,21 +3289,16 @@ public class Mover {
         return moveSuccess;
     }
 
-    boolean moveQueen( Square[][] board,  Square square,  MultiGame multiGame)
-    {
+    boolean moveQueen(Square[][] board, Square square, MultiGame multiGame) {
         boolean moveSuccess = false;
         boolean bishopImpossible = false;
         boolean rookImpossible = false;
-        while (!moveSuccess && (!bishopImpossible || !rookImpossible))
-        {
-            if (rand.nextInt(2) == 0 && !bishopImpossible)
-            {
-                moveSuccess = moveBishop( board,  square, multiGame);
+        while (!moveSuccess && (!bishopImpossible || !rookImpossible)) {
+            if (rand.nextInt(2) == 0 && !bishopImpossible) {
+                moveSuccess = moveBishop(board, square, multiGame);
                 bishopImpossible = !moveSuccess;
-            }
-            else if (!rookImpossible)
-            {
-                moveSuccess = moveRook( board,  square, multiGame);
+            } else if (!rookImpossible) {
+                moveSuccess = moveRook(board, square, multiGame);
                 rookImpossible = !moveSuccess;
             }
         }
@@ -3801,11 +3306,9 @@ public class Mover {
         return moveSuccess;
     }
 
-    public synchronized boolean canPieceMove(Square[][] board, Square square, MultiGame multiGame)
-    {
+    public synchronized boolean canPieceMove(Square[][] board, Square square, MultiGame multiGame) {
         boolean moveSuccess;
-        switch(square.getPiece())
-        {
+        switch (square.getPiece()) {
             case Piece.PAWN:
                 moveSuccess = canPawnMove(board, square, multiGame);
                 break;
@@ -3813,16 +3316,16 @@ public class Mover {
                 moveSuccess = canRookMove(board, square, multiGame);
                 break;
             case Piece.KNIGHT:
-                moveSuccess = canKnightMove( board,  square, multiGame);
+                moveSuccess = canKnightMove(board, square, multiGame);
                 break;
             case Piece.BISHOP:
-                moveSuccess = canBishopMove( board,  square, multiGame);
+                moveSuccess = canBishopMove(board, square, multiGame);
                 break;
             case Piece.KING:
-                moveSuccess = canKingMove( board,  square, multiGame);
+                moveSuccess = canKingMove(board, square, multiGame);
                 break;
             case Piece.QUEEN:
-                moveSuccess = canQueenMove( board,  square, multiGame);
+                moveSuccess = canQueenMove(board, square, multiGame);
                 break;
             default:
                 moveSuccess = false;
@@ -3832,8 +3335,7 @@ public class Mover {
         return moveSuccess;
     }
 
-    boolean canPawnMove( Square[][] board,  Square square,  MultiGame multiGame)
-    {
+    boolean canPawnMove(Square[][] board, Square square, MultiGame multiGame) {
         List<Direction> options = new ArrayList<>();
 
         boolean moveSuccess = false;
@@ -3844,8 +3346,7 @@ public class Mover {
 
         rand.nextInt();
 
-        while (!moveSuccess && (!forwardImpossible || !leftImpossible || !rightImpossible))
-        {
+        while (!moveSuccess && (!forwardImpossible || !leftImpossible || !rightImpossible)) {
             options.clear();
 
             if (!forwardImpossible)
@@ -3855,71 +3356,52 @@ public class Mover {
             if (!rightImpossible)
                 options.add(Direction.RIGHT);
 
-            switch(options.get(rand.nextInt(options.size())))
-            {
+            switch (options.get(rand.nextInt(options.size()))) {
                 case UP: // tries to move forward
 
 
                     if (square.getPieceCount() == 0)
-                        count = rand.nextInt(2)+1;
+                        count = rand.nextInt(2) + 1;
                     else
                         count = 1;
 
-                    try
-                    {
+                    try {
 
-                        while(!nothingInWayForward( board,  square, count))
-                        {
+                        while (!nothingInWayForward(board, square, count)) {
                             count--;
-                            if(count == 0)
-                            {
+                            if (count == 0) {
                                 forwardImpossible = true;
                                 break;
                             }
                         }
-                        if(count > 0)
-                        {
+                        if (count > 0) {
                             moveSuccess = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         forwardImpossible = true;
                     }
                     break;
                 case LEFT: // tries to capture diagonally to left
-                    try
-                    {
-                        destination = board[square.getI() + square.getTeam()][ square.getJ() + square.getTeam()];
-                        if (destination.getTeam() == -square.getTeam())
-                        {
+                    try {
+                        destination = board[square.getI() + square.getTeam()][square.getJ() + square.getTeam()];
+                        if (destination.getTeam() == -square.getTeam()) {
                             moveSuccess = true;
-                        }
-                        else
-                        {
+                        } else {
                             leftImpossible = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         leftImpossible = true;
                     }
                     break;
                 case RIGHT: // tries to capture diagonally to right
-                    try
-                    {
-                        destination = board[square.getI() - square.getTeam()][ square.getJ() + square.getTeam()];
-                        if (destination.getTeam() == -square.getTeam())
-                        {
+                    try {
+                        destination = board[square.getI() - square.getTeam()][square.getJ() + square.getTeam()];
+                        if (destination.getTeam() == -square.getTeam()) {
                             moveSuccess = true;
-                        }
-                        else
-                        {
+                        } else {
                             rightImpossible = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         rightImpossible = true;
                     }
                     break;
@@ -4088,8 +3570,7 @@ public class Mover {
         return moveSuccess;
     }
 
-    boolean canRookMove( Square[][] board,  Square square,  MultiGame multiGame)
-    {
+    boolean canRookMove(Square[][] board, Square square, MultiGame multiGame) {
         List<Direction> options = new ArrayList<>();
 
         boolean moveSuccess = false;
@@ -4104,11 +3585,9 @@ public class Mover {
         int count;
 
 
-
         rand.nextInt();
 
-        while(!moveSuccess && (!forwardImpossible || !leftImpossible || !rightImpossible || !backImpossible))
-        {
+        while (!moveSuccess && (!forwardImpossible || !leftImpossible || !rightImpossible || !backImpossible)) {
             options.clear();
 
 
@@ -4121,41 +3600,33 @@ public class Mover {
             if (!backImpossible)
                 options.add(Direction.BACK);
 
-            switch (options.get(rand.nextInt(options.size())))
-            {
+            switch (options.get(rand.nextInt(options.size()))) {
                 case UP: // Tries to move forward
 
-                    count = rand.nextInt(maxForward)+1;
+                    count = rand.nextInt(maxForward) + 1;
 
-                    try
-                    {
+                    try {
 
-                        while (!nothingInWayForward( board,  square, count))
-                        {
+                        while (!nothingInWayForward(board, square, count)) {
 
-                            if (enemyInWayForward( board,  square, count))
-                            {
-                                while (!nothingInWayForward( board,  square, count-1))
+                            if (enemyInWayForward(board, square, count)) {
+                                while (!nothingInWayForward(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 forwardImpossible = true;
                                 break;
                             }
 
                         }
-                        destination = board[square.getI()][ square.getJ() + square.getTeam() * count];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI()][square.getJ() + square.getTeam() * count];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
 
                             moveSuccess = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         maxForward--;
                         if (maxForward == 0)
                             forwardImpossible = true;
@@ -4163,37 +3634,30 @@ public class Mover {
                     break;
                 case LEFT: // Tries to move left
 
-                    count = rand.nextInt(maxLeft)+1;
+                    count = rand.nextInt(maxLeft) + 1;
 
-                    try
-                    {
+                    try {
 
-                        while (!nothingInWayLeft( board,  square, count))
-                        {
-                            if (enemyInWayLeft( board,  square, count))
-                            {
-                                while (!nothingInWayLeft( board,  square, count - 1))
+                        while (!nothingInWayLeft(board, square, count)) {
+                            if (enemyInWayLeft(board, square, count)) {
+                                while (!nothingInWayLeft(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
 
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 leftImpossible = true;
                                 break;
                             }
 
                         }
-                        destination = board[square.getI() + square.getTeam() * count][ square.getJ()];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI() + square.getTeam() * count][square.getJ()];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
 
                             moveSuccess = true;
                         }
-                    }
-                    catch(Exception e)
-                    {
+                    } catch (Exception e) {
                         maxLeft--;
                         if (maxLeft == 0)
                             leftImpossible = true;
@@ -4201,37 +3665,30 @@ public class Mover {
                     break;
                 case RIGHT: // Tries to move right
 
-                    count = rand.nextInt(maxRight)+1;
+                    count = rand.nextInt(maxRight) + 1;
 
-                    try
-                    {
+                    try {
 
-                        while (!nothingInWayRight( board,  square, count))
-                        {
-                            if (enemyInWayRight( board,  square, count))
-                            {
-                                while (!nothingInWayRight( board,  square, count - 1))
+                        while (!nothingInWayRight(board, square, count)) {
+                            if (enemyInWayRight(board, square, count)) {
+                                while (!nothingInWayRight(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
 
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 rightImpossible = true;
                                 break;
                             }
 
                         }
-                        destination = board[square.getI() - square.getTeam() * count][ square.getJ()];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI() - square.getTeam() * count][square.getJ()];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
 
                             moveSuccess = true;
                         }
-                    }
-                    catch(Exception e)
-                    {
+                    } catch (Exception e) {
                         maxRight--;
                         if (maxRight == 0)
                             rightImpossible = true;
@@ -4241,34 +3698,27 @@ public class Mover {
 
                     count = rand.nextInt(maxBack) + 1;
 
-                    try
-                    {
+                    try {
 
-                        while (!nothingInWayBack( board,  square, count))
-                        {
-                            if (enemyInWayBack( board,  square, count))
-                            {
-                                while (!nothingInWayBack( board,  square, count - 1))
+                        while (!nothingInWayBack(board, square, count)) {
+                            if (enemyInWayBack(board, square, count)) {
+                                while (!nothingInWayBack(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
 
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 backImpossible = true;
                                 break;
                             }
 
                         }
-                        destination = board[square.getI()][ square.getJ() - square.getTeam() * count];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI()][square.getJ() - square.getTeam() * count];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
                             moveSuccess = true;
                         }
-                    }
-                    catch(Exception e)
-                    {
+                    } catch (Exception e) {
                         maxBack--;
                         if (maxBack == 0)
                             backImpossible = true;
@@ -4279,12 +3729,10 @@ public class Mover {
         }
 
 
-
         return moveSuccess;
     }
 
-    boolean canKnightMove( Square[][] board,  Square square,  MultiGame multiGame)
-    {
+    boolean canKnightMove(Square[][] board, Square square, MultiGame multiGame) {
         List<Direction> options = new ArrayList<>();
 
         boolean moveSuccess = false;
@@ -4292,11 +3740,9 @@ public class Mover {
         _2R1U = _1R2U = _1L2U = _2L1U = _2L1D = _1L2D = _1R2D = _2R1D = false;
 
 
-
         rand.nextInt();
 
-        while (!moveSuccess && (!_2R1U || !_1R2U || !_1L2U || !_2L1U || !_2L1D || !_1L2D || !_1R2D || !_2R1D))
-        {
+        while (!moveSuccess && (!_2R1U || !_1R2U || !_1L2U || !_2L1U || !_2L1D || !_1L2D || !_1R2D || !_2R1D)) {
             options.clear();
 
             if (!_2R1U)
@@ -4317,149 +3763,100 @@ public class Mover {
                 options.add(Direction._2R1D);
 
 
-            switch (options.get(rand.nextInt(options.size())))
-            {
+            switch (options.get(rand.nextInt(options.size()))) {
                 case _2R1U:
-                    try
-                    {
-                        destination = board[square.getI() - square.getTeam() * 2][ square.getJ() + square.getTeam()];
-                        if(destination.getTeam() != square.getTeam())
-                        {
+                    try {
+                        destination = board[square.getI() - square.getTeam() * 2][square.getJ() + square.getTeam()];
+                        if (destination.getTeam() != square.getTeam()) {
                             moveSuccess = true;
-                        }
-                        else
-                        {
+                        } else {
                             _2R1U = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         _2R1U = true;
                     }
                     break;
                 case _1R2U:
-                    try
-                    {
-                        destination = board[square.getI() - square.getTeam()][ square.getJ() + square.getTeam() * 2];
-                        if (destination.getTeam() != square.getTeam())
-                        {
+                    try {
+                        destination = board[square.getI() - square.getTeam()][square.getJ() + square.getTeam() * 2];
+                        if (destination.getTeam() != square.getTeam()) {
                             moveSuccess = true;
-                        }
-                        else
-                        {
+                        } else {
                             _1R2U = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         _1R2U = true;
                     }
                     break;
                 case _1L2U:
-                    try
-                    {
-                        destination = board[square.getI() + square.getTeam()][ square.getJ() + square.getTeam() * 2];
-                        if (destination.getTeam() != square.getTeam())
-                        {
+                    try {
+                        destination = board[square.getI() + square.getTeam()][square.getJ() + square.getTeam() * 2];
+                        if (destination.getTeam() != square.getTeam()) {
                             moveSuccess = true;
-                        }
-                        else
-                        {
+                        } else {
                             _1L2U = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         _1L2U = true;
                     }
                     break;
                 case _2L1U:
-                    try
-                    {
-                        destination = board[square.getI() + square.getTeam() * 2][ square.getJ() + square.getTeam()];
-                        if (destination.getTeam() != square.getTeam())
-                        {
+                    try {
+                        destination = board[square.getI() + square.getTeam() * 2][square.getJ() + square.getTeam()];
+                        if (destination.getTeam() != square.getTeam()) {
                             moveSuccess = true;
-                        }
-                        else
-                        {
+                        } else {
                             _2L1U = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         _2L1U = true;
                     }
                     break;
                 case _2L1D:
-                    try
-                    {
-                        destination = board[square.getI() + square.getTeam() * 2][ square.getJ() - square.getTeam()];
-                        if (destination.getTeam() != square.getTeam())
-                        {
+                    try {
+                        destination = board[square.getI() + square.getTeam() * 2][square.getJ() - square.getTeam()];
+                        if (destination.getTeam() != square.getTeam()) {
                             moveSuccess = true;
-                        }
-                        else
-                        {
+                        } else {
                             _2L1D = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         _2L1D = true;
                     }
                     break;
                 case _1L2D:
-                    try
-                    {
-                        destination = board[square.getI() + square.getTeam()][ square.getJ() - square.getTeam() * 2];
-                        if (destination.getTeam() != square.getTeam())
-                        {
+                    try {
+                        destination = board[square.getI() + square.getTeam()][square.getJ() - square.getTeam() * 2];
+                        if (destination.getTeam() != square.getTeam()) {
                             moveSuccess = true;
-                        }
-                        else
-                        {
+                        } else {
                             _1L2D = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         _1L2D = true;
                     }
                     break;
                 case _1R2D:
-                    try
-                    {
-                        destination = board[square.getI() - square.getTeam()][ square.getJ() - square.getTeam() * 2];
-                        if (destination.getTeam() != square.getTeam())
-                        {
+                    try {
+                        destination = board[square.getI() - square.getTeam()][square.getJ() - square.getTeam() * 2];
+                        if (destination.getTeam() != square.getTeam()) {
                             moveSuccess = true;
-                        }
-                        else
-                        {
+                        } else {
                             _1R2D = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         _1R2D = true;
                     }
                     break;
                 case _2R1D:
-                    try
-                    {
-                        destination = board[square.getI() - square.getTeam() * 2][ square.getJ() - square.getTeam()];
-                        if (destination.getTeam() != square.getTeam())
-                        {
+                    try {
+                        destination = board[square.getI() - square.getTeam() * 2][square.getJ() - square.getTeam()];
+                        if (destination.getTeam() != square.getTeam()) {
                             moveSuccess = true;
-                        }
-                        else
-                        {
+                        } else {
                             _2R1D = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         _2R1D = true;
                     }
                     break;
@@ -4473,8 +3870,7 @@ public class Mover {
         return moveSuccess;
     }
 
-    boolean canBishopMove(Square[][] board, Square square, MultiGame multiGame, int max)
-    {
+    boolean canBishopMove(Square[][] board, Square square, MultiGame multiGame, int max) {
         boolean moveSuccess = false;
         boolean rightUpImpossible = false;
         boolean leftUpImpossible = false;
@@ -4486,11 +3882,9 @@ public class Mover {
         int maxRightDown = max;
 
 
-
         rand.nextInt();
 
-        while (!moveSuccess && (!rightUpImpossible || !leftUpImpossible || !leftDownImpossible || !rightDownImpossible))
-        {
+        while (!moveSuccess && (!rightUpImpossible || !leftUpImpossible || !leftDownImpossible || !rightDownImpossible)) {
             List<Direction> options = new ArrayList<>();
             int count;
 
@@ -4503,37 +3897,29 @@ public class Mover {
             if (!rightDownImpossible)
                 options.add(Direction.RIGHTBACK);
 
-            switch (options.get(rand.nextInt(options.size())))
-            {
+            switch (options.get(rand.nextInt(options.size()))) {
                 case RIGHTUP: // Tries to move right and up
 
-                    count = rand.nextInt(maxRightUp)+1;
+                    count = rand.nextInt(maxRightUp) + 1;
 
-                    try
-                    {
-                        while (!nothingInWayRightUp( board,  square, count))
-                        {
-                            if (enemyInWayRightUp( board,  square, count))
-                            {
-                                while (!nothingInWayRightUp( board,  square, count - 1))
+                    try {
+                        while (!nothingInWayRightUp(board, square, count)) {
+                            if (enemyInWayRightUp(board, square, count)) {
+                                while (!nothingInWayRightUp(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 rightUpImpossible = true;
                                 break;
                             }
                         }
-                        destination = board[square.getI() - square.getTeam() * count][ square.getJ() + square.getTeam() * count];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI() - square.getTeam() * count][square.getJ() + square.getTeam() * count];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
                             moveSuccess = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         maxRightUp--;
                         if (maxRightUp == 0)
                             rightUpImpossible = true;
@@ -4541,34 +3927,27 @@ public class Mover {
                     break;
                 case LEFTUP: // Tries to move left and up
 
-                    count = rand.nextInt(maxLeftUp)+1;
+                    count = rand.nextInt(maxLeftUp) + 1;
 
-                    try
-                    {
+                    try {
 
-                        while (!nothingInWayLeftUp( board,  square, count))
-                        {
-                            if (enemyInWayLeftUp( board,  square, count))
-                            {
-                                while (!nothingInWayLeftUp( board,  square, count - 1))
+                        while (!nothingInWayLeftUp(board, square, count)) {
+                            if (enemyInWayLeftUp(board, square, count)) {
+                                while (!nothingInWayLeftUp(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 leftUpImpossible = true;
                                 break;
                             }
                         }
-                        destination = board[square.getI() + square.getTeam() * count][ square.getJ() + square.getTeam() * count];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI() + square.getTeam() * count][square.getJ() + square.getTeam() * count];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
                             moveSuccess = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         maxLeftUp--;
                         if (maxLeftUp == 0)
                             leftUpImpossible = true;
@@ -4577,34 +3956,27 @@ public class Mover {
                 case LEFTBACK: // Tries to move left and down
 
 
-                    count = rand.nextInt(maxLeftDown)+1;
+                    count = rand.nextInt(maxLeftDown) + 1;
 
-                    try
-                    {
+                    try {
 
-                        while (!nothingInWayLeftDown( board,  square, count))
-                        {
-                            if (enemyInWayLeftDown( board,  square, count))
-                            {
-                                while (!nothingInWayLeftDown( board,  square, count - 1))
+                        while (!nothingInWayLeftDown(board, square, count)) {
+                            if (enemyInWayLeftDown(board, square, count)) {
+                                while (!nothingInWayLeftDown(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 leftDownImpossible = true;
                                 break;
                             }
                         }
-                        destination = board[square.getI() + square.getTeam() * count][ square.getJ() - square.getTeam() * count];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI() + square.getTeam() * count][square.getJ() - square.getTeam() * count];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
                             moveSuccess = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         maxLeftDown--;
                         if (maxLeftDown == 0)
                             leftDownImpossible = true;
@@ -4612,34 +3984,27 @@ public class Mover {
                     break;
                 case RIGHTBACK: // Tries to move right and down
 
-                    count = rand.nextInt(maxRightDown)+1;
+                    count = rand.nextInt(maxRightDown) + 1;
 
-                    try
-                    {
+                    try {
 
-                        while (!nothingInWayRightDown( board,  square, count))
-                        {
-                            if (enemyInWayRightDown( board,  square, count))
-                            {
-                                while (!nothingInWayRightDown( board,  square, count - 1))
+                        while (!nothingInWayRightDown(board, square, count)) {
+                            if (enemyInWayRightDown(board, square, count)) {
+                                while (!nothingInWayRightDown(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 rightDownImpossible = true;
                                 break;
                             }
                         }
-                        destination = board[square.getI() - square.getTeam() * count][ square.getJ() - square.getTeam() * count];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI() - square.getTeam() * count][square.getJ() - square.getTeam() * count];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
                             moveSuccess = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         maxRightDown--;
                         if (maxRightDown == 0)
                             rightDownImpossible = true;
@@ -4652,8 +4017,7 @@ public class Mover {
         return moveSuccess;
     }
 
-    boolean canBishopMove( Square[][] board,  Square square,  MultiGame multiGame)
-    {
+    boolean canBishopMove(Square[][] board, Square square, MultiGame multiGame) {
         List<Direction> options = new ArrayList<>();
 
         boolean moveSuccess = false;
@@ -4670,8 +4034,7 @@ public class Mover {
 
         rand.nextInt();
 
-        while (!moveSuccess && (!rightUpImpossible || !leftUpImpossible || !leftDownImpossible || !rightDownImpossible))
-        {
+        while (!moveSuccess && (!rightUpImpossible || !leftUpImpossible || !leftDownImpossible || !rightDownImpossible)) {
             options.clear();
 
 
@@ -4684,37 +4047,29 @@ public class Mover {
             if (!rightDownImpossible)
                 options.add(Direction.RIGHTBACK);
 
-            switch (options.get(rand.nextInt(options.size())))
-            {
+            switch (options.get(rand.nextInt(options.size()))) {
                 case RIGHTUP: // Tries to move right and up
 
-                    count = rand.nextInt(maxRightUp)+1;
+                    count = rand.nextInt(maxRightUp) + 1;
 
-                    try
-                    {
-                        while (!nothingInWayRightUp( board,  square, count))
-                        {
-                            if (enemyInWayRightUp( board,  square, count))
-                            {
-                                while (!nothingInWayRightUp( board,  square, count - 1))
+                    try {
+                        while (!nothingInWayRightUp(board, square, count)) {
+                            if (enemyInWayRightUp(board, square, count)) {
+                                while (!nothingInWayRightUp(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 rightUpImpossible = true;
                                 break;
                             }
                         }
-                        destination = board[square.getI() - square.getTeam() * count][ square.getJ() + square.getTeam() * count];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI() - square.getTeam() * count][square.getJ() + square.getTeam() * count];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
                             moveSuccess = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         maxRightUp--;
                         if (maxRightUp == 0)
                             rightUpImpossible = true;
@@ -4722,34 +4077,27 @@ public class Mover {
                     break;
                 case LEFTUP: // Tries to move left and up
 
-                    count = rand.nextInt(maxLeftUp)+1;
+                    count = rand.nextInt(maxLeftUp) + 1;
 
-                    try
-                    {
+                    try {
 
-                        while (!nothingInWayLeftUp( board,  square, count))
-                        {
-                            if (enemyInWayLeftUp( board,  square, count))
-                            {
-                                while (!nothingInWayLeftUp( board,  square, count - 1))
+                        while (!nothingInWayLeftUp(board, square, count)) {
+                            if (enemyInWayLeftUp(board, square, count)) {
+                                while (!nothingInWayLeftUp(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 leftUpImpossible = true;
                                 break;
                             }
                         }
-                        destination = board[square.getI() + square.getTeam() * count][ square.getJ() + square.getTeam() * count];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI() + square.getTeam() * count][square.getJ() + square.getTeam() * count];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
                             moveSuccess = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         maxLeftUp--;
                         if (maxLeftUp == 0)
                             leftUpImpossible = true;
@@ -4758,34 +4106,27 @@ public class Mover {
                 case LEFTBACK: // Tries to move left and down
 
 
-                    count = rand.nextInt(maxLeftDown)+1;
+                    count = rand.nextInt(maxLeftDown) + 1;
 
-                    try
-                    {
+                    try {
 
-                        while (!nothingInWayLeftDown( board,  square, count))
-                        {
-                            if (enemyInWayLeftDown( board,  square, count))
-                            {
-                                while (!nothingInWayLeftDown( board,  square, count - 1))
+                        while (!nothingInWayLeftDown(board, square, count)) {
+                            if (enemyInWayLeftDown(board, square, count)) {
+                                while (!nothingInWayLeftDown(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 leftDownImpossible = true;
                                 break;
                             }
                         }
-                        destination = board[square.getI() + square.getTeam() * count][ square.getJ() - square.getTeam() * count];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI() + square.getTeam() * count][square.getJ() - square.getTeam() * count];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
                             moveSuccess = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         maxLeftDown--;
                         if (maxLeftDown == 0)
                             leftDownImpossible = true;
@@ -4793,34 +4134,27 @@ public class Mover {
                     break;
                 case RIGHTBACK: // Tries to move right and down
 
-                    count = rand.nextInt(maxRightDown)+1;
+                    count = rand.nextInt(maxRightDown) + 1;
 
-                    try
-                    {
+                    try {
 
-                        while (!nothingInWayRightDown( board,  square, count))
-                        {
-                            if (enemyInWayRightDown( board,  square, count))
-                            {
-                                while (!nothingInWayRightDown( board,  square, count - 1))
+                        while (!nothingInWayRightDown(board, square, count)) {
+                            if (enemyInWayRightDown(board, square, count)) {
+                                while (!nothingInWayRightDown(board, square, count - 1))
                                     count--;
                                 break;
                             }
                             count--;
-                            if (count == 0)
-                            {
+                            if (count == 0) {
                                 rightDownImpossible = true;
                                 break;
                             }
                         }
-                        destination = board[square.getI() - square.getTeam() * count][ square.getJ() - square.getTeam() * count];
-                        if (count > 0 && destination.getTeam() != square.getTeam())
-                        {
+                        destination = board[square.getI() - square.getTeam() * count][square.getJ() - square.getTeam() * count];
+                        if (count > 0 && destination.getTeam() != square.getTeam()) {
                             moveSuccess = true;
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         maxRightDown--;
                         if (maxRightDown == 0)
                             rightDownImpossible = true;
@@ -4833,29 +4167,26 @@ public class Mover {
         return moveSuccess;
     }
 
-    boolean canKingMove( Square[][] board,  Square square,  MultiGame multiGame)
-    {
+    boolean canKingMove(Square[][] board, Square square, MultiGame multiGame) {
         List<KQMODE> options = new ArrayList<>();
 
         boolean moveSuccess = false;
         boolean bishopImpossible = false;
         boolean rookImpossible = false;
 
-        while (!moveSuccess && (!bishopImpossible || !rookImpossible))
-        {
+        while (!moveSuccess && (!bishopImpossible || !rookImpossible)) {
             if (!bishopImpossible)
                 options.add(KQMODE.BISHOP);
             if (!rookImpossible)
                 options.add(KQMODE.ROOK);
 
-            switch (options.get(rand.nextInt(options.size())))
-            {
+            switch (options.get(rand.nextInt(options.size()))) {
                 case BISHOP:
-                    moveSuccess = canBishopMove( board,  square, multiGame,1);
+                    moveSuccess = canBishopMove(board, square, multiGame, 1);
                     bishopImpossible = !moveSuccess;
                     break;
                 case ROOK:
-                    moveSuccess = canRookMove( board,  square, multiGame, 1);
+                    moveSuccess = canRookMove(board, square, multiGame, 1);
                     rookImpossible = !moveSuccess;
                     break;
             }
@@ -4864,28 +4195,25 @@ public class Mover {
         return moveSuccess;
     }
 
-    boolean canQueenMove( Square[][] board,  Square square,  MultiGame multiGame)
-    {
+    boolean canQueenMove(Square[][] board, Square square, MultiGame multiGame) {
         List<KQMODE> options = new ArrayList<>();
 
         boolean moveSuccess = false;
         boolean bishopImpossible = false;
         boolean rookImpossible = false;
-        while (!moveSuccess && (!bishopImpossible || !rookImpossible))
-        {
+        while (!moveSuccess && (!bishopImpossible || !rookImpossible)) {
             if (!bishopImpossible)
                 options.add(KQMODE.BISHOP);
             if (!rookImpossible)
                 options.add(KQMODE.ROOK);
 
-            switch (options.get(rand.nextInt(options.size())))
-            {
+            switch (options.get(rand.nextInt(options.size()))) {
                 case BISHOP:
-                    moveSuccess = canBishopMove( board,  square, multiGame);
+                    moveSuccess = canBishopMove(board, square, multiGame);
                     bishopImpossible = !moveSuccess;
                     break;
                 case ROOK:
-                    moveSuccess = canRookMove( board,  square, multiGame);
+                    moveSuccess = canRookMove(board, square, multiGame);
                     rookImpossible = !moveSuccess;
                     break;
             }
@@ -4893,55 +4221,14 @@ public class Mover {
 
         return moveSuccess;
     }
-    
+
     //Multi game functions end
 
-    boolean nothingInWayForward( Square[][] board,  Square square, int count)
-    {
+    boolean nothingInWayForward(Square[][] board, Square square, int count) {
         boolean clear = true;
 
-        for(int j = 1; j <= count; j++)
-        {
-            clear = board[square.getI()][ square.getJ() + square.getTeam()*j].getPiece() == Piece.NONE;
-            if (!clear)
-                break;
-        }
-
-        return clear;
-    }
-    boolean nothingInWayLeft( Square[][] board,  Square square, int count)
-    {
-        boolean clear = true;
-
-        for (int j = 1; j <= count; j++)
-        {
-            clear = board[square.getI() + square.getTeam() * j][ square.getJ()].getPiece() == Piece.NONE;
-            if (!clear)
-                break;
-        }
-
-        return clear;
-    }
-    boolean nothingInWayRight( Square[][] board,  Square square, int count)
-    {
-        boolean clear = true;
-
-        for (int j = 1; j <= count; j++)
-        {
-            clear = board[square.getI() - square.getTeam() * j][ square.getJ()].getPiece() == Piece.NONE;
-            if (!clear)
-                break;
-        }
-
-        return clear;
-    }
-    boolean nothingInWayBack( Square[][] board,  Square square, int count)
-    {
-        boolean clear = true;
-
-        for (int j = 1; j <= count; j++)
-        {
-            clear = board[square.getI()][ square.getJ() - square.getTeam() * j].getPiece() == Piece.NONE;
+        for (int j = 1; j <= count; j++) {
+            clear = board[square.getI()][square.getJ() + square.getTeam() * j].getPiece() == Piece.NONE;
             if (!clear)
                 break;
         }
@@ -4949,14 +4236,48 @@ public class Mover {
         return clear;
     }
 
-    boolean nothingInWayRightUp( Square[][] board,  Square square, int count)
-    {
+    boolean nothingInWayLeft(Square[][] board, Square square, int count) {
+        boolean clear = true;
+
+        for (int j = 1; j <= count; j++) {
+            clear = board[square.getI() + square.getTeam() * j][square.getJ()].getPiece() == Piece.NONE;
+            if (!clear)
+                break;
+        }
+
+        return clear;
+    }
+
+    boolean nothingInWayRight(Square[][] board, Square square, int count) {
+        boolean clear = true;
+
+        for (int j = 1; j <= count; j++) {
+            clear = board[square.getI() - square.getTeam() * j][square.getJ()].getPiece() == Piece.NONE;
+            if (!clear)
+                break;
+        }
+
+        return clear;
+    }
+
+    boolean nothingInWayBack(Square[][] board, Square square, int count) {
+        boolean clear = true;
+
+        for (int j = 1; j <= count; j++) {
+            clear = board[square.getI()][square.getJ() - square.getTeam() * j].getPiece() == Piece.NONE;
+            if (!clear)
+                break;
+        }
+
+        return clear;
+    }
+
+    boolean nothingInWayRightUp(Square[][] board, Square square, int count) {
         boolean clear = true;
 
 
-        for (int j = 1; j <= count; j++)
-        {
-            destination = board[square.getI() - square.getTeam() * j][ square.getJ() + square.getTeam() * j];
+        for (int j = 1; j <= count; j++) {
+            destination = board[square.getI() - square.getTeam() * j][square.getJ() + square.getTeam() * j];
             clear = destination.getPiece() == Piece.NONE;
             if (!clear)
                 break;
@@ -4965,14 +4286,12 @@ public class Mover {
         return clear;
     }
 
-    boolean nothingInWayLeftUp( Square[][] board,  Square square, int count)
-    {
+    boolean nothingInWayLeftUp(Square[][] board, Square square, int count) {
         boolean clear = true;
 
 
-        for (int j = 1; j <= count; j++)
-        {
-            destination = board[square.getI() + square.getTeam() * j][ square.getJ() + square.getTeam() * j];
+        for (int j = 1; j <= count; j++) {
+            destination = board[square.getI() + square.getTeam() * j][square.getJ() + square.getTeam() * j];
             clear = destination.getPiece() == Piece.NONE;
             if (!clear)
                 break;
@@ -4981,14 +4300,12 @@ public class Mover {
         return clear;
     }
 
-    boolean nothingInWayLeftDown( Square[][] board,  Square square, int count)
-    {
+    boolean nothingInWayLeftDown(Square[][] board, Square square, int count) {
         boolean clear = true;
 
 
-        for (int j = 1; j <= count; j++)
-        {
-            destination = board[square.getI() + square.getTeam() * j][ square.getJ() - square.getTeam() * j];
+        for (int j = 1; j <= count; j++) {
+            destination = board[square.getI() + square.getTeam() * j][square.getJ() - square.getTeam() * j];
             clear = destination.getPiece() == Piece.NONE;
             if (!clear)
                 break;
@@ -4997,14 +4314,12 @@ public class Mover {
         return clear;
     }
 
-    boolean nothingInWayRightDown( Square[][] board,  Square square, int count)
-    {
+    boolean nothingInWayRightDown(Square[][] board, Square square, int count) {
         boolean clear = true;
 
 
-        for (int j = 1; j <= count; j++)
-        {
-            destination = board[square.getI() - square.getTeam() * j][ square.getJ() - square.getTeam() * j];
+        for (int j = 1; j <= count; j++) {
+            destination = board[square.getI() - square.getTeam() * j][square.getJ() - square.getTeam() * j];
             clear = destination.getPiece() == Piece.NONE;
             if (!clear)
                 break;
@@ -5013,14 +4328,12 @@ public class Mover {
         return clear;
     }
 
-    boolean enemyInWayForward( Square[][] board,  Square square, int count)
-    {
+    boolean enemyInWayForward(Square[][] board, Square square, int count) {
         boolean enemy = false;
 
 
-        for (int j = 1; j <= count; j++)
-        {
-            destination = board[square.getI()][ square.getJ() + square.getTeam() * j];
+        for (int j = 1; j <= count; j++) {
+            destination = board[square.getI()][square.getJ() + square.getTeam() * j];
             enemy = destination.getTeam() == -square.getTeam();
             if (enemy)
                 break;
@@ -5029,14 +4342,12 @@ public class Mover {
         return enemy;
     }
 
-    boolean enemyInWayLeft( Square[][] board,  Square square, int count)
-    {
+    boolean enemyInWayLeft(Square[][] board, Square square, int count) {
         boolean enemy = false;
 
 
-        for (int j = 1; j <= count; j++)
-        {
-            destination = board[square.getI() + square.getTeam() * j][ square.getJ()];
+        for (int j = 1; j <= count; j++) {
+            destination = board[square.getI() + square.getTeam() * j][square.getJ()];
             enemy = destination.getTeam() == -square.getTeam();
             if (enemy)
                 break;
@@ -5045,14 +4356,12 @@ public class Mover {
         return enemy;
     }
 
-    boolean enemyInWayRight( Square[][] board,  Square square, int count)
-    {
+    boolean enemyInWayRight(Square[][] board, Square square, int count) {
         boolean enemy = false;
 
 
-        for (int j = 1; j <= count; j++)
-        {
-            destination = board[square.getI() - square.getTeam() * j][ square.getJ()];
+        for (int j = 1; j <= count; j++) {
+            destination = board[square.getI() - square.getTeam() * j][square.getJ()];
             enemy = destination.getTeam() == -square.getTeam();
             if (enemy)
                 break;
@@ -5061,14 +4370,12 @@ public class Mover {
         return enemy;
     }
 
-    boolean enemyInWayBack( Square[][] board,  Square square, int count)
-    {
+    boolean enemyInWayBack(Square[][] board, Square square, int count) {
         boolean enemy = false;
 
 
-        for (int j = 1; j <= count; j++)
-        {
-            destination = board[square.getI()][ square.getJ() - square.getTeam() * j];
+        for (int j = 1; j <= count; j++) {
+            destination = board[square.getI()][square.getJ() - square.getTeam() * j];
             enemy = destination.getTeam() == -square.getTeam();
             if (enemy)
                 break;
@@ -5077,14 +4384,12 @@ public class Mover {
         return enemy;
     }
 
-    boolean enemyInWayRightUp( Square[][] board,  Square square, int count)
-    {
+    boolean enemyInWayRightUp(Square[][] board, Square square, int count) {
         boolean enemy = false;
 
 
-        for (int j = 1; j <= count; j++)
-        {
-            destination = board[square.getI() - square.getTeam() * j][ square.getJ() + square.getTeam() * j];
+        for (int j = 1; j <= count; j++) {
+            destination = board[square.getI() - square.getTeam() * j][square.getJ() + square.getTeam() * j];
             enemy = destination.getTeam() == -square.getTeam();
             if (enemy)
                 break;
@@ -5093,14 +4398,12 @@ public class Mover {
         return enemy;
     }
 
-    boolean enemyInWayLeftUp( Square[][] board,  Square square, int count)
-    {
+    boolean enemyInWayLeftUp(Square[][] board, Square square, int count) {
         boolean enemy = false;
 
 
-        for (int j = 1; j <= count; j++)
-        {
-            destination = board[square.getI() + square.getTeam() * j][ square.getJ() + square.getTeam() * j];
+        for (int j = 1; j <= count; j++) {
+            destination = board[square.getI() + square.getTeam() * j][square.getJ() + square.getTeam() * j];
             enemy = destination.getTeam() == -square.getTeam();
             if (enemy)
                 break;
@@ -5109,14 +4412,12 @@ public class Mover {
         return enemy;
     }
 
-    boolean enemyInWayLeftDown( Square[][] board,  Square square, int count)
-    {
+    boolean enemyInWayLeftDown(Square[][] board, Square square, int count) {
         boolean enemy = false;
 
 
-        for (int j = 1; j <= count; j++)
-        {
-            destination = board[square.getI() + square.getTeam() * j][ square.getJ() - square.getTeam() * j];
+        for (int j = 1; j <= count; j++) {
+            destination = board[square.getI() + square.getTeam() * j][square.getJ() - square.getTeam() * j];
             enemy = destination.getTeam() == -square.getTeam();
             if (enemy)
                 break;
@@ -5125,14 +4426,12 @@ public class Mover {
         return enemy;
     }
 
-    boolean enemyInWayRightDown( Square[][] board,  Square square, int count)
-    {
+    boolean enemyInWayRightDown(Square[][] board, Square square, int count) {
         boolean enemy = false;
 
 
-        for (int j = 1; j <= count; j++)
-        {
-            destination = board[square.getI() - square.getTeam() * j][ square.getJ() - square.getTeam() * j];
+        for (int j = 1; j <= count; j++) {
+            destination = board[square.getI() - square.getTeam() * j][square.getJ() - square.getTeam() * j];
             enemy = destination.getTeam() == -square.getTeam();
             if (enemy)
                 break;
@@ -5141,8 +4440,8 @@ public class Mover {
         return enemy;
     }
 
-    private int convertDpToPx(int dp){
-        return Math.round(dp*(context.getResources().getDisplayMetrics().xdpi/ DisplayMetrics.DENSITY_DEFAULT));
+    private int convertDpToPx(int dp) {
+        return Math.round(dp * (context.getResources().getDisplayMetrics().xdpi / DisplayMetrics.DENSITY_DEFAULT));
     }
 
 }
