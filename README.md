@@ -20,7 +20,7 @@ Open Chaos Chess is a free and open source version of [Chaos Chess](https://play
 All future development for Chaos Chess will be in this project.
 
 ## Current Status
-As of the most recent commit to the master branch, achievements and single player games are working. However, since it is not using any online services, the progress is only saved locally and is lost if app data is wiped or if a player installs on a new device. Multiplayer is now working over Bluetooth for the most part.
+As of the most recent commit to the master branch, achievements and single player games are working. However, since it is not using any online services, the progress is only saved locally and is lost if app data is wiped or if a player installs on a new device. Multiplayer is now working over Bluetooth for the most part. Pieces are now animated on move.
 
 ----
 
@@ -30,6 +30,16 @@ As of the most recent commit to the master branch, achievements and single playe
 <img src="https://i.imgur.com/Nij5ZU0.png" alt="Normal Game Playing" width="200" />
 <img src="https://i.imgur.com/NRuWsUf.png" alt="Knights Only Start" width="200" />
 <img src="https://i.imgur.com/HZlM2rV.png" alt="Knights Only Playing" width="200" />
+
+----
+
+## Direct Contributors
+
+[CorruptedArk](https://github.com/CorruptedArk) - Orignal Author
+
+[LibreHacker](https://github.com/LibreHacker) - Russian Translations
+
+If you want to contribute, please read [CONTRIBUTING](CONTRIBUTING.md).
 
 ----
 
