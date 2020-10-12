@@ -239,7 +239,7 @@ public class Mover {
             }
 
             if (!enemySquares.isEmpty()) {
-                destination = enemySquares.get(rand.nextInt(options.size()));
+                destination = enemySquares.get(rand.nextInt(enemySquares.size()));
                 if (destination.getTeam() == OPPONENT)
                     singleGame.incrementPlayerPoints();
                 else if (destination.getTeam() == YOU)
@@ -623,7 +623,7 @@ public class Mover {
         if (bloodThirsty) {
             ArrayList<Square> enemySquares = getEnemiesOfRook(board, square);
             if (!enemySquares.isEmpty()) {
-                destination = enemySquares.get(rand.nextInt(options.size()));
+                destination = enemySquares.get(rand.nextInt(enemySquares.size()));
                 if (destination.getTeam() == OPPONENT)
                     singleGame.incrementPlayerPoints();
                 else if (destination.getTeam() == YOU)
@@ -1166,7 +1166,7 @@ public class Mover {
         if (bloodThirsty) {
             ArrayList<Square> enemySquares = getEnemiesOfBishop(board, square);
             if (!enemySquares.isEmpty()) {
-                destination = enemySquares.get(rand.nextInt(options.size()));
+                destination = enemySquares.get(rand.nextInt(enemySquares.size()));
                 if (destination.getTeam() == OPPONENT)
                     singleGame.incrementPlayerPoints();
                 else if (destination.getTeam() == YOU)
@@ -4311,10 +4311,15 @@ public class Mover {
     boolean nothingInWayForward(Square[][] board, Square square, int count) {
         boolean clear = true;
 
-        for (int j = 1; j <= count; j++) {
-            clear = board[square.getI()][square.getJ() + square.getTeam() * j].getPiece() == Piece.NONE;
-            if (!clear)
-                break;
+        try {
+            for (int j = 1; j <= count; j++) {
+                clear = board[square.getI()][square.getJ() + square.getTeam() * j].getPiece() == Piece.NONE;
+                if (!clear)
+                    break;
+            }
+        }
+        catch (IndexOutOfBoundsException e) {
+            clear = false;
         }
 
         return clear;
@@ -4323,10 +4328,15 @@ public class Mover {
     boolean nothingInWayLeft(Square[][] board, Square square, int count) {
         boolean clear = true;
 
-        for (int j = 1; j <= count; j++) {
-            clear = board[square.getI() + square.getTeam() * j][square.getJ()].getPiece() == Piece.NONE;
-            if (!clear)
-                break;
+        try {
+            for (int j = 1; j <= count; j++) {
+                clear = board[square.getI() + square.getTeam() * j][square.getJ()].getPiece() == Piece.NONE;
+                if (!clear)
+                    break;
+            }
+        }
+        catch (IndexOutOfBoundsException e) {
+            clear = false;
         }
 
         return clear;
@@ -4335,10 +4345,15 @@ public class Mover {
     boolean nothingInWayRight(Square[][] board, Square square, int count) {
         boolean clear = true;
 
-        for (int j = 1; j <= count; j++) {
-            clear = board[square.getI() - square.getTeam() * j][square.getJ()].getPiece() == Piece.NONE;
-            if (!clear)
-                break;
+        try {
+            for (int j = 1; j <= count; j++) {
+                clear = board[square.getI() - square.getTeam() * j][square.getJ()].getPiece() == Piece.NONE;
+                if (!clear)
+                    break;
+            }
+        }
+        catch (IndexOutOfBoundsException e) {
+            clear = false;
         }
 
         return clear;
@@ -4347,10 +4362,15 @@ public class Mover {
     boolean nothingInWayBack(Square[][] board, Square square, int count) {
         boolean clear = true;
 
-        for (int j = 1; j <= count; j++) {
-            clear = board[square.getI()][square.getJ() - square.getTeam() * j].getPiece() == Piece.NONE;
-            if (!clear)
-                break;
+        try {
+            for (int j = 1; j <= count; j++) {
+                clear = board[square.getI()][square.getJ() - square.getTeam() * j].getPiece() == Piece.NONE;
+                if (!clear)
+                    break;
+            }
+        }
+        catch (IndexOutOfBoundsException e) {
+            clear = false;
         }
 
         return clear;
@@ -4359,12 +4379,16 @@ public class Mover {
     boolean nothingInWayRightUp(Square[][] board, Square square, int count) {
         boolean clear = true;
 
-
-        for (int j = 1; j <= count; j++) {
-            destination = board[square.getI() - square.getTeam() * j][square.getJ() + square.getTeam() * j];
-            clear = destination.getPiece() == Piece.NONE;
-            if (!clear)
-                break;
+        try {
+            for (int j = 1; j <= count; j++) {
+                destination = board[square.getI() - square.getTeam() * j][square.getJ() + square.getTeam() * j];
+                clear = destination.getPiece() == Piece.NONE;
+                if (!clear)
+                    break;
+            }
+        }
+        catch (IndexOutOfBoundsException e) {
+            clear = false;
         }
 
         return clear;
@@ -4373,12 +4397,16 @@ public class Mover {
     boolean nothingInWayLeftUp(Square[][] board, Square square, int count) {
         boolean clear = true;
 
-        //TODO - Out of bounds checks on clear checkers
-        for (int j = 1; j <= count; j++) {
-            destination = board[square.getI() + square.getTeam() * j][square.getJ() + square.getTeam() * j];
-            clear = destination.getPiece() == Piece.NONE;
-            if (!clear)
-                break;
+        try {
+            for (int j = 1; j <= count; j++) {
+                destination = board[square.getI() + square.getTeam() * j][square.getJ() + square.getTeam() * j];
+                clear = destination.getPiece() == Piece.NONE;
+                if (!clear)
+                    break;
+            }
+        }
+        catch (IndexOutOfBoundsException e) {
+            clear = false;
         }
 
         return clear;
@@ -4387,12 +4415,16 @@ public class Mover {
     boolean nothingInWayLeftDown(Square[][] board, Square square, int count) {
         boolean clear = true;
 
-
-        for (int j = 1; j <= count; j++) {
-            destination = board[square.getI() + square.getTeam() * j][square.getJ() - square.getTeam() * j];
-            clear = destination.getPiece() == Piece.NONE;
-            if (!clear)
-                break;
+        try {
+            for (int j = 1; j <= count; j++) {
+                destination = board[square.getI() + square.getTeam() * j][square.getJ() - square.getTeam() * j];
+                clear = destination.getPiece() == Piece.NONE;
+                if (!clear)
+                    break;
+            }
+        }
+        catch (IndexOutOfBoundsException e) {
+            clear = false;
         }
 
         return clear;
@@ -4401,12 +4433,16 @@ public class Mover {
     boolean nothingInWayRightDown(Square[][] board, Square square, int count) {
         boolean clear = true;
 
-
-        for (int j = 1; j <= count; j++) {
-            destination = board[square.getI() - square.getTeam() * j][square.getJ() - square.getTeam() * j];
-            clear = destination.getPiece() == Piece.NONE;
-            if (!clear)
-                break;
+        try {
+            for (int j = 1; j <= count; j++) {
+                destination = board[square.getI() - square.getTeam() * j][square.getJ() - square.getTeam() * j];
+                clear = destination.getPiece() == Piece.NONE;
+                if (!clear)
+                    break;
+            }
+        }
+        catch (IndexOutOfBoundsException e) {
+            clear = false;
         }
 
         return clear;
@@ -4415,12 +4451,15 @@ public class Mover {
     boolean enemyInWayForward(Square[][] board, Square square, int count) {
         boolean enemy = false;
 
-
-        for (int j = 1; j <= count; j++) {
-            destination = board[square.getI()][square.getJ() + square.getTeam() * j];
-            enemy = destination.getTeam() == -square.getTeam();
-            if (enemy)
-                break;
+        try {
+            for (int j = 1; j <= count; j++) {
+                destination = board[square.getI()][square.getJ() + square.getTeam() * j];
+                enemy = destination.getTeam() == -square.getTeam();
+                if (enemy)
+                    break;
+            }
+        }
+        catch (IndexOutOfBoundsException e) {
         }
 
         return enemy;
@@ -4429,12 +4468,15 @@ public class Mover {
     boolean enemyInWayLeft(Square[][] board, Square square, int count) {
         boolean enemy = false;
 
-
-        for (int j = 1; j <= count; j++) {
-            destination = board[square.getI() + square.getTeam() * j][square.getJ()];
-            enemy = destination.getTeam() == -square.getTeam();
-            if (enemy)
-                break;
+        try {
+            for (int j = 1; j <= count; j++) {
+                destination = board[square.getI() + square.getTeam() * j][square.getJ()];
+                enemy = destination.getTeam() == -square.getTeam();
+                if (enemy)
+                    break;
+            }
+        }
+        catch (IndexOutOfBoundsException e) {
         }
 
         return enemy;
@@ -4443,12 +4485,15 @@ public class Mover {
     boolean enemyInWayRight(Square[][] board, Square square, int count) {
         boolean enemy = false;
 
-
-        for (int j = 1; j <= count; j++) {
-            destination = board[square.getI() - square.getTeam() * j][square.getJ()];
-            enemy = destination.getTeam() == -square.getTeam();
-            if (enemy)
-                break;
+        try {
+            for (int j = 1; j <= count; j++) {
+                destination = board[square.getI() - square.getTeam() * j][square.getJ()];
+                enemy = destination.getTeam() == -square.getTeam();
+                if (enemy)
+                    break;
+            }
+        }
+        catch (IndexOutOfBoundsException e) {
         }
 
         return enemy;
@@ -4457,13 +4502,17 @@ public class Mover {
     boolean enemyInWayBack(Square[][] board, Square square, int count) {
         boolean enemy = false;
 
-
-        for (int j = 1; j <= count; j++) {
-            destination = board[square.getI()][square.getJ() - square.getTeam() * j];
-            enemy = destination.getTeam() == -square.getTeam();
-            if (enemy)
-                break;
+        try {
+            for (int j = 1; j <= count; j++) {
+                destination = board[square.getI()][square.getJ() - square.getTeam() * j];
+                enemy = destination.getTeam() == -square.getTeam();
+                if (enemy)
+                    break;
+            }
         }
+        catch (IndexOutOfBoundsException e) {
+        }
+
 
         return enemy;
     }
@@ -4471,12 +4520,15 @@ public class Mover {
     boolean enemyInWayRightUp(Square[][] board, Square square, int count) {
         boolean enemy = false;
 
-
-        for (int j = 1; j <= count; j++) {
-            destination = board[square.getI() - square.getTeam() * j][square.getJ() + square.getTeam() * j];
-            enemy = destination.getTeam() == -square.getTeam();
-            if (enemy)
-                break;
+        try {
+            for (int j = 1; j <= count; j++) {
+                destination = board[square.getI() - square.getTeam() * j][square.getJ() + square.getTeam() * j];
+                enemy = destination.getTeam() == -square.getTeam();
+                if (enemy)
+                    break;
+            }
+        }
+        catch (IndexOutOfBoundsException e) {
         }
 
         return enemy;
@@ -4485,12 +4537,15 @@ public class Mover {
     boolean enemyInWayLeftUp(Square[][] board, Square square, int count) {
         boolean enemy = false;
 
-
-        for (int j = 1; j <= count; j++) {
-            destination = board[square.getI() + square.getTeam() * j][square.getJ() + square.getTeam() * j];
-            enemy = destination.getTeam() == -square.getTeam();
-            if (enemy)
-                break;
+        try {
+            for (int j = 1; j <= count; j++) {
+                destination = board[square.getI() + square.getTeam() * j][square.getJ() + square.getTeam() * j];
+                enemy = destination.getTeam() == -square.getTeam();
+                if (enemy)
+                    break;
+            }
+        }
+        catch (IndexOutOfBoundsException e) {
         }
 
         return enemy;
@@ -4499,12 +4554,15 @@ public class Mover {
     boolean enemyInWayLeftDown(Square[][] board, Square square, int count) {
         boolean enemy = false;
 
-
-        for (int j = 1; j <= count; j++) {
-            destination = board[square.getI() + square.getTeam() * j][square.getJ() - square.getTeam() * j];
-            enemy = destination.getTeam() == -square.getTeam();
-            if (enemy)
-                break;
+        try {
+            for (int j = 1; j <= count; j++) {
+                destination = board[square.getI() + square.getTeam() * j][square.getJ() - square.getTeam() * j];
+                enemy = destination.getTeam() == -square.getTeam();
+                if (enemy)
+                    break;
+            }
+        }
+        catch (IndexOutOfBoundsException e) {
         }
 
         return enemy;
@@ -4513,12 +4571,15 @@ public class Mover {
     boolean enemyInWayRightDown(Square[][] board, Square square, int count) {
         boolean enemy = false;
 
-
-        for (int j = 1; j <= count; j++) {
-            destination = board[square.getI() - square.getTeam() * j][square.getJ() - square.getTeam() * j];
-            enemy = destination.getTeam() == -square.getTeam();
-            if (enemy)
-                break;
+        try {
+            for (int j = 1; j <= count; j++) {
+                destination = board[square.getI() - square.getTeam() * j][square.getJ() - square.getTeam() * j];
+                enemy = destination.getTeam() == -square.getTeam();
+                if (enemy)
+                    break;
+            }
+        }
+        catch (IndexOutOfBoundsException e) {
         }
 
         return enemy;
