@@ -74,6 +74,8 @@ public class MultiPlayerBoard extends AppCompatActivity {
     public final String TAG = "Multiplayer Board";
 
     private boolean isHost;
+    private boolean bloodThirsty;
+    private boolean bloodThirstQueued;
 
     int boardSize, squareSize, xPosition, yPosition;
     Square[][] board;
@@ -536,6 +538,12 @@ public class MultiPlayerBoard extends AppCompatActivity {
             case R.id.new_game:
                 newGameButton_Click();
                 return true;
+            case R.id.blood_thirst_toggle:
+                item.setChecked(!item.isChecked());
+                bloodThirstQueued = !bloodThirstQueued;
+                if (bloodThirstQueued)
+                    Toast.makeText(this, R.string.bloodthirst_notification, Toast.LENGTH_SHORT).show();
+                return true;
             case android.R.id.home:
                 //multiGame.saveBoard(board);
                 onBackPressed();
@@ -552,6 +560,11 @@ public class MultiPlayerBoard extends AppCompatActivity {
 
     private void newGameButton_Click()
     {
+        if (bloodThirstQueued) {
+            bloodThirsty = !bloodThirsty;
+            bloodThirstQueued = false;
+        }
+
         if(multiGame.getTurn() == NONE && (newGameRequestThread == null || !newGameRequestThread.isAlive())) {
             newGameRequestThread = new Thread() {
                 @Override
@@ -560,7 +573,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
                     Looper.prepare();
 
                     multiPlayerService = GameConnectionHandler.getMultiPlayerService(context);
-                    multiPlayerService.sendData(context,NEW_GAME);
+                    multiPlayerService.sendData(context,NEW_GAME + bloodThirsty);
 
 
                     Toast.makeText(MultiPlayerBoard.this, "New game requested", Toast.LENGTH_LONG).show();
@@ -653,8 +666,24 @@ public class MultiPlayerBoard extends AppCompatActivity {
 
 
                     String received = multiPlayerService.getMostRecentData(context);
-                    if (received.equals(NEW_GAME))
+                    if (received.equals(NEW_GAME + true))
                     {
+                        bloodThirsty = true;
+
+                        Looper.prepare();
+
+                        Log.v(TAG, "Trying to show alert");
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                newGameAlertFragment.show(getSupportFragmentManager(),"newGameAlert");
+                            }
+                        });
+                    }
+                    else if (received.equals(NEW_GAME + false))
+                    {
+                        bloodThirsty = false;
 
                         Looper.prepare();
 
@@ -898,7 +927,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
                 });
 
 
-            } else if (mover.movePiece(board, board[selected.getI()][ selected.getJ()], multiGame)) {
+            } else if (mover.movePiece(board, board[selected.getI()][ selected.getJ()], multiGame, bloodThirsty)) {
                 sendYourMove(selected, mover.getLastDestination());
 
                 selected.post(new Runnable() {

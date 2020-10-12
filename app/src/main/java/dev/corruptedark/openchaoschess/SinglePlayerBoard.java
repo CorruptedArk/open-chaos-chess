@@ -38,6 +38,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -81,6 +82,9 @@ public class SinglePlayerBoard extends AppCompatActivity{
     int boardColor2;
     int selectColor;
     int pieceColor;
+
+    private boolean bloodThirsty = false;
+    private boolean bloodThirstQueued = false;
 
     TextView wonLabel, lostLabel, tieLabel,cantMoveThatLabel, notYourTurnLabel, gameOverLabel, thatSucksLabel, noiceLabel, playerPointLabel, computerPointLabel;
 
@@ -326,6 +330,12 @@ public class SinglePlayerBoard extends AppCompatActivity{
             case R.id.new_game:
                 newGameButton_Click();
                 return true;
+            case R.id.blood_thirst_toggle:
+                item.setChecked(!item.isChecked());
+                bloodThirstQueued = !bloodThirstQueued;
+                if (bloodThirstQueued)
+                    Toast.makeText(this, R.string.bloodthirst_notification, Toast.LENGTH_SHORT).show();
+                return true;
             case android.R.id.home:
                 singleGame.saveBoard(board);
                 for(int i = 0; i < boardSize; i++)
@@ -357,6 +367,11 @@ public class SinglePlayerBoard extends AppCompatActivity{
         noiceLabel.setVisibility(View.INVISIBLE);
 
         while(moveThread != null && moveThread.isAlive());
+
+        if (bloodThirstQueued) {
+            bloodThirsty = !bloodThirsty;
+            bloodThirstQueued = false;
+        }
 
         selected = defaultSquare;
         clearPieces();
@@ -582,7 +597,7 @@ public class SinglePlayerBoard extends AppCompatActivity{
                 });
 
 
-            } else if (mover.movePiece(board, board[selected.getI()][ selected.getJ()], singleGame)) {
+            } else if (mover.movePiece(board, board[selected.getI()][ selected.getJ()], singleGame, bloodThirsty)) {
                 selected.post(new Runnable() {
                     @Override
                     public void run() {
@@ -780,7 +795,7 @@ public class SinglePlayerBoard extends AppCompatActivity{
         {
             int computerScore = singleGame.getComputerPoints();
             picked = computerPieces.get(rand.nextInt(computerPieces.size()));
-            while (!mover.movePiece( board,  board[picked.getI()][ picked.getJ()], singleGame))
+            while (!mover.movePiece( board,  board[picked.getI()][ picked.getJ()], singleGame, bloodThirsty))
             {
                 computerPieces.remove(picked);
                 if (computerPieces.size() == 0)

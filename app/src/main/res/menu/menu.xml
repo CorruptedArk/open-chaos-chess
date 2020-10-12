@@ -23,5 +23,10 @@
         android:title="@string/new_game"
         android:visible="true"
         app:showAsAction = "ifRoom|withText"/>
-
+    <item android:id="@+id/blood_thirst_toggle"
+        android:title="@string/bloodthirst"
+        android:visible="true"
+        android:checkable="true"
+        android:checked="false"
+        app:showAsAction="never"/>
 </menu>

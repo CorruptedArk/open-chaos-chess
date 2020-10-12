@@ -77,4 +77,6 @@
     <string name="host_status">Host status:</string>
     <string name="import_file">Import From File</string>
     <string name="export_file">Export to File</string>
+    <string name="bloodthirst">Bloodthirst</string>
+    <string name="bloodthirst_notification">Bloodthirst will be toggled on new game</string>
 </resources>

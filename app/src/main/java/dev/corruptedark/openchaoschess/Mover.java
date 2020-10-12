@@ -28,7 +28,10 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ViewAnimator;
 
+import java.sql.SQLInvalidAuthorizationSpecException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -179,19 +182,19 @@ public class Mover {
                 moveSuccess = movePawn(board, square, singleGame, bloodThirsty);
                 break;
             case Piece.ROOK:
-                moveSuccess = moveRook(board, square, singleGame);
+                moveSuccess = moveRook(board, square, singleGame, bloodThirsty);
                 break;
             case Piece.KNIGHT:
-                moveSuccess = moveKnight(board, square, singleGame);
+                moveSuccess = moveKnight(board, square, singleGame, bloodThirsty);
                 break;
             case Piece.BISHOP:
-                moveSuccess = moveBishop(board, square, singleGame);
+                moveSuccess = moveBishop(board, square, singleGame, bloodThirsty);
                 break;
             case Piece.KING:
-                moveSuccess = moveKing(board, square, singleGame);
+                moveSuccess = moveKing(board, square, singleGame, bloodThirsty);
                 break;
             case Piece.QUEEN:
-                moveSuccess = moveQueen(board, square, singleGame);
+                moveSuccess = moveQueen(board, square, singleGame, bloodThirsty);
                 break;
             default:
                 moveSuccess = false;
@@ -237,6 +240,10 @@ public class Mover {
 
             if (!enemySquares.isEmpty()) {
                 destination = enemySquares.get(rand.nextInt(options.size()));
+                if (destination.getTeam() == OPPONENT)
+                    singleGame.incrementPlayerPoints();
+                else if (destination.getTeam() == YOU)
+                    singleGame.incrementComputerPoints();
                 animateMove(square, destination, singleGame);
                 moveSuccess = true;
             }
@@ -328,7 +335,83 @@ public class Mover {
         return moveSuccess;
     }
 
-    boolean moveRook(Square[][] board, Square square, SingleGame singleGame, int max) {
+    ArrayList<Square> getEnemiesOfRook(Square[][] board, Square square) {
+        ArrayList<Square> enemies = new ArrayList<>();
+
+        int distance = 0;
+        while (nothingInWayForward(board, square, distance)) {
+            distance++;
+        }
+        if (enemyInWayForward(board, square, distance)) {
+            enemies.add(board[square.getI()][square.getJ() + square.getTeam() * distance]);
+        }
+
+        distance = 0;
+        while (nothingInWayLeft(board, square, distance)) {
+            distance++;
+        }
+        if (enemyInWayLeft(board, square, distance)) {
+            enemies.add(board[square.getI() + square.getTeam() * distance][square.getJ()]);
+        }
+
+        distance = 0;
+        while (nothingInWayRight(board, square, distance)) {
+            distance++;
+        }
+        if (enemyInWayRight(board, square, distance)) {
+            enemies.add(board[square.getI() - square.getTeam() * distance][square.getJ()]);
+        }
+
+        distance = 0;
+        while (nothingInWayBack(board, square, distance)) {
+            distance++;
+        }
+        if (enemyInWayBack(board, square, distance)) {
+            enemies.add(board[square.getI()][square.getJ() - square.getTeam() * distance]);
+        }
+
+        return enemies;
+    }
+
+    ArrayList<Square> getEnemiesOfRook(Square[][] board, Square square, int maxDistance) {
+        ArrayList<Square> enemies = new ArrayList<>();
+
+        int distance = 0;
+        while (maxDistance > distance && nothingInWayForward(board, square, distance)) {
+            distance++;
+        }
+        if (enemyInWayForward(board, square, distance)) {
+            enemies.add(board[square.getI()][square.getJ() + square.getTeam() * distance]);
+        }
+
+        distance = 0;
+        while (maxDistance > distance && nothingInWayLeft(board, square, distance)) {
+            distance++;
+        }
+        if (enemyInWayLeft(board, square, distance)) {
+            enemies.add(board[square.getI() + square.getTeam() * distance][square.getJ()]);
+        }
+
+        distance = 0;
+        while (maxDistance > distance && nothingInWayRight(board, square, distance)) {
+            distance++;
+        }
+        if (enemyInWayRight(board, square, distance)) {
+            enemies.add(board[square.getI() - square.getTeam() * distance][square.getJ()]);
+        }
+
+        distance = 0;
+        while (maxDistance > distance && nothingInWayBack(board, square, distance)) {
+            distance++;
+        }
+        if (enemyInWayBack(board, square, distance)) {
+            enemies.add(board[square.getI()][square.getJ() - square.getTeam() * distance]);
+        }
+
+        return enemies;
+    }
+
+    boolean moveRook(Square[][] board, Square square, SingleGame singleGame, int max, boolean bloodThirsty) {
         List<Direction> options = new ArrayList<>();
 
         boolean moveSuccess = false;
@@ -344,6 +427,19 @@ public class Mover {
 
         rand.nextInt();
 
+        if (bloodThirsty) {
+            ArrayList<Square> enemySquares = getEnemiesOfRook(board, square, max);
+            if (!enemySquares.isEmpty()) {
+                destination = enemySquares.get(rand.nextInt(options.size()));
+                if (destination.getTeam() == OPPONENT)
+                    singleGame.incrementPlayerPoints();
+                else if (destination.getTeam() == YOU)
+                    singleGame.incrementComputerPoints();
+                animateMove(square, destination, singleGame);
+                moveSuccess = true;
+            }
+        }
+
         while (!moveSuccess && (!forwardImpossible || !leftImpossible || !rightImpossible || !backImpossible)) {
 
             options.clear();
@@ -508,7 +604,7 @@ public class Mover {
         return moveSuccess;
     }
 
-    boolean moveRook(Square[][] board, Square square, SingleGame singleGame) {
+    boolean moveRook(Square[][] board, Square square, SingleGame singleGame, boolean bloodThirsty) {
         List<Direction> options = new ArrayList<>();
 
         boolean moveSuccess = false;
@@ -524,6 +620,19 @@ public class Mover {
 
         rand.nextInt();
 
+        if (bloodThirsty) {
+            ArrayList<Square> enemySquares = getEnemiesOfRook(board, square);
+            if (!enemySquares.isEmpty()) {
+                destination = enemySquares.get(rand.nextInt(options.size()));
+                if (destination.getTeam() == OPPONENT)
+                    singleGame.incrementPlayerPoints();
+                else if (destination.getTeam() == YOU)
+                    singleGame.incrementComputerPoints();
+                animateMove(square, destination, singleGame);
+                moveSuccess = true;
+            }
+        }
+
         while (!moveSuccess && (!forwardImpossible || !leftImpossible || !rightImpossible || !backImpossible)) {
             options.clear();
 
@@ -689,193 +798,169 @@ public class Mover {
         return moveSuccess;
     }
 
-    boolean moveKnight(Square[][] board, Square square, SingleGame singleGame) {
-        List<Direction> options = new ArrayList<>();
+    ArrayList<Square> getKnightMoves(Square[][] board, Square square) {
+        ArrayList<Square> moves = new ArrayList<>();
 
-        boolean moveSuccess = false;
-        boolean _2R1U, _1R2U, _1L2U, _2L1U, _2L1D, _1L2D, _1R2D, _2R1D; // true means move is impossible
-        _2R1U = _1R2U = _1L2U = _2L1U = _2L1D = _1L2D = _1R2D = _2R1D = false;
+        int[] firstPermutation = {1, 2};
+        int[] currentPermutation = firstPermutation.clone();
+        int i = square.getI();
+        int j = square.getJ();
 
+        Square currentSquare;
+        do {
+            try {
+                currentSquare = board[i + currentPermutation[0]][j + currentPermutation[1]];
 
-        rand.nextInt();
-
-        while (!moveSuccess && (!_2R1U || !_1R2U || !_1L2U || !_2L1U || !_2L1D || !_1L2D || !_1R2D || !_2R1D)) {
-            options.clear();
-
-            if (!_2R1U)
-                options.add(Direction._2R1U);
-            if (!_1R2U)
-                options.add(Direction._1R2U);
-            if (!_1L2U)
-                options.add(Direction._1L2U);
-            if (!_2L1U)
-                options.add(Direction._2L1U);
-            if (!_2L1D)
-                options.add(Direction._2L1D);
-            if (!_1L2D)
-                options.add(Direction._1L2D);
-            if (!_1R2D)
-                options.add(Direction._1R2D);
-            if (!_2R1D)
-                options.add(Direction._2R1D);
-
-
-            switch (options.get(rand.nextInt(options.size()))) {
-                case _2R1U:
-                    try {
-                        destination = board[square.getI() - square.getTeam() * 2][square.getJ() + square.getTeam()];
-                        if (destination.getTeam() != square.getTeam()) {
-                            if (destination.getTeam() == OPPONENT)
-                                singleGame.incrementPlayerPoints();
-                            else if (destination.getTeam() == YOU)
-                                singleGame.incrementComputerPoints();
-
-                            animateMove(square, destination, singleGame);
-                            moveSuccess = true;
-                        } else {
-                            _2R1U = true;
-                        }
-                    } catch (Exception e) {
-                        _2R1U = true;
-                    }
-                    break;
-                case _1R2U:
-                    try {
-                        destination = board[square.getI() - square.getTeam()][square.getJ() + square.getTeam() * 2];
-                        if (destination.getTeam() != square.getTeam()) {
-                            if (destination.getTeam() == OPPONENT)
-                                singleGame.incrementPlayerPoints();
-                            else if (destination.getTeam() == YOU)
-                                singleGame.incrementComputerPoints();
-
-                            animateMove(square, destination, singleGame);
-                            moveSuccess = true;
-                        } else {
-                            _1R2U = true;
-                        }
-                    } catch (Exception e) {
-                        _1R2U = true;
-                    }
-                    break;
-                case _1L2U:
-                    try {
-                        destination = board[square.getI() + square.getTeam()][square.getJ() + square.getTeam() * 2];
-                        if (destination.getTeam() != square.getTeam()) {
-                            if (destination.getTeam() == OPPONENT)
-                                singleGame.incrementPlayerPoints();
-                            else if (destination.getTeam() == YOU)
-                                singleGame.incrementComputerPoints();
-
-                            animateMove(square, destination, singleGame);
-                            moveSuccess = true;
-                        } else {
-                            _1L2U = true;
-                        }
-                    } catch (Exception e) {
-                        _1L2U = true;
-                    }
-                    break;
-                case _2L1U:
-                    try {
-                        destination = board[square.getI() + square.getTeam() * 2][square.getJ() + square.getTeam()];
-                        if (destination.getTeam() != square.getTeam()) {
-                            if (destination.getTeam() == OPPONENT)
-                                singleGame.incrementPlayerPoints();
-                            else if (destination.getTeam() == YOU)
-                                singleGame.incrementComputerPoints();
-
-                            animateMove(square, destination, singleGame);
-                            moveSuccess = true;
-                        } else {
-                            _2L1U = true;
-                        }
-                    } catch (Exception e) {
-                        _2L1U = true;
-                    }
-                    break;
-                case _2L1D:
-                    try {
-                        destination = board[square.getI() + square.getTeam() * 2][square.getJ() - square.getTeam()];
-                        if (destination.getTeam() != square.getTeam()) {
-                            if (destination.getTeam() == OPPONENT)
-                                singleGame.incrementPlayerPoints();
-                            else if (destination.getTeam() == YOU)
-                                singleGame.incrementComputerPoints();
-
-                            animateMove(square, destination, singleGame);
-                            moveSuccess = true;
-                        } else {
-                            _2L1D = true;
-                        }
-                    } catch (Exception e) {
-                        _2L1D = true;
-                    }
-                    break;
-                case _1L2D:
-                    try {
-                        destination = board[square.getI() + square.getTeam()][square.getJ() - square.getTeam() * 2];
-                        if (destination.getTeam() != square.getTeam()) {
-                            if (destination.getTeam() == OPPONENT)
-                                singleGame.incrementPlayerPoints();
-                            else if (destination.getTeam() == YOU)
-                                singleGame.incrementComputerPoints();
-
-                            animateMove(square, destination, singleGame);
-                            moveSuccess = true;
-                        } else {
-                            _1L2D = true;
-                        }
-                    } catch (Exception e) {
-                        _1L2D = true;
-                    }
-                    break;
-                case _1R2D:
-                    try {
-                        destination = board[square.getI() - square.getTeam()][square.getJ() - square.getTeam() * 2];
-                        if (destination.getTeam() != square.getTeam()) {
-                            if (destination.getTeam() == OPPONENT)
-                                singleGame.incrementPlayerPoints();
-                            else if (destination.getTeam() == YOU)
-                                singleGame.incrementComputerPoints();
-
-                            animateMove(square, destination, singleGame);
-                            moveSuccess = true;
-                        } else {
-                            _1R2D = true;
-                        }
-                    } catch (Exception e) {
-                        _1R2D = true;
-                    }
-                    break;
-                case _2R1D:
-                    try {
-                        destination = board[square.getI() - square.getTeam() * 2][square.getJ() - square.getTeam()];
-                        if (destination.getTeam() != square.getTeam()) {
-                            if (destination.getTeam() == OPPONENT)
-                                singleGame.incrementPlayerPoints();
-                            else if (destination.getTeam() == YOU)
-                                singleGame.incrementComputerPoints();
-
-                            animateMove(square, destination, singleGame);
-                            moveSuccess = true;
-                        } else {
-                            _2R1D = true;
-                        }
-                    } catch (Exception e) {
-                        _2R1D = true;
-                    }
-                    break;
-
+                if (currentSquare.getTeam() != square.getTeam()) {
+                    moves.add(currentSquare);
+                }
+            }
+            catch (Exception e) {
             }
 
+            currentPermutation[0] = -currentPermutation[0]; // Negate i
 
+            try {
+                currentSquare = board[i + currentPermutation[0]][j + currentPermutation[1]];
+
+                if (currentSquare.getTeam() != square.getTeam()) {
+                    moves.add(currentSquare);
+                }
+            }
+            catch (Exception e) {
+            }
+
+            //swap i and j
+            int temp = currentPermutation[0];
+            currentPermutation[0] = currentPermutation[1];
+            currentPermutation[1] = temp;
+
+        } while (!Arrays.equals(currentPermutation, firstPermutation));
+
+        return moves;
+    }
+
+    boolean moveKnight(Square[][] board, Square square, SingleGame singleGame, boolean bloodThirsty) {
+
+        boolean moveSuccess = false;
+
+        rand.nextInt();
+        int enemy = -square.getTeam();
+
+        ArrayList<Square> possibleMoves = getKnightMoves(board, square);
+
+        if (!possibleMoves.isEmpty() && bloodThirsty) {
+            ArrayList<Square> enemyMoves = new ArrayList<>();
+            for (Square move : possibleMoves) {
+                if (move.getTeam() == enemy) {
+                    enemyMoves.add(move);
+                }
+            }
+
+            if (!enemyMoves.isEmpty()) {
+                destination = enemyMoves.get(rand.nextInt(enemyMoves.size()));
+
+                if (destination.getTeam() == OPPONENT)
+                    singleGame.incrementPlayerPoints();
+                else if (destination.getTeam() == YOU)
+                    singleGame.incrementComputerPoints();
+
+                animateMove(square, destination, singleGame);
+                moveSuccess = true;
+            }
         }
+        if (!possibleMoves.isEmpty() && !moveSuccess) {
+            destination = possibleMoves.get(rand.nextInt(possibleMoves.size()));
 
+            if (destination.getTeam() == OPPONENT)
+                singleGame.incrementPlayerPoints();
+            else if (destination.getTeam() == YOU)
+                singleGame.incrementComputerPoints();
+
+            animateMove(square, destination, singleGame);
+            moveSuccess = true;
+        }
 
         return moveSuccess;
     }
 
-    boolean moveBishop(Square[][] board, Square square, SingleGame singleGame, int max) {
+    ArrayList<Square> getEnemiesOfBishop(Square[][] board, Square square) {
+        ArrayList<Square> enemies = new ArrayList<>();
+
+        int distance = 0;
+        while (nothingInWayRightUp(board, square, distance)) {
+            distance++;
+        }
+        if (enemyInWayRightUp(board, square, distance)) {
+            enemies.add(board[square.getI() - square.getTeam() * distance][square.getJ() + square.getTeam() * distance]);
+        }
+
+        distance = 0;
+        while (nothingInWayLeftUp(board, square, distance)) {
+            distance++;
+        }
+        if (enemyInWayLeftUp(board, square, distance)) {
+            enemies.add(board[square.getI() + square.getTeam() * distance][square.getJ() + square.getTeam() * distance]);
+        }
+
+        distance = 0;
+        while (nothingInWayLeftDown(board, square, distance)) {
+            distance++;
+        }
+        if (enemyInWayLeftDown(board, square, distance)) {
+            enemies.add(board[square.getI() + square.getTeam() * distance][square.getJ() - square.getTeam() * distance]);
+        }
+
+        distance = 0;
+        while (nothingInWayRightDown(board, square, distance)) {
+            distance++;
+        }
+        if (enemyInWayRightDown(board, square, distance)) {
+            enemies.add(board[square.getI() - square.getTeam() * distance][square.getJ() - square.getTeam() * distance]);
+        }
+
+        return enemies;
+    }
+
+    ArrayList<Square> getEnemiesOfBishop(Square[][] board, Square square, int maxDistance) {
+        ArrayList<Square> enemies = new ArrayList<>();
+
+        int distance = 0;
+        while (maxDistance > distance && nothingInWayRightUp(board, square, distance)) {
+            distance++;
+        }
+        if (enemyInWayRightUp(board, square, distance)) {
+            enemies.add(board[square.getI() - square.getTeam() * distance][square.getJ() + square.getTeam() * distance]);
+        }
+
+        distance = 0;
+        while (maxDistance > distance && nothingInWayLeftUp(board, square, distance)) {
+            distance++;
+        }
+        if (enemyInWayLeftUp(board, square, distance)) {
+            enemies.add(board[square.getI() + square.getTeam() * distance][square.getJ() + square.getTeam() * distance]);
+        }
+
+        distance = 0;
+        while (maxDistance > distance && nothingInWayLeftDown(board, square, distance)) {
+            distance++;
+        }
+        if (enemyInWayLeftDown(board, square, distance)) {
+            enemies.add(board[square.getI() + square.getTeam() * distance][square.getJ() - square.getTeam() * distance]);
+        }
+
+        distance = 0;
+        while (maxDistance > distance && nothingInWayRightDown(board, square, distance)) {
+            distance++;
+        }
+        if (enemyInWayRightDown(board, square, distance)) {
+            enemies.add(board[square.getI() - square.getTeam() * distance][square.getJ() - square.getTeam() * distance]);
+        }
+
+        return enemies;
+    }
+
+    boolean moveBishop(Square[][] board, Square square, SingleGame singleGame, int max, boolean bloodThirsty) {
         List<Direction> options = new ArrayList<>();
 
         boolean moveSuccess = false;
@@ -888,8 +973,20 @@ public class Mover {
         int maxLeftDown = max;
         int maxRightDown = max;
 
-
         rand.nextInt();
+
+        if (bloodThirsty) {
+            ArrayList<Square> enemySquares = getEnemiesOfBishop(board, square, max);
+            if (!enemySquares.isEmpty()) {
+                destination = enemySquares.get(rand.nextInt(options.size()));
+                if (destination.getTeam() == OPPONENT)
+                    singleGame.incrementPlayerPoints();
+                else if (destination.getTeam() == YOU)
+                    singleGame.incrementComputerPoints();
+                animateMove(square, destination, singleGame);
+                moveSuccess = true;
+            }
+        }
 
         int count;
 
@@ -1050,7 +1147,7 @@ public class Mover {
         return moveSuccess;
     }
 
-    boolean moveBishop(Square[][] board, Square square, SingleGame singleGame) {
+    boolean moveBishop(Square[][] board, Square square, SingleGame singleGame, boolean bloodThirsty) {
         List<Direction> options = new ArrayList<>();
 
         boolean moveSuccess = false;
@@ -1066,6 +1163,19 @@ public class Mover {
 
         rand.nextInt();
 
+        if (bloodThirsty) {
+            ArrayList<Square> enemySquares = getEnemiesOfBishop(board, square);
+            if (!enemySquares.isEmpty()) {
+                destination = enemySquares.get(rand.nextInt(options.size()));
+                if (destination.getTeam() == OPPONENT)
+                    singleGame.incrementPlayerPoints();
+                else if (destination.getTeam() == YOU)
+                    singleGame.incrementComputerPoints();
+                animateMove(square, destination, singleGame);
+                moveSuccess = true;
+            }
+        }
+
         while (!moveSuccess && (!rightUpImpossible || !leftUpImpossible || !leftDownImpossible || !rightDownImpossible)) {
             options.clear();
 
@@ -1218,12 +1328,28 @@ public class Mover {
         return moveSuccess;
     }
 
-    boolean moveKing(Square[][] board, Square square, SingleGame singleGame) {
+    boolean moveKing(Square[][] board, Square square, SingleGame singleGame, boolean bloodThirsty) {
         List<KQMODE> options = new ArrayList<>();
 
         boolean moveSuccess = false;
         boolean bishopImpossible = false;
         boolean rookImpossible = false;
+
+        if (bloodThirsty) {
+            ArrayList<Square> enemySquares = getEnemiesOfBishop(board, square, 1);
+            enemySquares.addAll(getEnemiesOfRook(board, square, 1));
+
+            if (!enemySquares.isEmpty()) {
+                destination = enemySquares.get(rand.nextInt(enemySquares.size()));
+                if (destination.getTeam() == OPPONENT)
+                    singleGame.incrementPlayerPoints();
+                else if (destination.getTeam() == YOU)
+                    singleGame.incrementComputerPoints();
+                animateMove(square, destination, singleGame);
+                moveSuccess = true;
+            }
+        }
+
         while (!moveSuccess && (!bishopImpossible || !rookImpossible)) {
             options.clear();
             if (!bishopImpossible)
@@ -1233,11 +1359,11 @@ public class Mover {
 
             switch (options.get(rand.nextInt(options.size()))) {
                 case BISHOP:
-                    moveSuccess = moveBishop(board, square, singleGame, 1);
+                    moveSuccess = moveBishop(board, square, singleGame, 1, false);
                     bishopImpossible = !moveSuccess;
                     break;
                 case ROOK:
-                    moveSuccess = moveRook(board, square, singleGame, 1);
+                    moveSuccess = moveRook(board, square, singleGame, 1, false);
                     rookImpossible = !moveSuccess;
                     break;
             }
@@ -1246,16 +1372,32 @@ public class Mover {
         return moveSuccess;
     }
 
-    boolean moveQueen(Square[][] board, Square square, SingleGame singleGame) {
+    boolean moveQueen(Square[][] board, Square square, SingleGame singleGame, boolean bloodThirsty) {
         boolean moveSuccess = false;
         boolean bishopImpossible = false;
         boolean rookImpossible = false;
+
+        if (bloodThirsty) {
+            ArrayList<Square> enemySquares = getEnemiesOfBishop(board, square);
+            enemySquares.addAll(getEnemiesOfRook(board, square));
+
+            if (!enemySquares.isEmpty()) {
+                destination = enemySquares.get(rand.nextInt(enemySquares.size()));
+                if (destination.getTeam() == OPPONENT)
+                    singleGame.incrementPlayerPoints();
+                else if (destination.getTeam() == YOU)
+                    singleGame.incrementComputerPoints();
+                animateMove(square, destination, singleGame);
+                moveSuccess = true;
+            }
+        }
+
         while (!moveSuccess && (!bishopImpossible || !rookImpossible)) {
             if (rand.nextInt(2) == 0 && !bishopImpossible) {
-                moveSuccess = moveBishop(board, square, singleGame);
+                moveSuccess = moveBishop(board, square, singleGame, false);
                 bishopImpossible = !moveSuccess;
             } else if (!rookImpossible) {
-                moveSuccess = moveRook(board, square, singleGame);
+                moveSuccess = moveRook(board, square, singleGame, false);
                 rookImpossible = !moveSuccess;
             }
         }
@@ -2189,19 +2331,19 @@ public class Mover {
                 moveSuccess = movePawn(board, square, multiGame, bloodThirsty);
                 break;
             case Piece.ROOK:
-                moveSuccess = moveRook(board, square, multiGame);
+                moveSuccess = moveRook(board, square, multiGame, bloodThirsty);
                 break;
             case Piece.KNIGHT:
-                moveSuccess = moveKnight(board, square, multiGame);
+                moveSuccess = moveKnight(board, square, multiGame, bloodThirsty);
                 break;
             case Piece.BISHOP:
-                moveSuccess = moveBishop(board, square, multiGame);
+                moveSuccess = moveBishop(board, square, multiGame, bloodThirsty);
                 break;
             case Piece.KING:
-                moveSuccess = moveKing(board, square, multiGame);
+                moveSuccess = moveKing(board, square, multiGame, bloodThirsty);
                 break;
             case Piece.QUEEN:
-                moveSuccess = moveQueen(board, square, multiGame);
+                moveSuccess = moveQueen(board, square, multiGame, bloodThirsty);
                 break;
             default:
                 moveSuccess = false;
@@ -2213,7 +2355,6 @@ public class Mover {
 
     boolean movePawn(Square[][] board, Square square, MultiGame multiGame, boolean bloodThirsty) {
         List<Direction> options = new ArrayList<>();
-
 
         boolean moveSuccess = false;
         boolean forwardImpossible = false;
@@ -2247,7 +2388,11 @@ public class Mover {
             }
 
             if (!enemySquares.isEmpty()) {
-                destination = enemySquares.get(rand.nextInt(options.size()));
+                destination = enemySquares.get(rand.nextInt(enemySquares.size()));
+                if (destination.getTeam() == OPPONENT)
+                    multiGame.incrementYourPoints();
+                else if (destination.getTeam() == YOU)
+                    multiGame.incrementOpponentPoints();
                 animateMove(square, destination, multiGame);
                 moveSuccess = true;
             }
@@ -2333,18 +2478,18 @@ public class Mover {
                     }
                     break;
             }
+        }
 
-            if (destination.getJ() == 7 && destination.getTeam() == OPPONENT && moveSuccess) {
-                destination.setPiece(Piece.QUEEN);
-            } else if (destination.getJ() == 0 && destination.getTeam() == YOU && moveSuccess) {
-                destination.setPiece(Piece.QUEEN);
-            }
+        if (destination.getJ() == 7 && destination.getTeam() == OPPONENT && moveSuccess) {
+            destination.setPiece(Piece.QUEEN);
+        } else if (destination.getJ() == 0 && destination.getTeam() == YOU && moveSuccess) {
+            destination.setPiece(Piece.QUEEN);
         }
 
         return moveSuccess;
     }
 
-    boolean moveRook(Square[][] board, Square square, MultiGame multiGame, int max) {
+    boolean moveRook(Square[][] board, Square square, MultiGame multiGame, int max, boolean bloodThirsty) {
         List<Direction> options = new ArrayList<>();
 
         boolean moveSuccess = false;
@@ -2360,6 +2505,19 @@ public class Mover {
 
         rand.nextInt();
 
+        if (bloodThirsty) {
+            ArrayList<Square> enemySquares = getEnemiesOfRook(board, square);
+            if (!enemySquares.isEmpty()) {
+                destination = enemySquares.get(rand.nextInt(enemySquares.size()));
+                if (destination.getTeam() == OPPONENT)
+                    multiGame.incrementYourPoints();
+                else if (destination.getTeam() == YOU)
+                    multiGame.incrementOpponentPoints();
+                animateMove(square, destination, multiGame);
+                moveSuccess = true;
+            }
+        }
+
         while (!moveSuccess && (!forwardImpossible || !leftImpossible || !rightImpossible || !backImpossible)) {
 
             options.clear();
@@ -2545,7 +2703,7 @@ public class Mover {
         return moveSuccess;
     }
 
-    boolean moveRook(Square[][] board, Square square, MultiGame multiGame) {
+    boolean moveRook(Square[][] board, Square square, MultiGame multiGame, boolean bloodThirsty) {
         List<Direction> options = new ArrayList<>();
 
         boolean moveSuccess = false;
@@ -2559,8 +2717,20 @@ public class Mover {
         int maxBack = 8;
         int count;
 
-
         rand.nextInt();
+
+        if (bloodThirsty) {
+            ArrayList<Square> enemySquares = getEnemiesOfRook(board, square);
+            if (!enemySquares.isEmpty()) {
+                destination = enemySquares.get(rand.nextInt(enemySquares.size()));
+                if (destination.getTeam() == OPPONENT)
+                    multiGame.incrementYourPoints();
+                else if (destination.getTeam() == YOU)
+                    multiGame.incrementOpponentPoints();
+                animateMove(square, destination, multiGame);
+                moveSuccess = true;
+            }
+        }
 
         while (!moveSuccess && (!forwardImpossible || !leftImpossible || !rightImpossible || !backImpossible)) {
             options.clear();
@@ -2728,193 +2898,50 @@ public class Mover {
         return moveSuccess;
     }
 
-    boolean moveKnight(Square[][] board, Square square, MultiGame multiGame) {
-        List<Direction> options = new ArrayList<>();
-
+    boolean moveKnight(Square[][] board, Square square, MultiGame multiGame, boolean bloodThirsty) {
         boolean moveSuccess = false;
-        boolean _2R1U, _1R2U, _1L2U, _2L1U, _2L1D, _1L2D, _1R2D, _2R1D; // true means move is impossible
-        _2R1U = _1R2U = _1L2U = _2L1U = _2L1D = _1L2D = _1R2D = _2R1D = false;
-
 
         rand.nextInt();
+        int enemy = -square.getTeam();
 
-        while (!moveSuccess && (!_2R1U || !_1R2U || !_1L2U || !_2L1U || !_2L1D || !_1L2D || !_1R2D || !_2R1D)) {
-            options.clear();
+        ArrayList<Square> possibleMoves = getKnightMoves(board, square);
 
-            if (!_2R1U)
-                options.add(Direction._2R1U);
-            if (!_1R2U)
-                options.add(Direction._1R2U);
-            if (!_1L2U)
-                options.add(Direction._1L2U);
-            if (!_2L1U)
-                options.add(Direction._2L1U);
-            if (!_2L1D)
-                options.add(Direction._2L1D);
-            if (!_1L2D)
-                options.add(Direction._1L2D);
-            if (!_1R2D)
-                options.add(Direction._1R2D);
-            if (!_2R1D)
-                options.add(Direction._2R1D);
-
-
-            switch (options.get(rand.nextInt(options.size()))) {
-                case _2R1U:
-                    try {
-                        destination = board[square.getI() - square.getTeam() * 2][square.getJ() + square.getTeam()];
-                        if (destination.getTeam() != square.getTeam()) {
-                            if (destination.getTeam() == OPPONENT)
-                                multiGame.incrementYourPoints();
-                            else if (destination.getTeam() == YOU)
-                                multiGame.incrementOpponentPoints();
-
-                            animateMove(square, destination, multiGame);
-                            moveSuccess = true;
-                        } else {
-                            _2R1U = true;
-                        }
-                    } catch (Exception e) {
-                        _2R1U = true;
-                    }
-                    break;
-                case _1R2U:
-                    try {
-                        destination = board[square.getI() - square.getTeam()][square.getJ() + square.getTeam() * 2];
-                        if (destination.getTeam() != square.getTeam()) {
-                            if (destination.getTeam() == OPPONENT)
-                                multiGame.incrementYourPoints();
-                            else if (destination.getTeam() == YOU)
-                                multiGame.incrementOpponentPoints();
-
-                            animateMove(square, destination, multiGame);
-                            moveSuccess = true;
-                        } else {
-                            _1R2U = true;
-                        }
-                    } catch (Exception e) {
-                        _1R2U = true;
-                    }
-                    break;
-                case _1L2U:
-                    try {
-                        destination = board[square.getI() + square.getTeam()][square.getJ() + square.getTeam() * 2];
-                        if (destination.getTeam() != square.getTeam()) {
-                            if (destination.getTeam() == OPPONENT)
-                                multiGame.incrementYourPoints();
-                            else if (destination.getTeam() == YOU)
-                                multiGame.incrementOpponentPoints();
-
-                            animateMove(square, destination, multiGame);
-                            moveSuccess = true;
-                        } else {
-                            _1L2U = true;
-                        }
-                    } catch (Exception e) {
-                        _1L2U = true;
-                    }
-                    break;
-                case _2L1U:
-                    try {
-                        destination = board[square.getI() + square.getTeam() * 2][square.getJ() + square.getTeam()];
-                        if (destination.getTeam() != square.getTeam()) {
-                            if (destination.getTeam() == OPPONENT)
-                                multiGame.incrementYourPoints();
-                            else if (destination.getTeam() == YOU)
-                                multiGame.incrementOpponentPoints();
-
-                            animateMove(square, destination, multiGame);
-                            moveSuccess = true;
-                        } else {
-                            _2L1U = true;
-                        }
-                    } catch (Exception e) {
-                        _2L1U = true;
-                    }
-                    break;
-                case _2L1D:
-                    try {
-                        destination = board[square.getI() + square.getTeam() * 2][square.getJ() - square.getTeam()];
-                        if (destination.getTeam() != square.getTeam()) {
-                            if (destination.getTeam() == OPPONENT)
-                                multiGame.incrementYourPoints();
-                            else if (destination.getTeam() == YOU)
-                                multiGame.incrementOpponentPoints();
-
-                            animateMove(square, destination, multiGame);
-                            moveSuccess = true;
-                        } else {
-                            _2L1D = true;
-                        }
-                    } catch (Exception e) {
-                        _2L1D = true;
-                    }
-                    break;
-                case _1L2D:
-                    try {
-                        destination = board[square.getI() + square.getTeam()][square.getJ() - square.getTeam() * 2];
-                        if (destination.getTeam() != square.getTeam()) {
-                            if (destination.getTeam() == OPPONENT)
-                                multiGame.incrementYourPoints();
-                            else if (destination.getTeam() == YOU)
-                                multiGame.incrementOpponentPoints();
-
-                            animateMove(square, destination, multiGame);
-                            moveSuccess = true;
-                        } else {
-                            _1L2D = true;
-                        }
-                    } catch (Exception e) {
-                        _1L2D = true;
-                    }
-                    break;
-                case _1R2D:
-                    try {
-                        destination = board[square.getI() - square.getTeam()][square.getJ() - square.getTeam() * 2];
-                        if (destination.getTeam() != square.getTeam()) {
-                            if (destination.getTeam() == OPPONENT)
-                                multiGame.incrementYourPoints();
-                            else if (destination.getTeam() == YOU)
-                                multiGame.incrementOpponentPoints();
-
-                            animateMove(square, destination, multiGame);
-                            moveSuccess = true;
-                        } else {
-                            _1R2D = true;
-                        }
-                    } catch (Exception e) {
-                        _1R2D = true;
-                    }
-                    break;
-                case _2R1D:
-                    try {
-                        destination = board[square.getI() - square.getTeam() * 2][square.getJ() - square.getTeam()];
-                        if (destination.getTeam() != square.getTeam()) {
-                            if (destination.getTeam() == OPPONENT)
-                                multiGame.incrementYourPoints();
-                            else if (destination.getTeam() == YOU)
-                                multiGame.incrementOpponentPoints();
-
-                            animateMove(square, destination, multiGame);
-                            moveSuccess = true;
-                        } else {
-                            _2R1D = true;
-                        }
-                    } catch (Exception e) {
-                        _2R1D = true;
-                    }
-                    break;
-
+        if (!possibleMoves.isEmpty() && bloodThirsty) {
+            ArrayList<Square> enemyMoves = new ArrayList<>();
+            for (Square move : possibleMoves) {
+                if (move.getTeam() == enemy) {
+                    enemyMoves.add(move);
+                }
             }
 
+            if (!enemyMoves.isEmpty()) {
+                destination = enemyMoves.get(rand.nextInt(enemyMoves.size()));
 
+                if (destination.getTeam() == OPPONENT)
+                    multiGame.incrementYourPoints();
+                else if (destination.getTeam() == YOU)
+                    multiGame.incrementOpponentPoints();
+
+                animateMove(square, destination, multiGame);
+                moveSuccess = true;
+            }
         }
+        if (!possibleMoves.isEmpty() && !moveSuccess) {
+            destination = possibleMoves.get(rand.nextInt(possibleMoves.size()));
 
+            if (destination.getTeam() == OPPONENT)
+                multiGame.incrementYourPoints();
+            else if (destination.getTeam() == YOU)
+                multiGame.incrementOpponentPoints();
+
+            animateMove(square, destination, multiGame);
+            moveSuccess = true;
+        }
 
         return moveSuccess;
     }
 
-    boolean moveBishop(Square[][] board, Square square, MultiGame multiGame, int max) {
+    boolean moveBishop(Square[][] board, Square square, MultiGame multiGame, int max, boolean bloodThirsty) {
         List<Direction> options = new ArrayList<>();
 
         boolean moveSuccess = false;
@@ -2927,8 +2954,20 @@ public class Mover {
         int maxLeftDown = max;
         int maxRightDown = max;
 
-
         rand.nextInt();
+
+        if (bloodThirsty) {
+            ArrayList<Square> enemySquares = getEnemiesOfBishop(board, square);
+            if (!enemySquares.isEmpty()) {
+                destination = enemySquares.get(rand.nextInt(enemySquares.size()));
+                if (destination.getTeam() == OPPONENT)
+                    multiGame.incrementYourPoints();
+                else if (destination.getTeam() == YOU)
+                    multiGame.incrementOpponentPoints();
+                animateMove(square, destination, multiGame);
+                moveSuccess = true;
+            }
+        }
 
         int count;
 
@@ -3089,7 +3128,7 @@ public class Mover {
         return moveSuccess;
     }
 
-    boolean moveBishop(Square[][] board, Square square, MultiGame multiGame) {
+    boolean moveBishop(Square[][] board, Square square, MultiGame multiGame, boolean bloodThirsty) {
         List<Direction> options = new ArrayList<>();
 
         boolean moveSuccess = false;
@@ -3105,6 +3144,19 @@ public class Mover {
 
         rand.nextInt();
 
+        if (bloodThirsty) {
+            ArrayList<Square> enemySquares = getEnemiesOfBishop(board, square);
+            if (!enemySquares.isEmpty()) {
+                destination = enemySquares.get(rand.nextInt(enemySquares.size()));
+                if (destination.getTeam() == OPPONENT)
+                    multiGame.incrementYourPoints();
+                else if (destination.getTeam() == YOU)
+                    multiGame.incrementOpponentPoints();
+                animateMove(square, destination, multiGame);
+                moveSuccess = true;
+            }
+        }
+
         while (!moveSuccess && (!rightUpImpossible || !leftUpImpossible || !leftDownImpossible || !rightDownImpossible)) {
             options.clear();
 
@@ -3261,12 +3313,28 @@ public class Mover {
         return moveSuccess;
     }
 
-    boolean moveKing(Square[][] board, Square square, MultiGame multiGame) {
+    boolean moveKing(Square[][] board, Square square, MultiGame multiGame, boolean bloodThirsty) {
         List<KQMODE> options = new ArrayList<>();
 
         boolean moveSuccess = false;
         boolean bishopImpossible = false;
         boolean rookImpossible = false;
+
+        if (bloodThirsty) {
+            ArrayList<Square> enemySquares = getEnemiesOfBishop(board, square, 1);
+            enemySquares.addAll(getEnemiesOfRook(board, square, 1));
+
+            if (!enemySquares.isEmpty()) {
+                destination = enemySquares.get(rand.nextInt(enemySquares.size()));
+                if (destination.getTeam() == OPPONENT)
+                    multiGame.incrementYourPoints();
+                else if (destination.getTeam() == YOU)
+                    multiGame.incrementOpponentPoints();
+                animateMove(square, destination, multiGame);
+                moveSuccess = true;
+            }
+        }
+
         while (!moveSuccess && (!bishopImpossible || !rookImpossible)) {
             options.clear();
             if (!bishopImpossible)
@@ -3276,11 +3344,11 @@ public class Mover {
 
             switch (options.get(rand.nextInt(options.size()))) {
                 case BISHOP:
-                    moveSuccess = moveBishop(board, square, multiGame, 1);
+                    moveSuccess = moveBishop(board, square, multiGame, 1, false);
                     bishopImpossible = !moveSuccess;
                     break;
                 case ROOK:
-                    moveSuccess = moveRook(board, square, multiGame, 1);
+                    moveSuccess = moveRook(board, square, multiGame, 1, false);
                     rookImpossible = !moveSuccess;
                     break;
             }
@@ -3289,16 +3357,32 @@ public class Mover {
         return moveSuccess;
     }
 
-    boolean moveQueen(Square[][] board, Square square, MultiGame multiGame) {
+    boolean moveQueen(Square[][] board, Square square, MultiGame multiGame, boolean bloodThirsty) {
         boolean moveSuccess = false;
         boolean bishopImpossible = false;
         boolean rookImpossible = false;
+
+        if (bloodThirsty) {
+            ArrayList<Square> enemySquares = getEnemiesOfBishop(board, square);
+            enemySquares.addAll(getEnemiesOfRook(board, square));
+
+            if (!enemySquares.isEmpty()) {
+                destination = enemySquares.get(rand.nextInt(enemySquares.size()));
+                if (destination.getTeam() == OPPONENT)
+                    multiGame.incrementYourPoints();
+                else if (destination.getTeam() == YOU)
+                    multiGame.incrementOpponentPoints();
+                animateMove(square, destination, multiGame);
+                moveSuccess = true;
+            }
+        }
+
         while (!moveSuccess && (!bishopImpossible || !rookImpossible)) {
             if (rand.nextInt(2) == 0 && !bishopImpossible) {
-                moveSuccess = moveBishop(board, square, multiGame);
+                moveSuccess = moveBishop(board, square, multiGame, false);
                 bishopImpossible = !moveSuccess;
             } else if (!rookImpossible) {
-                moveSuccess = moveRook(board, square, multiGame);
+                moveSuccess = moveRook(board, square, multiGame, false);
                 rookImpossible = !moveSuccess;
             }
         }
@@ -4289,7 +4373,7 @@ public class Mover {
     boolean nothingInWayLeftUp(Square[][] board, Square square, int count) {
         boolean clear = true;
 
-
+        //TODO - Out of bounds checks on clear checkers
         for (int j = 1; j <= count; j++) {
             destination = board[square.getI() + square.getTeam() * j][square.getJ() + square.getTeam() * j];
             clear = destination.getPiece() == Piece.NONE;
