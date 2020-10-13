@@ -20,7 +20,7 @@ Open Chaos Chess is a free and open source version of [Chaos Chess](https://play
 All future development for Chaos Chess will be in this project.
 
 ## Current Status
-As of the most recent commit to the master branch, achievements and single player games are working. However, since it is not using any online services, the progress is only saved locally and is lost if app data is wiped or if a player installs on a new device. Multiplayer is now working over Bluetooth for the most part. Pieces are now animated on move.
+As of the most recent commit to the master branch, achievements and single player games are working. However, since it is not using any online services, the progress is only saved locally and is lost if app data is wiped or if a player installs on a new device. Multiplayer is now working over Bluetooth for the most part. Pieces are now animated on move. Bloodthirst feature has been implemented. While Bloodthirst is active, pieces will always attack if possible.
 
 ----
 
@@ -38,6 +38,8 @@ As of the most recent commit to the master branch, achievements and single playe
 [CorruptedArk](https://github.com/CorruptedArk) - Orignal Author
 
 [LibreHacker](https://github.com/LibreHacker) - Russian Translations
+
+[czarkoff](https://github.com/czarkoff) - Suggested idea for feature: Bloodthirst
 
 If you want to contribute, please read [CONTRIBUTING](CONTRIBUTING.md).
 

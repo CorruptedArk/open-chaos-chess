@@ -1,0 +1,5 @@
+v1.6.0
+Addition:
+-New feature: Bloodthirst - When Bloodthirst is active, pieces will always attack if possible.
+
+The concept for Bloodthirst was suggested by czarkoff on Github.

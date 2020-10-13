@@ -33,6 +33,7 @@
                             \n Credit for the color picker dialog goes to Simone Pessotto (aka Pes8)
                             \n Credit for the idea of color settings goes to Jonas Lowe
                             \n Credit for Russian translations goes to LibreHacker on GitHub
+                            \n The concept for Bloodthirst was suggested by czarkoff on Github
                             </string>
     <string name="descript">Open Chaos Chess is a free as in speech version of Chaos Chess.
                             Chaos Chess is a variation of chess where you can pick the piece that moves, but the moves are random. As such, you no longer win by checkmates. Instead, you win by eliminating your opponent\'s pieces. Have fun, and may the RNG be ever in your favor.
@@ -40,6 +41,8 @@
                             \nThis program comes with ABSOLUTELY NO WARRANTY.
                             \nThis is free software, and you are welcome to redistribute it under certain conditions.
                             \nFor the full GNU General Public License visit: https://www.gnu.org/licenses/gpl-3.0.txt
+                            \n
+                            \nBy default, pieces have no bias to attack. However, while Bloodthirst is active, pieces will always attack if possible.
                             </string>
     <string name="contact">Facebook: Noah James Stanford\nTwitter: @CorruptedArk\nGithub: CorruptedArk\n\nMy Website: corruptedark.wordpress.com\n\nEmail: noahstandingford@gmail.com\n\n</string>
     <string name="tied_bro">OOOH IT\'S TIED, BRO!</string>
@@ -77,4 +80,6 @@
     <string name="host_status">Статус Хоста:</string>
     <string name="import_file">Импортировать Из Файла</string>
     <string name="export_file">Экспортировать из Файла</string>
+    <string name="bloodthirst">Bloodthirst</string>
+    <string name="bloodthirst_notification">Bloodthirst will be toggled on new game</string>
 </resources>
