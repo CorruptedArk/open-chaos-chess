@@ -39,6 +39,8 @@ As of the most recent commit to the master branch, achievements and single playe
 
 [LibreHacker](https://github.com/LibreHacker) - Russian Translations
 
+[Lian C. Begett/RedsickleDE](https://github.com/RedsickleDE) - German Translations
+
 [czarkoff](https://github.com/czarkoff) - Suggested idea for feature: Bloodthirst
 
 If you want to contribute, please read [CONTRIBUTING](CONTRIBUTING.md).
