@@ -1,0 +1,3 @@
+v1.6.1
+Addition:
+-The first pass of German translations by RedsickleDE on GitHub
