@@ -83,5 +83,11 @@
     <string name="export_file">Export to File</string>
     <string name="bloodthirst">Blutdurst</string>
     <string name="bloodthirst_notification">Blutdurst-Modus greift ab dem nächsten Spiel</string>
+    <string name="solo">Allein</string>
+    <string name="versus">Gegen</string>
+    <string name="settings">Settings</string>
+    <string name="colors_saved">Colors saved</string>
+    <string name="color_save_failed">Colors failed to save</string>
+    <string name="gameplay_settings_file">gameplaysettings.txt</string>
 </resources>
 

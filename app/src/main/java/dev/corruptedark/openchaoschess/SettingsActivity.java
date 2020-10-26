@@ -114,7 +114,7 @@ public class SettingsActivity extends AppCompatActivity {
         colorManager = ColorManager.getInstance(this);
 
         toolbar = (Toolbar) findViewById(R.id.settings_toolbar);
-        toolbar.setTitle("Settings");
+        toolbar.setTitle(R.string.settings);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -196,11 +196,11 @@ public class SettingsActivity extends AppCompatActivity {
 
         if(colorManager.saveChangesToFile())
         {
-            Toast.makeText(this, "Colors saved", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.colors_saved, Toast.LENGTH_SHORT).show();
         }
         else
         {
-            Toast.makeText(this, "Colors failed to save", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.color_save_failed, Toast.LENGTH_SHORT).show();
         }
 
         layout.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BACKGROUND_COLOR));

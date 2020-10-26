@@ -88,8 +88,8 @@ public class MultiPlayerBoard extends AppCompatActivity {
     MoveThread moveThread;
     RelativeLayout boardLayout;
     NewGameAlertFragment newGameAlertFragment;
-
     private Square animatedSquare;
+    private MenuItem bloodThirstToggle;
 
     private Thread newGameRequestThread;
     private Thread newGameListenerThread;
@@ -138,6 +138,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
         yourPointLabel = (TextView) findViewById(R.id.your_points);
         opponentPointLabel = (TextView) findViewById(R.id.opponent_points);
         tieLabel = (TextView) findViewById(R.id.tie_label);
+        bloodThirstToggle = (MenuItem)findViewById(R.id.blood_thirst_toggle);
 
         colorManager = ColorManager.getInstance(this);
 
@@ -462,6 +463,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
         thatSucksLabel.setGravity(Gravity.CENTER);
 
         boardLayout.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BACKGROUND_COLOR));
+        toolbar.setTitle(R.string.versus);
         toolbar.setBackgroundColor(colorManager.getColorFromFile(ColorManager.SECONDARY_COLOR));
         toolbar.setTitleTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         wonLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
@@ -482,6 +484,8 @@ public class MultiPlayerBoard extends AppCompatActivity {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(colorManager.getColorFromFile(ColorManager.BAR_COLOR));
         }
+
+        bloodThirstToggle.setChecked(bloodThirsty);
 
         if(multiGame.getTurn() == OPPONENT)
         {

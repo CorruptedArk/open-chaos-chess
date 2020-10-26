@@ -69,8 +69,8 @@ public class SinglePlayerBoard extends AppCompatActivity{
     SinglePlayerBoard context;
     MoveThread moveThread;
     RelativeLayout boardLayout;
-
     private Square animatedSquare;
+    private MenuItem bloodThirstToggle;
 
     Toolbar toolbar;
 
@@ -114,6 +114,7 @@ public class SinglePlayerBoard extends AppCompatActivity{
         playerPointLabel = (TextView) findViewById(R.id.player_points);
         computerPointLabel = (TextView) findViewById(R.id.computer_points);
         tieLabel = (TextView) findViewById(R.id.tie_label);
+        bloodThirstToggle = (MenuItem)findViewById(R.id.blood_thirst_toggle);
 
         colorManager = ColorManager.getInstance(this);
 
@@ -288,6 +289,7 @@ public class SinglePlayerBoard extends AppCompatActivity{
         thatSucksLabel.setGravity(Gravity.CENTER);
 
         boardLayout.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BACKGROUND_COLOR));
+        toolbar.setTitle(R.string.solo);
         toolbar.setBackgroundColor(colorManager.getColorFromFile(ColorManager.SECONDARY_COLOR));
         toolbar.setTitleTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         wonLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
@@ -305,6 +307,8 @@ public class SinglePlayerBoard extends AppCompatActivity{
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(colorManager.getColorFromFile(ColorManager.BAR_COLOR));
         }
+
+        bloodThirstToggle.setChecked(bloodThirsty);
     }
 
     @Override
