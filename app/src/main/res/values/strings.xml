@@ -81,7 +81,7 @@
     <string name="host_status">Host status:</string>
     <string name="import_file">Import From File</string>
     <string name="export_file">Export to File</string>
-    <string name="bloodthirst">Bloodthirst</string>
+    <string name="bloodthirst">Bloodthirst  </string>
     <string name="bloodthirst_notification">Bloodthirst will be toggled on new game</string>
     <string name="solo">Solo</string>
     <string name="versus">Versus</string>
@@ -89,4 +89,5 @@
     <string name="colors_saved">Colors saved</string>
     <string name="color_save_failed">Colors failed to save</string>
     <string name="gameplay_settings_file">gameplaysettings.txt</string>
+    <string name="bloodthirsty_by_default">Bloodthirsty by default</string>
 </resources>

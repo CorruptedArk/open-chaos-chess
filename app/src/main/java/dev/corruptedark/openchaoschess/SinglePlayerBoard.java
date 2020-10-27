@@ -19,12 +19,17 @@
 
 package dev.corruptedark.openchaoschess;
 
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 
 
+import android.graphics.ColorFilter;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Display;
@@ -36,18 +41,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.CheckBox;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.MarginLayoutParamsCompat;
+import androidx.core.view.MenuItemCompat;
+import androidx.core.widget.CompoundButtonCompat;
+import androidx.core.widget.TextViewCompat;
 
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -70,7 +78,6 @@ public class SinglePlayerBoard extends AppCompatActivity{
     MoveThread moveThread;
     RelativeLayout boardLayout;
     private Square animatedSquare;
-    private MenuItem bloodThirstToggle;
 
     Toolbar toolbar;
 
@@ -83,7 +90,7 @@ public class SinglePlayerBoard extends AppCompatActivity{
     int selectColor;
     int pieceColor;
 
-    private boolean bloodThirsty = false;
+    private boolean bloodThirsty;
     private boolean bloodThirstQueued = false;
 
     TextView wonLabel, lostLabel, tieLabel,cantMoveThatLabel, notYourTurnLabel, gameOverLabel, thatSucksLabel, noiceLabel, playerPointLabel, computerPointLabel;
@@ -114,7 +121,7 @@ public class SinglePlayerBoard extends AppCompatActivity{
         playerPointLabel = (TextView) findViewById(R.id.player_points);
         computerPointLabel = (TextView) findViewById(R.id.computer_points);
         tieLabel = (TextView) findViewById(R.id.tie_label);
-        bloodThirstToggle = (MenuItem)findViewById(R.id.blood_thirst_toggle);
+
 
         colorManager = ColorManager.getInstance(this);
 
@@ -308,15 +315,42 @@ public class SinglePlayerBoard extends AppCompatActivity{
             window.setStatusBarColor(colorManager.getColorFromFile(ColorManager.BAR_COLOR));
         }
 
-        bloodThirstToggle.setChecked(bloodThirsty);
+        bloodThirsty = GameplaySettingsManager.getInstance(this).getBloodThirstByDefault();
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
+        for (int i = 0; i < menu.size(); i++) {
+           MenuItem item = menu.getItem(i);
+           SpannableString spannableString = new SpannableString(item.getTitle().toString());
+           spannableString.setSpan(new ForegroundColorSpan(colorManager.getColorFromFile(ColorManager.TEXT_COLOR)), 0, spannableString.length(), 0);
+           item.setTitle(spannableString);
+        }
+
+        int[][] states = {{android.R.attr.state_checked}, {}};
+        int[] colors = {colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1), colorManager.getColorFromFile(ColorManager.TEXT_COLOR)};
+        final MenuItem bloodthirstToggle = menu.findItem(R.id.bloodthirst_toggle);
+
+        AppCompatCheckBox bloodthirstToggleCheck = (AppCompatCheckBox)bloodthirstToggle.getActionView();
+        bloodthirstToggleCheck.setChecked(bloodThirsty);
+
+        bloodthirstToggleCheck.setText(R.string.bloodthirst);
+        bloodthirstToggleCheck.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                bloodthirstToggle.setChecked(!bloodthirstToggle.isChecked());
+                bloodThirstQueued = !bloodThirstQueued;
+                if (bloodThirstQueued)
+                    Toast.makeText(view.getContext(), R.string.bloodthirst_notification, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        CompoundButtonCompat.setButtonTintList(bloodthirstToggleCheck, new ColorStateList(states, colors));
+
         return true;
     }
-
 
     @Override
     public void onBackPressed() {
@@ -334,7 +368,7 @@ public class SinglePlayerBoard extends AppCompatActivity{
             case R.id.new_game:
                 newGameButton_Click();
                 return true;
-            case R.id.blood_thirst_toggle:
+            case R.id.bloodthirst_toggle:
                 item.setChecked(!item.isChecked());
                 bloodThirstQueued = !bloodThirstQueued;
                 if (bloodThirstQueued)

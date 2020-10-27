@@ -446,7 +446,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(final int request, int response, Intent data) {
-
+        super.onActivityResult(request, response, data);
     }
 
 }

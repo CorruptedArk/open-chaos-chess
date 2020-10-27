@@ -19,17 +19,17 @@
 
 package dev.corruptedark.openchaoschess;
 
-import android.content.DialogInterface;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.widget.CompoundButtonCompat;
 
 import android.os.Looper;
 import android.util.DisplayMetrics;
@@ -47,16 +47,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.TreeMap;
 
 public class MultiPlayerBoard extends AppCompatActivity {
     public final int YOU = -1;
@@ -138,7 +129,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
         yourPointLabel = (TextView) findViewById(R.id.your_points);
         opponentPointLabel = (TextView) findViewById(R.id.opponent_points);
         tieLabel = (TextView) findViewById(R.id.tie_label);
-        bloodThirstToggle = (MenuItem)findViewById(R.id.blood_thirst_toggle);
+        bloodThirstToggle = (MenuItem)findViewById(R.id.bloodthirst_toggle);
 
         colorManager = ColorManager.getInstance(this);
 
@@ -501,6 +492,29 @@ public class MultiPlayerBoard extends AppCompatActivity {
         newGameButton.setVisible(isHost);
         newGameButton.setEnabled(isHost);
 
+        int[][] states = {{android.R.attr.state_checked}, {}};
+        int[] colors = {colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1), colorManager.getColorFromFile(ColorManager.TEXT_COLOR)};
+        final MenuItem bloodthirstToggle = menu.findItem(R.id.bloodthirst_toggle);
+
+        bloodthirstToggle.setVisible(isHost);
+        bloodthirstToggle.setEnabled(isHost);
+
+        AppCompatCheckBox bloodthirstToggleCheck = (AppCompatCheckBox)bloodthirstToggle.getActionView();
+        bloodthirstToggleCheck.setChecked(bloodThirsty);
+
+        bloodthirstToggleCheck.setText(R.string.bloodthirst);
+        bloodthirstToggleCheck.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                bloodthirstToggle.setChecked(!bloodthirstToggle.isChecked());
+                bloodThirstQueued = !bloodThirstQueued;
+                if (bloodThirstQueued)
+                    Toast.makeText(view.getContext(), R.string.bloodthirst_notification, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        CompoundButtonCompat.setButtonTintList(bloodthirstToggleCheck, new ColorStateList(states, colors));
+
         return true;
     }
 
@@ -542,7 +556,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
             case R.id.new_game:
                 newGameButton_Click();
                 return true;
-            case R.id.blood_thirst_toggle:
+            case R.id.bloodthirst_toggle:
                 item.setChecked(!item.isChecked());
                 bloodThirstQueued = !bloodThirstQueued;
                 if (bloodThirstQueued)

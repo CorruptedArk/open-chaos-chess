@@ -81,7 +81,7 @@
     <string name="host_status">Статус Хоста:</string>
     <string name="import_file">Импортировать Из Файла</string>
     <string name="export_file">Экспортировать из Файла</string>
-    <string name="bloodthirst">Bloodthirst</string>
+    <string name="bloodthirst">"Bloodthirst  "</string>
     <string name="bloodthirst_notification">Bloodthirst will be toggled on new game</string>
     <string name="solo">Одиночная</string>
     <string name="versus">Против</string>
@@ -89,4 +89,5 @@
     <string name="colors_saved">Colors saved</string>
     <string name="color_save_failed">Colors failed to save</string>
     <string name="gameplay_settings_file">gameplaysettings.txt</string>
+    <string name="bloodthirsty_by_default">Bloodthirsty by default</string>
 </resources>

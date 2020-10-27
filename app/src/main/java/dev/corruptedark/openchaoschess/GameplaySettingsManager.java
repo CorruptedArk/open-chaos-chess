@@ -63,7 +63,7 @@ public class GameplaySettingsManager {
         saveChangesToFile();
     }
 
-    public boolean saveChangesToFile()
+    private boolean saveChangesToFile()
     {
         boolean successful;
         StringBuilder contents = new StringBuilder();

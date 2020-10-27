@@ -21,6 +21,7 @@ package dev.corruptedark.openchaoschess;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -29,7 +30,10 @@ import android.os.Build;
 import androidx.annotation.ColorInt;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.widget.CompoundButtonCompat;
+import androidx.core.widget.TextViewCompat;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -38,6 +42,8 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CheckedTextView;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -54,6 +60,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 
 public class SettingsActivity extends AppCompatActivity {
+    AppCompatCheckBox bloodthirstDefaultToggle;
     TextView backgroundColorLabel;
     TextView barColorLabel;
     TextView secondaryColorLabel;
@@ -88,6 +95,8 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        bloodthirstDefaultToggle = (AppCompatCheckBox)findViewById(R.id.bloodthirst_default_toggle);
 
         backgroundColorLabel = (TextView)findViewById(R.id.background_color_label);
         barColorLabel = (TextView)findViewById(R.id.bar_color_label);
@@ -139,6 +148,8 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         layout.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BACKGROUND_COLOR));
+        bloodthirstDefaultToggle.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        bloodthirstDefaultToggle.setHighlightColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
         backgroundColorLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         barColorLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         secondaryColorLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
@@ -151,6 +162,20 @@ public class SettingsActivity extends AppCompatActivity {
         setDefaultsButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
         saveColorButton.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         saveColorButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
+
+        int[][] states = {{android.R.attr.state_checked}, {}};
+        int[] colors = {colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1), colorManager.getColorFromFile(ColorManager.TEXT_COLOR)};
+
+        TextViewCompat.setCompoundDrawableTintList(bloodthirstDefaultToggle, new ColorStateList(states, colors));
+
+        bloodthirstDefaultToggle.setChecked(GameplaySettingsManager.getInstance(this).getBloodThirstByDefault());
+
+        bloodthirstDefaultToggle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GameplaySettingsManager.getInstance(view.getContext()).setBloodThirstByDefault(bloodthirstDefaultToggle.isChecked());
+            }
+        });
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
@@ -204,6 +229,8 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
         layout.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BACKGROUND_COLOR));
+        bloodthirstDefaultToggle.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        bloodthirstDefaultToggle.setHighlightColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
         backgroundColorLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         barColorLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         secondaryColorLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
@@ -216,6 +243,10 @@ public class SettingsActivity extends AppCompatActivity {
         setDefaultsButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
         saveColorButton.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         saveColorButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
+
+        int[][] states = {{android.R.attr.state_checked}, {}};
+        int[] colors = {colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1), colorManager.getColorFromFile(ColorManager.TEXT_COLOR)};
+        TextViewCompat.setCompoundDrawableTintList(bloodthirstDefaultToggle, new ColorStateList(states, colors));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();

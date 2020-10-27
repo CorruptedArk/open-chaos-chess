@@ -81,7 +81,7 @@
     <string name="host_status">Hosting-Status:</string>
     <string name="import_file">Import From File</string>
     <string name="export_file">Export to File</string>
-    <string name="bloodthirst">Blutdurst</string>
+    <string name="bloodthirst">"Blutdurst  "</string>
     <string name="bloodthirst_notification">Blutdurst-Modus greift ab dem nächsten Spiel</string>
     <string name="solo">Allein</string>
     <string name="versus">Gegen</string>
@@ -89,5 +89,6 @@
     <string name="colors_saved">Colors saved</string>
     <string name="color_save_failed">Colors failed to save</string>
     <string name="gameplay_settings_file">gameplaysettings.txt</string>
+    <string name="bloodthirsty_by_default">Blutrünstig standardmäßig</string>
 </resources>
 
