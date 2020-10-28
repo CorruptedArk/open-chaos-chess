@@ -1,0 +1,6 @@
+v1.6.2
+Addition:
+-Toggle to activate Bloodthirst by default as suggested by itsanogo on Github
+
+Fix:
+-A crash during first move on devices using API 24

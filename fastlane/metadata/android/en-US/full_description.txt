@@ -1,1 +1,5 @@
 Open Chaos Chess is a variation of chess where you can pick the piece that moves, but the moves are random. As such, you no longer win by checkmates. Instead, you win by eliminating your opponent's pieces. The game functions completely without any internet connection, but Bluetooth is required to play the multiplayer mode. Achievement data and colour settings are saved locally.
+
+ACCESS_FINE_LOCATION permission is only used as a mandatory prerequisite for Bluetooth functionality. No location data is stored or sent anywhere by this application.
+
+READ_EXTERNAL_STORAGE and WRITE_EXTERNAL_STORAGE permissions are only used for import/export of color preferences and achievements.
