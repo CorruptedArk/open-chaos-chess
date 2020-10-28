@@ -20,6 +20,7 @@
 package dev.corruptedark.openchaoschess;
 
 import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.content.Context;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -64,7 +65,7 @@ public class Mover {
         double speed = 0.20 * convertDpToPx(1);
         long duration = (long) (distance / speed);
 
-        TranslateAnimation animation = new TranslateAnimation(0, end.getX() - start.getX(), 0, end.getY() - start.getY());
+        final TranslateAnimation animation = new TranslateAnimation(0, end.getX() - start.getX(), 0, end.getY() - start.getY());
         animatedSquare.setPiece(piece);
         animatedSquare.setTeam(team);
         animatedSquare.setX(start.getX());
@@ -103,7 +104,13 @@ public class Mover {
         });
 
         animation.setDuration(duration);
-        animatedSquare.startAnimation(animation);
+
+        ((Activity)context).runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                animatedSquare.startAnimation(animation);
+            }
+        });
 
         while (!animation.hasEnded()) {
             Log.v("Open Chaos Chess", "Animation still running.");

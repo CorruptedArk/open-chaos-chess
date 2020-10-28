@@ -65,7 +65,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
     public final String TAG = "Multiplayer Board";
 
     private boolean isHost;
-    private boolean bloodThirsty;
+    private boolean bloodthirsty;
     private boolean bloodThirstQueued;
 
     int boardSize, squareSize, xPosition, yPosition;
@@ -156,6 +156,8 @@ public class MultiPlayerBoard extends AppCompatActivity {
         mover = new Mover(this);
         multiGame = MultiGame.getInstance();
         multiGame.resetGames();
+
+        bloodthirsty = getIntent().getBooleanExtra("bloodthirsty", false);
 
         board = new Square[boardSize][boardSize];
         for (int i = 0; i < boardSize; i++)
@@ -476,7 +478,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
             window.setStatusBarColor(colorManager.getColorFromFile(ColorManager.BAR_COLOR));
         }
 
-        bloodThirstToggle.setChecked(bloodThirsty);
+        bloodThirstToggle.setChecked(bloodthirsty);
 
         if(multiGame.getTurn() == OPPONENT)
         {
@@ -500,7 +502,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
         bloodthirstToggle.setEnabled(isHost);
 
         AppCompatCheckBox bloodthirstToggleCheck = (AppCompatCheckBox)bloodthirstToggle.getActionView();
-        bloodthirstToggleCheck.setChecked(bloodThirsty);
+        bloodthirstToggleCheck.setChecked(bloodthirsty);
 
         bloodthirstToggleCheck.setText(R.string.bloodthirst);
         bloodthirstToggleCheck.setOnClickListener(new View.OnClickListener() {
@@ -579,7 +581,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
     private void newGameButton_Click()
     {
         if (bloodThirstQueued) {
-            bloodThirsty = !bloodThirsty;
+            bloodthirsty = !bloodthirsty;
             bloodThirstQueued = false;
         }
 
@@ -591,7 +593,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
                     Looper.prepare();
 
                     multiPlayerService = GameConnectionHandler.getMultiPlayerService(context);
-                    multiPlayerService.sendData(context,NEW_GAME + bloodThirsty);
+                    multiPlayerService.sendData(context,NEW_GAME + bloodthirsty);
 
 
                     Toast.makeText(MultiPlayerBoard.this, "New game requested", Toast.LENGTH_LONG).show();
@@ -686,7 +688,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
                     String received = multiPlayerService.getMostRecentData(context);
                     if (received.equals(NEW_GAME + true))
                     {
-                        bloodThirsty = true;
+                        bloodthirsty = true;
 
                         Looper.prepare();
 
@@ -701,7 +703,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
                     }
                     else if (received.equals(NEW_GAME + false))
                     {
-                        bloodThirsty = false;
+                        bloodthirsty = false;
 
                         Looper.prepare();
 
@@ -945,7 +947,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
                 });
 
 
-            } else if (mover.movePiece(board, board[selected.getI()][ selected.getJ()], multiGame, bloodThirsty)) {
+            } else if (mover.movePiece(board, board[selected.getI()][ selected.getJ()], multiGame, bloodthirsty)) {
                 sendYourMove(selected, mover.getLastDestination());
 
                 selected.post(new Runnable() {

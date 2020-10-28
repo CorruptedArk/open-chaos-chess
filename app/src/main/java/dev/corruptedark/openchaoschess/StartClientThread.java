@@ -61,15 +61,17 @@ public class StartClientThread extends Thread {
         Log.v(TAG, "Connected");
         //multiPlayerService.sendData("We good fam");
 
-        String knightsOnlyString = multiPlayerService.getMostRecentData(callingActivity);
+        String settingsString = multiPlayerService.getMostRecentData(callingActivity);
 
-        String response = knightsOnlyString.split(":")[1];
+        String knightsOnlyString = settingsString.split(";")[0].split(":")[1];
+        String bloodthirstyString = settingsString.split(";")[1].split(":")[1];
 
-        boolean knightsOnly = Boolean.parseBoolean(response);
+        boolean knightsOnly = Boolean.parseBoolean(knightsOnlyString);
+        boolean bloodthirsty = Boolean.parseBoolean(bloodthirstyString);
 
         Toast.makeText(callingActivity, "Starting Service", Toast.LENGTH_LONG).show();
 
-        GameConnectionHandler.setMultiPlayerService(multiPlayerService, callingActivity, knightsOnly, false);
+        GameConnectionHandler.setMultiPlayerService(multiPlayerService, callingActivity, knightsOnly, bloodthirsty, false);
     }
 
     StartClientThread(BluetoothDevice device, Activity callingActivity, BluetoothAdapter adapter) {

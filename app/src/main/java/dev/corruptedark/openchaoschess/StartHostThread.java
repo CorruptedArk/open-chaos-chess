@@ -41,6 +41,7 @@ public class StartHostThread extends Thread {
     private final String TAG = "Start Host Thread";
     private Activity callingActivity;
     private final boolean knightsOnly;
+    private final boolean bloodthirsty;
 
     private void manageConnectedSocket(BluetoothSocket socket)
     {
@@ -62,16 +63,17 @@ public class StartHostThread extends Thread {
         }
         multiPlayerService.getMostRecentData();*/
 
-        multiPlayerService.sendData(callingActivity,"knightsOnly:" + String.valueOf(knightsOnly));
+        multiPlayerService.sendData(callingActivity,"knightsOnly:" + knightsOnly + ";bloodthirsty:" + bloodthirsty);
 
         Toast.makeText(callingActivity, "Starting Service", Toast.LENGTH_LONG).show();
 
-        GameConnectionHandler.setMultiPlayerService(multiPlayerService, callingActivity, knightsOnly, true);
+        GameConnectionHandler.setMultiPlayerService(multiPlayerService, callingActivity, knightsOnly, bloodthirsty,true);
     }
 
-    public StartHostThread(Activity callingActivity, BluetoothAdapter adapter, boolean knightsOnly)
+    public StartHostThread(Activity callingActivity, BluetoothAdapter adapter, boolean knightsOnly, boolean bloodthirsty)
     {
         this.knightsOnly = knightsOnly;
+        this.bloodthirsty = bloodthirsty;
 
         this.callingActivity = callingActivity;
 

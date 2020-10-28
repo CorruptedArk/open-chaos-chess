@@ -139,10 +139,10 @@ public class GameConnectionHandler {
         }
     }
 
-    public void startHost(boolean knightsOnly)
+    public void startHost(boolean knightsOnly, boolean bloodthirsty)
     {
         if(startHostThread == null || !startHostThread.isAlive()) {
-            startHostThread = new StartHostThread(callingActivity, adapter, knightsOnly);
+            startHostThread = new StartHostThread(callingActivity, adapter, knightsOnly, bloodthirsty);
             startHostThread.start();
         }
     }
@@ -162,13 +162,15 @@ public class GameConnectionHandler {
         }
     }
 
-    public static void setMultiPlayerService(MultiPlayerService service, Activity callingActivity, boolean knightsOnly, boolean isHost)
+    public static void setMultiPlayerService(MultiPlayerService service, Activity callingActivity, boolean knightsOnly, boolean bloodthirsty, boolean isHost)
     {
         multiPlayerService = service;
 
         Intent intent = new Intent(callingActivity, MultiPlayerBoard.class);
 
         intent.putExtra("knightsOnly", knightsOnly);
+
+        intent.putExtra("bloodthirsty", bloodthirsty);
 
         intent.putExtra("isHost", isHost);
 

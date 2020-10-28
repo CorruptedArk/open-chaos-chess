@@ -30,6 +30,7 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -48,6 +49,7 @@ public class StartHostActivity extends AppCompatActivity {
     private TextView hostInstructionLabel;
     private TextView hostStatusLabel;
     private AppCompatCheckBox knightsOnlyCheckBox;
+    private AppCompatCheckBox bloodthirstyCheckBox;
     private Button startHostButton;
     private Button stopHostButton;
 
@@ -65,6 +67,7 @@ public class StartHostActivity extends AppCompatActivity {
         hostInstructionLabel = findViewById(R.id.host_instructions);
         hostStatusLabel = findViewById(R.id.host_status);
         knightsOnlyCheckBox = findViewById(R.id.knights_only_checkbox);
+        bloodthirstyCheckBox = findViewById(R.id.bloodthirsty_checkbox);
         startHostButton = findViewById(R.id.start_host_button);
         stopHostButton = findViewById(R.id.stop_host_button);
 
@@ -74,19 +77,15 @@ public class StartHostActivity extends AppCompatActivity {
         hostInstructionLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         hostStatusLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         knightsOnlyCheckBox.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        bloodthirstyCheckBox.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
 
-        ColorStateList colorStateList = new ColorStateList(
-                new int[][] {
-                        new int[] { -android.R.attr.state_checked }, // unchecked
-                        new int[] {  android.R.attr.state_checked }  // checked
-                },
-                new int[] {
-                        colorManager.getColorFromFile(ColorManager.TEXT_COLOR),
-                        colorManager.getColorFromFile(ColorManager.TEXT_COLOR)
-                }
-        );
+        int[][] states = {{android.R.attr.state_checked}, {}};
+        int[] colors = {colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1), colorManager.getColorFromFile(ColorManager.TEXT_COLOR)};
 
-        CompoundButtonCompat.setButtonTintList(knightsOnlyCheckBox, colorStateList);
+        CompoundButtonCompat.setButtonTintList(knightsOnlyCheckBox, new ColorStateList(states, colors));
+        CompoundButtonCompat.setButtonTintList(bloodthirstyCheckBox, new ColorStateList(states, colors));
+
+        bloodthirstyCheckBox.setChecked(GameplaySettingsManager.getInstance(this).getBloodThirstByDefault());
 
         startHostButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
         stopHostButton.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
@@ -101,7 +100,7 @@ public class StartHostActivity extends AppCompatActivity {
     public void startHosting(View view)
     {
         Toast.makeText(this,"Starting host", Toast.LENGTH_SHORT).show();
-        gameConnectionHandler.startHost(knightsOnlyCheckBox.isChecked());
+        gameConnectionHandler.startHost(knightsOnlyCheckBox.isChecked(), bloodthirstyCheckBox.isChecked());
         hostStatusLabel.setText(getString(R.string.host_status) + " " + gameConnectionHandler.getHostStatus());
     }
 
