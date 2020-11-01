@@ -393,30 +393,29 @@ public class SinglePlayerBoard extends AppCompatActivity{
     }
 
 
-    private void newGameButton_Click()
-    {
-        tieLabel.setVisibility(View.INVISIBLE);
-        wonLabel.setVisibility(View.INVISIBLE);
-        lostLabel.setVisibility(View.INVISIBLE);
-        cantMoveThatLabel.setVisibility(View.INVISIBLE);
-        notYourTurnLabel.setVisibility(View.INVISIBLE);
-        gameOverLabel.setVisibility(View.INVISIBLE);
-        thatSucksLabel.setVisibility(View.INVISIBLE);
-        noiceLabel.setVisibility(View.INVISIBLE);
+    private void newGameButton_Click() {
+        if (moveThread == null || !moveThread.isAlive()) {
+            tieLabel.setVisibility(View.INVISIBLE);
+            wonLabel.setVisibility(View.INVISIBLE);
+            lostLabel.setVisibility(View.INVISIBLE);
+            cantMoveThatLabel.setVisibility(View.INVISIBLE);
+            notYourTurnLabel.setVisibility(View.INVISIBLE);
+            gameOverLabel.setVisibility(View.INVISIBLE);
+            thatSucksLabel.setVisibility(View.INVISIBLE);
+            noiceLabel.setVisibility(View.INVISIBLE);
 
-        while(moveThread != null && moveThread.isAlive());
+            if (bloodThirstQueued) {
+                bloodThirsty = !bloodThirsty;
+                bloodThirstQueued = false;
+            }
 
-        if (bloodThirstQueued) {
-            bloodThirsty = !bloodThirsty;
-            bloodThirstQueued = false;
+            selected = defaultSquare;
+            clearPieces();
+            singleGame.newGame();
+            startNewGame(getIntent().getBooleanExtra("knightsOnly", false));
+            playerPointLabel.setText(getResources().getText(R.string.player_points).toString() + " " + singleGame.getPlayerPoints());
+            computerPointLabel.setText(getResources().getText(R.string.computer_points).toString() + " " + singleGame.getComputerPoints());
         }
-
-        selected = defaultSquare;
-        clearPieces();
-        singleGame.newGame();
-        startNewGame(getIntent().getBooleanExtra("knightsOnly",false));
-        playerPointLabel.setText(getResources().getText(R.string.player_points).toString()+ " " + singleGame.getPlayerPoints());
-        computerPointLabel.setText(getResources().getText(R.string.computer_points).toString() + " " + singleGame.getComputerPoints());
         return;
     }
 
