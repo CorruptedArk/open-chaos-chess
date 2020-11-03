@@ -90,5 +90,6 @@
     <string name="color_save_failed">Colors failed to save</string>
     <string name="gameplay_settings_file">gameplaysettings.txt</string>
     <string name="bloodthirsty_by_default">Blutrünstig standardmäßig</string>
+    <string name="wait_for_move">Wait until the move has finished</string>
 </resources>
 

@@ -200,7 +200,6 @@ public class MultiPlayerBoard extends AppCompatActivity {
         thatSucksLabel.bringToFront();
         animatedSquare.bringToFront();
         boardLayout.invalidate();
-
     }
 
     /*@Override
@@ -522,55 +521,62 @@ public class MultiPlayerBoard extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        if (moveThread == null || !moveThread.isAlive()) {
+            for (int i = 0; i < boardSize; i++)
+                for (int j = 0; j < boardSize; j++)
+                    boardMain.removeView(board[i][j]);
 
-        for(int i = 0; i < boardSize; i++)
-            for(int j = 0; j < boardSize; j++)
-                boardMain.removeView(board[i][j]);
+            if (multiPlayerService != null) {
+                multiPlayerService.cancel();
+            }
 
-        if(multiPlayerService != null) {
-            multiPlayerService.cancel();
+            if (moveOpponentThread != null) {
+                moveOpponentThread.interrupt();
+            }
+
+            if (newGameRequestThread != null) {
+                newGameRequestThread.interrupt();
+            }
+
+            if (newGameListenerThread != null) {
+                newGameListenerThread.interrupt();
+            }
+
+            Toast.makeText(this, "Connection ended", Toast.LENGTH_LONG).show();
+
+            this.finish();
+            super.onBackPressed();
         }
-
-        if(moveOpponentThread != null)
-        {
-            moveOpponentThread.interrupt();
+        else {
+            Toast.makeText(this, R.string.wait_for_move, Toast.LENGTH_SHORT).show();
         }
-
-        if(newGameRequestThread != null)
-        {
-            newGameRequestThread.interrupt();
-        }
-
-        if(newGameListenerThread != null)
-        {
-            newGameListenerThread.interrupt();
-        }
-
-        Toast.makeText(this,"Connection ended", Toast.LENGTH_LONG).show();
-
-        this.finish();
-        super.onBackPressed();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.new_game:
-                newGameButton_Click();
-                return true;
-            case R.id.bloodthirst_toggle:
-                item.setChecked(!item.isChecked());
-                bloodThirstQueued = !bloodThirstQueued;
-                if (bloodThirstQueued)
-                    Toast.makeText(this, R.string.bloodthirst_notification, Toast.LENGTH_SHORT).show();
-                return true;
-            case android.R.id.home:
-                //multiGame.saveBoard(board);
-                onBackPressed();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (moveThread == null || !moveThread.isAlive()) {
+            switch (item.getItemId()) {
+                case R.id.new_game:
+                    newGameButton_Click();
+                    return true;
+                case R.id.bloodthirst_toggle:
+                    item.setChecked(!item.isChecked());
+                    bloodThirstQueued = !bloodThirstQueued;
+                    if (bloodThirstQueued)
+                        Toast.makeText(this, R.string.bloodthirst_notification, Toast.LENGTH_SHORT).show();
+                    return true;
+                case android.R.id.home:
+                    //multiGame.saveBoard(board);
+                    onBackPressed();
+                    return true;
+                default:
+                    return super.onOptionsItemSelected(item);
 
+            }
+        }
+        else {
+            Toast.makeText(this, R.string.wait_for_move, Toast.LENGTH_SHORT).show();
+            return super.onOptionsItemSelected(item);
         }
     }
 

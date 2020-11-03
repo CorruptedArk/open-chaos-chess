@@ -61,7 +61,7 @@ import java.util.List;
 import java.util.Random;
 
 
-public class SinglePlayerBoard extends AppCompatActivity{
+public class SinglePlayerBoard extends AppCompatActivity {
 
     public final int YOU = -1;
     public final int OPPONENT = 1;
@@ -93,7 +93,7 @@ public class SinglePlayerBoard extends AppCompatActivity{
     private boolean bloodThirsty;
     private boolean bloodThirstQueued = false;
 
-    TextView wonLabel, lostLabel, tieLabel,cantMoveThatLabel, notYourTurnLabel, gameOverLabel, thatSucksLabel, noiceLabel, playerPointLabel, computerPointLabel;
+    TextView wonLabel, lostLabel, tieLabel, cantMoveThatLabel, notYourTurnLabel, gameOverLabel, thatSucksLabel, noiceLabel, playerPointLabel, computerPointLabel;
 
 
     @Override
@@ -110,7 +110,7 @@ public class SinglePlayerBoard extends AppCompatActivity{
 
 
         boardMain = (ViewGroup) findViewById(R.id.board_layout);
-        boardLayout = (RelativeLayout)findViewById(R.id.board_layout);
+        boardLayout = (RelativeLayout) findViewById(R.id.board_layout);
         wonLabel = (TextView) findViewById(R.id.won_label);
         lostLabel = (TextView) findViewById(R.id.lost_label);
         cantMoveThatLabel = (TextView) findViewById(R.id.cant_move_that_label);
@@ -131,7 +131,7 @@ public class SinglePlayerBoard extends AppCompatActivity{
         pieceColor = colorManager.getColorFromFile(ColorManager.PIECE_COLOR);
 
         context = this;
-        defaultSquare = new Square(this,pieceColor);
+        defaultSquare = new Square(this, pieceColor);
         selected = defaultSquare;
         selected.setPiece(Piece.NONE);
         boardSize = 8;
@@ -141,39 +141,38 @@ public class SinglePlayerBoard extends AppCompatActivity{
         display.getSize(size);
         int width = size.x;
 
-        squareSize = (width-convertDpToPx(30))/8;
+        squareSize = (width - convertDpToPx(30)) / 8;
         xPosition = convertDpToPx(15);
         yPosition = convertDpToPx(160);
 
         mover = new Mover(this);
         singleGame = SingleGame.getInstance();
 
-        if(singleGame.hasBoard()){
+        if (singleGame.hasBoard()) {
             board = singleGame.restoreBoard();
             createSquares(boardSize);
-            for(int i = 0; i < boardSize; i++)
-                for (int j = 0; j < boardSize; j++){
-                    board[i][ j].setOnClickListener(new View.OnClickListener() {
+            for (int i = 0; i < boardSize; i++)
+                for (int j = 0; j < boardSize; j++) {
+                    board[i][j].setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            moveThread = new MoveThread(view,context,boardColor1,boardColor2,selectColor);
+                            moveThread = new MoveThread(view, context, boardColor1, boardColor2, selectColor);
                             moveThread.start();
                         }
                     });
                     board[i][j].setPieceColor(pieceColor);
                     boardMain.addView(board[i][j]);
                 }
-        }
-        else{
-            board = new Square[boardSize][ boardSize];
+        } else {
+            board = new Square[boardSize][boardSize];
             for (int i = 0; i < boardSize; i++)
                 for (int j = 0; j < boardSize; j++)
-                    board[i][ j] = new Square(this,pieceColor);
-            startNewGame(getIntent().getBooleanExtra("knightsOnly",false));
+                    board[i][j] = new Square(this, pieceColor);
+            startNewGame(getIntent().getBooleanExtra("knightsOnly", false));
             singleGame.newGame();
         }
 
-        animatedSquare = new Square(this,pieceColor);
+        animatedSquare = new Square(this, pieceColor);
         animatedSquare.setPiece(Piece.NONE);
         animatedSquare.setVisibility(View.GONE);
         animatedSquare.setX(0);
@@ -185,7 +184,7 @@ public class SinglePlayerBoard extends AppCompatActivity{
 
         boardMain.addView(animatedSquare);
 
-        playerPointLabel.setText(getResources().getText(R.string.player_points).toString()+ " " + singleGame.getPlayerPoints());
+        playerPointLabel.setText(getResources().getText(R.string.player_points).toString() + " " + singleGame.getPlayerPoints());
         computerPointLabel.setText(getResources().getText(R.string.computer_points).toString() + " " + singleGame.getComputerPoints());
 
         wonLabel.bringToFront();
@@ -211,88 +210,88 @@ public class SinglePlayerBoard extends AppCompatActivity{
         int width = size.x;
         int height = size.y;
 
-        int iconWidth = (int)(width * 0.40);
-        int buttonHeight = (int)(height * .075);
-        int buttonGap = (int)(height * .03);
+        int iconWidth = (int) (width * 0.40);
+        int buttonHeight = (int) (height * .075);
+        int buttonGap = (int) (height * .03);
 
-        RelativeLayout.LayoutParams playerPointParams = new RelativeLayout.LayoutParams(2*iconWidth, (int)(height*.03));
+        RelativeLayout.LayoutParams playerPointParams = new RelativeLayout.LayoutParams(2 * iconWidth, (int) (height * .03));
         playerPointParams.addRule(RelativeLayout.BELOW, R.id.toolbar);
         playerPointParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-        playerPointParams.setMargins(buttonGap, buttonGap,0,0);
+        playerPointParams.setMargins(buttonGap, buttonGap, 0, 0);
         playerPointLabel.setLayoutParams(playerPointParams);
-        playerPointLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX,(int)(height*.025));
+        playerPointLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX, (int) (height * .025));
         playerPointLabel.setGravity(Gravity.LEFT);
 
-        RelativeLayout.LayoutParams computerPointParams = new RelativeLayout.LayoutParams(2*iconWidth, (int)(height*.03));
+        RelativeLayout.LayoutParams computerPointParams = new RelativeLayout.LayoutParams(2 * iconWidth, (int) (height * .03));
         computerPointParams.addRule(RelativeLayout.BELOW, R.id.toolbar);
         computerPointParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        computerPointParams.setMargins(0,buttonGap,buttonGap,0);
+        computerPointParams.setMargins(0, buttonGap, buttonGap, 0);
         computerPointLabel.setLayoutParams(computerPointParams);
-        computerPointLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX,(int)(height*.025));
+        computerPointLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX, (int) (height * .025));
         computerPointLabel.setGravity(Gravity.RIGHT);
 
-        RelativeLayout.LayoutParams wonParams = new RelativeLayout.LayoutParams(3*iconWidth, (int)(height*.03));
+        RelativeLayout.LayoutParams wonParams = new RelativeLayout.LayoutParams(3 * iconWidth, (int) (height * .03));
         wonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         wonParams.addRule(RelativeLayout.CENTER_VERTICAL);
-        wonParams.setMargins(0, 0,0,0);
+        wonParams.setMargins(0, 0, 0, 0);
         wonLabel.setLayoutParams(wonParams);
-        wonLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX,(int)(height*.025));
+        wonLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX, (int) (height * .025));
         wonLabel.setGravity(Gravity.CENTER);
 
-        RelativeLayout.LayoutParams lostParams = new RelativeLayout.LayoutParams(3*iconWidth, (int)(height*.03));
+        RelativeLayout.LayoutParams lostParams = new RelativeLayout.LayoutParams(3 * iconWidth, (int) (height * .03));
         lostParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         lostParams.addRule(RelativeLayout.CENTER_VERTICAL);
-        lostParams.setMargins(0, 0,0,0);
+        lostParams.setMargins(0, 0, 0, 0);
         lostLabel.setLayoutParams(lostParams);
-        lostLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX,(int)(height*.025));
+        lostLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX, (int) (height * .025));
         lostLabel.setGravity(Gravity.CENTER);
 
-        RelativeLayout.LayoutParams tieParams = new RelativeLayout.LayoutParams(3*iconWidth, (int)(height*.03));
+        RelativeLayout.LayoutParams tieParams = new RelativeLayout.LayoutParams(3 * iconWidth, (int) (height * .03));
         tieParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         tieParams.addRule(RelativeLayout.CENTER_VERTICAL);
-        tieParams.setMargins(0, 0,0,0);
+        tieParams.setMargins(0, 0, 0, 0);
         tieLabel.setLayoutParams(tieParams);
-        tieLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX,(int)(height*.025));
+        tieLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX, (int) (height * .025));
         tieLabel.setGravity(Gravity.CENTER);
 
-        RelativeLayout.LayoutParams cantMoveParams = new RelativeLayout.LayoutParams(3*iconWidth, (int)(height*.03));
+        RelativeLayout.LayoutParams cantMoveParams = new RelativeLayout.LayoutParams(3 * iconWidth, (int) (height * .03));
         cantMoveParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         cantMoveParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        cantMoveParams.setMargins(0, 0,0,buttonGap);
+        cantMoveParams.setMargins(0, 0, 0, buttonGap);
         cantMoveThatLabel.setLayoutParams(cantMoveParams);
-        cantMoveThatLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX,(int)(height*.025));
+        cantMoveThatLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX, (int) (height * .025));
         cantMoveThatLabel.setGravity(Gravity.CENTER);
 
-        RelativeLayout.LayoutParams noiceParams = new RelativeLayout.LayoutParams(iconWidth, (int)(height*.03));
+        RelativeLayout.LayoutParams noiceParams = new RelativeLayout.LayoutParams(iconWidth, (int) (height * .03));
         noiceParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         noiceParams.addRule(RelativeLayout.BELOW, R.id.toolbar);
-        noiceParams.setMargins(0, 2*buttonGap,0,0);
+        noiceParams.setMargins(0, 2 * buttonGap, 0, 0);
         noiceLabel.setLayoutParams(noiceParams);
-        noiceLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX,(int)(height*.025));
+        noiceLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX, (int) (height * .025));
         noiceLabel.setGravity(Gravity.CENTER);
 
-        RelativeLayout.LayoutParams notYourTurnParams = new RelativeLayout.LayoutParams(3*iconWidth, (int)(height*.03));
+        RelativeLayout.LayoutParams notYourTurnParams = new RelativeLayout.LayoutParams(3 * iconWidth, (int) (height * .03));
         notYourTurnParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         notYourTurnParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        notYourTurnParams.setMargins(0, 0,0,buttonGap);
+        notYourTurnParams.setMargins(0, 0, 0, buttonGap);
         notYourTurnLabel.setLayoutParams(notYourTurnParams);
-        notYourTurnLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX,(int)(height*.025));
+        notYourTurnLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX, (int) (height * .025));
         notYourTurnLabel.setGravity(Gravity.CENTER);
 
-        RelativeLayout.LayoutParams gameOverParams = new RelativeLayout.LayoutParams(2*iconWidth, (int)(height*.03));
+        RelativeLayout.LayoutParams gameOverParams = new RelativeLayout.LayoutParams(2 * iconWidth, (int) (height * .03));
         gameOverParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        gameOverParams.addRule(RelativeLayout.ABOVE,R.id.lost_label);
-        gameOverParams.setMargins(0, 0,0,buttonGap);
+        gameOverParams.addRule(RelativeLayout.ABOVE, R.id.lost_label);
+        gameOverParams.setMargins(0, 0, 0, buttonGap);
         gameOverLabel.setLayoutParams(gameOverParams);
-        gameOverLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX,(int)(height*.025));
+        gameOverLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX, (int) (height * .025));
         gameOverLabel.setGravity(Gravity.CENTER);
 
-        RelativeLayout.LayoutParams thatSucksParams = new RelativeLayout.LayoutParams(2*iconWidth, (int)(height*.03));
+        RelativeLayout.LayoutParams thatSucksParams = new RelativeLayout.LayoutParams(2 * iconWidth, (int) (height * .03));
         thatSucksParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         thatSucksParams.addRule(RelativeLayout.BELOW, R.id.toolbar);
-        thatSucksParams.setMargins(0, 2*buttonGap,0,0);
+        thatSucksParams.setMargins(0, 2 * buttonGap, 0, 0);
         thatSucksLabel.setLayoutParams(thatSucksParams);
-        thatSucksLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX,(int)(height*.02));
+        thatSucksLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX, (int) (height * .02));
         thatSucksLabel.setGravity(Gravity.CENTER);
 
         boardLayout.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BACKGROUND_COLOR));
@@ -323,17 +322,17 @@ public class SinglePlayerBoard extends AppCompatActivity{
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
         for (int i = 0; i < menu.size(); i++) {
-           MenuItem item = menu.getItem(i);
-           SpannableString spannableString = new SpannableString(item.getTitle().toString());
-           spannableString.setSpan(new ForegroundColorSpan(colorManager.getColorFromFile(ColorManager.TEXT_COLOR)), 0, spannableString.length(), 0);
-           item.setTitle(spannableString);
+            MenuItem item = menu.getItem(i);
+            SpannableString spannableString = new SpannableString(item.getTitle().toString());
+            spannableString.setSpan(new ForegroundColorSpan(colorManager.getColorFromFile(ColorManager.TEXT_COLOR)), 0, spannableString.length(), 0);
+            item.setTitle(spannableString);
         }
 
         int[][] states = {{android.R.attr.state_checked}, {}};
         int[] colors = {colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1), colorManager.getColorFromFile(ColorManager.TEXT_COLOR)};
         final MenuItem bloodthirstToggle = menu.findItem(R.id.bloodthirst_toggle);
 
-        AppCompatCheckBox bloodthirstToggleCheck = (AppCompatCheckBox)bloodthirstToggle.getActionView();
+        AppCompatCheckBox bloodthirstToggleCheck = (AppCompatCheckBox) bloodthirstToggle.getActionView();
         bloodthirstToggleCheck.setChecked(bloodThirsty);
 
         bloodthirstToggleCheck.setText(R.string.bloodthirst);
@@ -354,110 +353,114 @@ public class SinglePlayerBoard extends AppCompatActivity{
 
     @Override
     public void onBackPressed() {
-        singleGame.saveBoard(board);
-        for(int i = 0; i < boardSize; i++)
-            for(int j = 0; j < boardSize; j++)
-                boardMain.removeView(board[i][j]);
+        if (moveThread == null || !moveThread.isAlive()) {
+            singleGame.saveBoard(board);
+            for (int i = 0; i < boardSize; i++)
+                for (int j = 0; j < boardSize; j++)
+                    boardMain.removeView(board[i][j]);
+            super.onBackPressed();
+        }
+        else {
+            Toast.makeText(this, R.string.wait_for_move, Toast.LENGTH_SHORT).show();
+        }
 
-        super.onBackPressed();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.new_game:
-                newGameButton_Click();
-                return true;
-            case R.id.bloodthirst_toggle:
-                item.setChecked(!item.isChecked());
-                bloodThirstQueued = !bloodThirstQueued;
-                if (bloodThirstQueued)
-                    Toast.makeText(this, R.string.bloodthirst_notification, Toast.LENGTH_SHORT).show();
-                return true;
-            case android.R.id.home:
-                singleGame.saveBoard(board);
-                for(int i = 0; i < boardSize; i++)
-                    for(int j = 0; j < boardSize; j++)
-                    boardMain.removeView(board[i][j]);
-                this.finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-
+        if (moveThread == null || !moveThread.isAlive()) {
+            switch (item.getItemId()) {
+                case R.id.new_game:
+                    newGameButton_Click();
+                    return true;
+                case R.id.bloodthirst_toggle:
+                    item.setChecked(!item.isChecked());
+                    bloodThirstQueued = !bloodThirstQueued;
+                    if (bloodThirstQueued)
+                        Toast.makeText(this, R.string.bloodthirst_notification, Toast.LENGTH_SHORT).show();
+                    return true;
+                case android.R.id.home:
+                    singleGame.saveBoard(board);
+                    for (int i = 0; i < boardSize; i++)
+                        for (int j = 0; j < boardSize; j++)
+                            boardMain.removeView(board[i][j]);
+                    this.finish();
+                    return true;
+                default:
+                    return super.onOptionsItemSelected(item);
+            }
+        } else {
+            Toast.makeText(this, R.string.wait_for_move, Toast.LENGTH_SHORT).show();
+            return super.onOptionsItemSelected(item);
         }
     }
 
 
-    private int convertDpToPx(int dp){
-        return Math.round(dp*(getResources().getDisplayMetrics().xdpi/DisplayMetrics.DENSITY_DEFAULT));
+    private int convertDpToPx(int dp) {
+        return Math.round(dp * (getResources().getDisplayMetrics().xdpi / DisplayMetrics.DENSITY_DEFAULT));
     }
 
 
     private void newGameButton_Click() {
-        if (moveThread == null || !moveThread.isAlive()) {
-            tieLabel.setVisibility(View.INVISIBLE);
-            wonLabel.setVisibility(View.INVISIBLE);
-            lostLabel.setVisibility(View.INVISIBLE);
-            cantMoveThatLabel.setVisibility(View.INVISIBLE);
-            notYourTurnLabel.setVisibility(View.INVISIBLE);
-            gameOverLabel.setVisibility(View.INVISIBLE);
-            thatSucksLabel.setVisibility(View.INVISIBLE);
-            noiceLabel.setVisibility(View.INVISIBLE);
+        tieLabel.setVisibility(View.INVISIBLE);
+        wonLabel.setVisibility(View.INVISIBLE);
+        lostLabel.setVisibility(View.INVISIBLE);
+        cantMoveThatLabel.setVisibility(View.INVISIBLE);
+        notYourTurnLabel.setVisibility(View.INVISIBLE);
+        gameOverLabel.setVisibility(View.INVISIBLE);
+        thatSucksLabel.setVisibility(View.INVISIBLE);
+        noiceLabel.setVisibility(View.INVISIBLE);
 
-            if (bloodThirstQueued) {
-                bloodThirsty = !bloodThirsty;
-                bloodThirstQueued = false;
-            }
-
-            selected = defaultSquare;
-            clearPieces();
-            singleGame.newGame();
-            startNewGame(getIntent().getBooleanExtra("knightsOnly", false));
-            playerPointLabel.setText(getResources().getText(R.string.player_points).toString() + " " + singleGame.getPlayerPoints());
-            computerPointLabel.setText(getResources().getText(R.string.computer_points).toString() + " " + singleGame.getComputerPoints());
+        if (bloodThirstQueued) {
+            bloodThirsty = !bloodThirsty;
+            bloodThirstQueued = false;
         }
+
+        selected = defaultSquare;
+        clearPieces();
+        singleGame.newGame();
+        startNewGame(getIntent().getBooleanExtra("knightsOnly", false));
+        playerPointLabel.setText(getResources().getText(R.string.player_points).toString() + " " + singleGame.getPlayerPoints());
+        computerPointLabel.setText(getResources().getText(R.string.computer_points).toString() + " " + singleGame.getComputerPoints());
         return;
     }
 
-    void clearPieces()
-    {
+    void clearPieces() {
         for (int i = 0; i < boardSize; i++)
-            for (int j = 0; j < boardSize; j++)
-            {
-                board[i][ j].setTeam(NONE);
-                board[i][ j].setPiece(Piece.NONE);
-                board[i][ j].setPieceCount(0);
+            for (int j = 0; j < boardSize; j++) {
+                board[i][j].setTeam(NONE);
+                board[i][j].setPiece(Piece.NONE);
+                board[i][j].setPieceCount(0);
             }
 
         return;
     }
 
-    void startNewGame(boolean knightsOnly)
-    {
-        drawBoard(knightsOnly ,boardSize);
+    void startNewGame(boolean knightsOnly) {
+        drawBoard(knightsOnly, boardSize);
         return;
     }
 
-    public boolean bishopTie(){
+    public boolean bishopTie() {
         boolean bishopTie;
-        List<Square> players = singleGame.movablePlayers(mover,board);
-        List<Square> computers = singleGame.movableComputers(mover,board);
+        List<Square> players = singleGame.movablePlayers(mover, board);
+        List<Square> computers = singleGame.movableComputers(mover, board);
 
         boolean allPlayersAreBishops = true;
         boolean allComputersAreBishops = true;
 
-        for(int i = 0; i < players.size(); i++)
-            if(players.get(i).getPiece() != Piece.BISHOP){
+        for (int i = 0; i < players.size(); i++)
+            if (players.get(i).getPiece() != Piece.BISHOP) {
                 allPlayersAreBishops = false;
                 break;
             }
-        for(int i = 0; i < computers.size(); i++)
-            if(computers.get(i).getPiece() != Piece.BISHOP){
+        for (int i = 0; i < computers.size(); i++)
+            if (computers.get(i).getPiece() != Piece.BISHOP) {
                 allComputersAreBishops = false;
                 break;
             }
 
-        if(allComputersAreBishops && allPlayersAreBishops && (players.size() == 1) && (computers.size() == 1) && (players.get(0).getColor() != computers.get(0).getColor()))
+        if (allComputersAreBishops && allPlayersAreBishops && (players.size() == 1) && (computers.size() == 1) && (players.get(0).getColor() != computers.get(0).getColor()))
             bishopTie = true;
         else
             bishopTie = false;
@@ -465,8 +468,7 @@ public class SinglePlayerBoard extends AppCompatActivity{
         return bishopTie;
     }
 
-    public synchronized void moveSelectedButton_Click(final View view)
-    {
+    public synchronized void moveSelectedButton_Click(final View view) {
         achievementHandler.incrementInMemory(AchievementHandler.STARTED_GAME);
         achievementHandler.saveValues();
         thatSucksLabel.post(new Runnable() {
@@ -482,9 +484,8 @@ public class SinglePlayerBoard extends AppCompatActivity{
             }
         });
         int playerScore = singleGame.getPlayerPoints();
-        if (singleGame.getTurn() == YOU)
-        {
-            if(!singleGame.getCanComputerMove(mover,board) && !singleGame.getCanPlayerMove(mover,board)){
+        if (singleGame.getTurn() == YOU) {
+            if (!singleGame.getCanComputerMove(mover, board) && !singleGame.getCanPlayerMove(mover, board)) {
                 cantMoveThatLabel.post(new Runnable() {
                     @Override
                     public void run() {
@@ -498,7 +499,7 @@ public class SinglePlayerBoard extends AppCompatActivity{
                     }
                 });
                 singleGame.setTurn(NONE);
-                if(singleGame.getComputerPoints()== singleGame.getPlayerPoints())
+                if (singleGame.getComputerPoints() == singleGame.getPlayerPoints())
                     tieLabel.post(new Runnable() {
                         @Override
                         public void run() {
@@ -512,7 +513,7 @@ public class SinglePlayerBoard extends AppCompatActivity{
                             achievementHandler.saveValues();
                         }
                     });
-                else if(singleGame.getComputerPoints()< singleGame.getPlayerPoints()) {
+                else if (singleGame.getComputerPoints() < singleGame.getPlayerPoints()) {
                     wonLabel.post(new Runnable() {
                         @Override
                         public void run() {
@@ -532,8 +533,7 @@ public class SinglePlayerBoard extends AppCompatActivity{
                         }
                     });
 
-                }
-                else
+                } else
                     lostLabel.post(new Runnable() {
                         @Override
                         public void run() {
@@ -547,15 +547,14 @@ public class SinglePlayerBoard extends AppCompatActivity{
                             achievementHandler.incrementInMemory(AchievementHandler.PLAYED_100_GAMES);
 
 
-                            if(singleGame.getPlayerPoints() == 0) {
+                            if (singleGame.getPlayerPoints() == 0) {
                                 achievementHandler.incrementInMemory(AchievementHandler.SLAUGHTERED);
                             }
 
                             achievementHandler.saveValues();
                         }
                     });
-            }
-            else if(bishopTie()){
+            } else if (bishopTie()) {
                 gameOverLabel.post(new Runnable() {
                     @Override
                     public void run() {
@@ -563,7 +562,7 @@ public class SinglePlayerBoard extends AppCompatActivity{
                     }
                 });
                 singleGame.setTurn(NONE);
-                if(singleGame.getComputerPoints()== singleGame.getPlayerPoints())
+                if (singleGame.getComputerPoints() == singleGame.getPlayerPoints())
                     tieLabel.post(new Runnable() {
                         @Override
                         public void run() {
@@ -577,7 +576,7 @@ public class SinglePlayerBoard extends AppCompatActivity{
                             achievementHandler.saveValues();
                         }
                     });
-                else if(singleGame.getComputerPoints()< singleGame.getPlayerPoints()) {
+                else if (singleGame.getComputerPoints() < singleGame.getPlayerPoints()) {
                     wonLabel.post(new Runnable() {
                         @Override
                         public void run() {
@@ -597,8 +596,7 @@ public class SinglePlayerBoard extends AppCompatActivity{
                         }
                     });
 
-                }
-                else
+                } else
                     lostLabel.post(new Runnable() {
                         @Override
                         public void run() {
@@ -611,14 +609,14 @@ public class SinglePlayerBoard extends AppCompatActivity{
                             achievementHandler.incrementInMemory(AchievementHandler.PLAYED_100_GAMES);
 
 
-                            if(singleGame.getPlayerPoints() == 0) {
+                            if (singleGame.getPlayerPoints() == 0) {
                                 achievementHandler.incrementInMemory(AchievementHandler.SLAUGHTERED);
                             }
 
                             achievementHandler.saveValues();
                         }
                     });
-            } else if(selected.getI() == -1) {
+            } else if (selected.getI() == -1) {
                 // Nothing selected
                 cantMoveThatLabel.post(new Runnable() {
                     @Override
@@ -634,13 +632,13 @@ public class SinglePlayerBoard extends AppCompatActivity{
                 });
 
 
-            } else if (mover.movePiece(board, board[selected.getI()][ selected.getJ()], singleGame, bloodThirsty)) {
+            } else if (mover.movePiece(board, board[selected.getI()][selected.getJ()], singleGame, bloodThirsty)) {
                 selected.post(new Runnable() {
                     @Override
                     public void run() {
                         int color;
 
-                        if(selected.getColor())
+                        if (selected.getColor())
                             color = boardColor1;
                         else
                             color = boardColor2;
@@ -650,7 +648,7 @@ public class SinglePlayerBoard extends AppCompatActivity{
                     }
                 });
 
-                if(singleGame.getPlayerPoints() > playerScore){
+                if (singleGame.getPlayerPoints() > playerScore) {
                     noiceLabel.post(new Runnable() {
                         @Override
                         public void run() {
@@ -658,8 +656,7 @@ public class SinglePlayerBoard extends AppCompatActivity{
                             thatSucksLabel.setVisibility(View.INVISIBLE);
                         }
                     });
-                }
-                else {
+                } else {
                     noiceLabel.post(new Runnable() {
                         @Override
                         public void run() {
@@ -705,10 +702,9 @@ public class SinglePlayerBoard extends AppCompatActivity{
                             computerPointLabel.setText(getResources().getText(R.string.computer_points).toString() + " " + singleGame.getComputerPoints());
                         }
                     });
-                }  while(!singleGame.getCanPlayerMove(mover,board) && singleGame.getCanComputerMove(mover,board) && singleGame.getPlayerCount() > 0);
+                } while (!singleGame.getCanPlayerMove(mover, board) && singleGame.getCanComputerMove(mover, board) && singleGame.getPlayerCount() > 0);
 
-                if (singleGame.getPlayerCount() == 0)
-                {
+                if (singleGame.getPlayerCount() == 0) {
                     lostLabel.post(new Runnable() {
                         @Override
                         public void run() {
@@ -721,7 +717,7 @@ public class SinglePlayerBoard extends AppCompatActivity{
                             achievementHandler.incrementInMemory(AchievementHandler.PLAYED_100_GAMES);
 
 
-                            if(singleGame.getPlayerPoints() == 0) {
+                            if (singleGame.getPlayerPoints() == 0) {
                                 achievementHandler.incrementInMemory(AchievementHandler.SLAUGHTERED);
                             }
 
@@ -730,9 +726,7 @@ public class SinglePlayerBoard extends AppCompatActivity{
                     });
 
                     singleGame.setTurn(NONE);
-                }
-                else if (singleGame.getComputerCount() == 0)
-                {
+                } else if (singleGame.getComputerCount() == 0) {
                     wonLabel.post(new Runnable() {
                         @Override
                         public void run() {
@@ -754,8 +748,7 @@ public class SinglePlayerBoard extends AppCompatActivity{
                     singleGame.setTurn(NONE);
 
                 }
-            }
-            else {
+            } else {
                 cantMoveThatLabel.post(new Runnable() {
                     @Override
                     public void run() {
@@ -772,9 +765,8 @@ public class SinglePlayerBoard extends AppCompatActivity{
             }
 
 
-        }
-        else if (singleGame.getTurn() == OPPONENT) {
-            if(singleGame.getCanComputerMove(mover,board)) {
+        } else if (singleGame.getTurn() == OPPONENT) {
+            if (singleGame.getCanComputerMove(mover, board)) {
                 cantMoveThatLabel.post(new Runnable() {
                     @Override
                     public void run() {
@@ -787,12 +779,11 @@ public class SinglePlayerBoard extends AppCompatActivity{
                         notYourTurnLabel.setVisibility(View.VISIBLE);
                     }
                 });
-            }else{
+            } else {
                 singleGame.setTurn(YOU);
                 moveSelectedButton_Click(view);
             }
-        }
-        else {
+        } else {
             gameOverLabel.post(new Runnable() {
                 @Override
                 public void run() {
@@ -805,8 +796,7 @@ public class SinglePlayerBoard extends AppCompatActivity{
 
     }
 
-    synchronized void moveComputer()
-    {
+    synchronized void moveComputer() {
         thatSucksLabel.post(new Runnable() {
             @Override
             public void run() {
@@ -826,28 +816,25 @@ public class SinglePlayerBoard extends AppCompatActivity{
 
         for (int i = 0; i < boardSize; i++)
             for (int j = 0; j < boardSize; j++)
-                if (board[i][ j].getTeam() == OPPONENT)
-        computerPieces.add(board[i][ j]);
-        if (computerPieces.size() > 0)
-        {
+                if (board[i][j].getTeam() == OPPONENT)
+                    computerPieces.add(board[i][j]);
+        if (computerPieces.size() > 0) {
             int computerScore = singleGame.getComputerPoints();
             picked = computerPieces.get(rand.nextInt(computerPieces.size()));
-            while (!mover.movePiece( board,  board[picked.getI()][ picked.getJ()], singleGame, bloodThirsty))
-            {
+            while (!mover.movePiece(board, board[picked.getI()][picked.getJ()], singleGame, bloodThirsty)) {
                 computerPieces.remove(picked);
                 if (computerPieces.size() == 0)
                     break;
                 picked = computerPieces.get(rand.nextInt(computerPieces.size()));
             }
 
-            if(selected.getTeam() == OPPONENT)
-            {
+            if (selected.getTeam() == OPPONENT) {
                 selected.post(new Runnable() {
                     @Override
                     public void run() {
                         int color;
 
-                        if(selected.getColor())
+                        if (selected.getColor())
                             color = boardColor1;
                         else
                             color = boardColor2;
@@ -887,48 +874,43 @@ public class SinglePlayerBoard extends AppCompatActivity{
 
     }
 
-    void drawBoard(boolean knightsOnly, int size)
-    {
+    void drawBoard(boolean knightsOnly, int size) {
         createSquares(size);
 
-        startPieces(knightsOnly,size);
+        startPieces(knightsOnly, size);
 
         return;
     }
 
-    void createSquares(int size)
-    {
+    void createSquares(int size) {
         boolean colorPicker = false;
         int color;
 
-        for (int i = 0; i < size; i++)
-        {
+        for (int i = 0; i < size; i++) {
 
             colorPicker = !colorPicker;
-            for (int j = 0; j < size; j++)
-            {
+            for (int j = 0; j < size; j++) {
 
                 if (colorPicker)
                     color = boardColor1;
                 else
                     color = boardColor2;
 
-                board[i][ j].setI(i);
-                board[i][ j].setJ(j);
-                board[i][ j].setColor(colorPicker);
-                board[i][ j].setBackgroundColor(color);
+                board[i][j].setI(i);
+                board[i][j].setJ(j);
+                board[i][j].setColor(colorPicker);
+                board[i][j].setBackgroundColor(color);
 
 
                 colorPicker = !colorPicker;
-                board[i][ j].setX(xPosition + i * squareSize);
-                board[i][ j].setY(yPosition + j * squareSize);
-                board[i][ j].setLayoutParams(new RelativeLayout.LayoutParams(squareSize, squareSize));
-                if (singleGame.getGameCount() == 0)
-                {
-                    board[i][ j].setOnClickListener(new View.OnClickListener() {
+                board[i][j].setX(xPosition + i * squareSize);
+                board[i][j].setY(yPosition + j * squareSize);
+                board[i][j].setLayoutParams(new RelativeLayout.LayoutParams(squareSize, squareSize));
+                if (singleGame.getGameCount() == 0) {
+                    board[i][j].setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            if(moveThread == null || !moveThread.isAlive()) {
+                            if (moveThread == null || !moveThread.isAlive()) {
                                 moveThread = new MoveThread(view, context, boardColor1, boardColor2, selectColor);
                                 moveThread.start();
                             }
@@ -944,10 +926,8 @@ public class SinglePlayerBoard extends AppCompatActivity{
         return;
     }
 
-    void startPieces(boolean knightsOnly, int size)
-    {
-        if(knightsOnly)
-        {
+    void startPieces(boolean knightsOnly, int size) {
+        if (knightsOnly) {
             // Set Teams and pieces
             for (int i = 0; i < size; i++) {
                 board[i][0].setTeam(OPPONENT);
@@ -960,8 +940,7 @@ public class SinglePlayerBoard extends AppCompatActivity{
                 board[i][7].setPiece(Piece.KNIGHT);
             }
 
-        }
-        else {
+        } else {
             // Set Teams
             for (int i = 0; i < size; i++) {
                 board[i][0].setTeam(OPPONENT);
