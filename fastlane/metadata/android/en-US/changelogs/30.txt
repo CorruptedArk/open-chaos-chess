@@ -1,0 +1,3 @@
+v1.6.3
+Fix:
+-Crashes and freezes on toolbar actions during a move in progress
