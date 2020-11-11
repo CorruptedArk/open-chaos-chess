@@ -417,6 +417,10 @@ public class SinglePlayerBoard extends AppCompatActivity {
         }
 
         selected = defaultSquare;
+        while(moveThread != null && moveThread.isAlive())
+        {
+            moveThread.interrupt();
+        }
         clearPieces();
         singleGame.newGame();
         startNewGame(getIntent().getBooleanExtra("knightsOnly", false));

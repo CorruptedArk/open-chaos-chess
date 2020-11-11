@@ -637,7 +637,10 @@ public class MultiPlayerBoard extends AppCompatActivity {
                                 thatSucksLabel.setVisibility(View.INVISIBLE);
                                 noiceLabel.setVisibility(View.INVISIBLE);
 
-                                while (moveThread != null && moveThread.isAlive() && !isInterrupted());
+                                while(moveThread != null && moveThread.isAlive() && !isInterrupted())
+                                {
+                                    moveThread.interrupt();
+                                }
 
                                 if(isInterrupted())
                                 {

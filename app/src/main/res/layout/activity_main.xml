@@ -29,17 +29,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="dev.corruptedark.openchaoschess.MainActivity">
 
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/ic_filledknight"
-        android:id="@+id/knight_button"
-        android:background="?android:attr/colorBackground"
-        android:onClick="knightButtonClicked"
-        android:layout_marginBottom="30dp"
-        android:layout_above="@+id/play_button"
-        android:layout_centerHorizontal="true" />
-
     <ImageView
         android:layout_width="120dp"
         android:layout_height="120dp"
@@ -158,6 +147,16 @@
         android:fontFamily="sans-serif"
         android:textSize="16sp"
         android:layout_below="@+id/main_title"
+        android:layout_centerHorizontal="true" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_filledknight"
+        android:id="@+id/knight_button"
+        android:background="#00000000"
+        android:onClick="knightButtonClicked"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 
 

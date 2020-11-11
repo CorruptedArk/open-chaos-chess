@@ -27,6 +27,7 @@ import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Display;
@@ -122,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
 
         colorManager = ColorManager.getInstance(this);
 
-        knightHandler = new Handler();
+        knightHandler = new Handler(Looper.getMainLooper());
         startKnight();
     }
 
@@ -145,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
         super.onPostCreate(savedInstanceState);
 
 
-        Display display = getWindowManager().getDefaultDisplay();
+        Display display = getDisplay();
         Point size = new Point();
         display.getSize(size);
 
@@ -226,8 +227,6 @@ public class MainActivity extends AppCompatActivity {
         achievementButtonParams.setMargins(0, 0,0,0);
         achievementsButton.setLayoutParams(achievementButtonParams);
 
-
-        knightButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BACKGROUND_COLOR));
         knightButton.getDrawable().setColorFilter(colorManager.getColorFromFile(ColorManager.PIECE_COLOR), PorterDuff.Mode.MULTIPLY);
         mainLayout.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BACKGROUND_COLOR));
         mainTitle.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
@@ -246,6 +245,9 @@ public class MainActivity extends AppCompatActivity {
         settingsButton.getDrawable().setColorFilter(colorManager.getColorFromFile(ColorManager.TEXT_COLOR),PorterDuff.Mode.MULTIPLY);
         achievementsButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
         achievementsButton.getDrawable().setColorFilter(colorManager.getColorFromFile(ColorManager.TEXT_COLOR),PorterDuff.Mode.MULTIPLY);
+
+        knightButton.bringToFront();
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -257,7 +259,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        Display display = getWindowManager().getDefaultDisplay();
+        Display display = getDisplay();
         Point size = new Point();
         display.getSize(size);
 
@@ -341,7 +343,6 @@ public class MainActivity extends AppCompatActivity {
 
         colorManager = ColorManager.getInstance(this);
 
-        knightButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BACKGROUND_COLOR));
         knightButton.getDrawable().setColorFilter(colorManager.getColorFromFile(ColorManager.PIECE_COLOR), PorterDuff.Mode.MULTIPLY);
         mainLayout.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BACKGROUND_COLOR));
         mainTitle.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
@@ -360,6 +361,9 @@ public class MainActivity extends AppCompatActivity {
         settingsButton.getDrawable().setColorFilter(colorManager.getColorFromFile(ColorManager.TEXT_COLOR),PorterDuff.Mode.MULTIPLY);
         achievementsButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
         achievementsButton.getDrawable().setColorFilter(colorManager.getColorFromFile(ColorManager.TEXT_COLOR),PorterDuff.Mode.MULTIPLY);
+
+        knightButton.bringToFront();
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
