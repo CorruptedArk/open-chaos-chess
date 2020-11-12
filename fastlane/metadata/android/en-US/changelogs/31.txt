@@ -1,0 +1,7 @@
+v1.6.4
+Change:
+-Cancelling bloodthirst toggle now creates Toast notification
+
+Fix:
+-Move executing during board reset for new game
+
