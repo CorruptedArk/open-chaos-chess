@@ -511,6 +511,8 @@ public class MultiPlayerBoard extends AppCompatActivity {
                 bloodThirstQueued = !bloodThirstQueued;
                 if (bloodThirstQueued)
                     Toast.makeText(view.getContext(), R.string.bloodthirst_notification, Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(view.getContext(), R.string.bloodthirst_toggle_cancelled, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -564,6 +566,8 @@ public class MultiPlayerBoard extends AppCompatActivity {
                     bloodThirstQueued = !bloodThirstQueued;
                     if (bloodThirstQueued)
                         Toast.makeText(this, R.string.bloodthirst_notification, Toast.LENGTH_SHORT).show();
+                    else
+                        Toast.makeText(this, R.string.bloodthirst_toggle_cancelled, Toast.LENGTH_SHORT).show();
                     return true;
                 case android.R.id.home:
                     //multiGame.saveBoard(board);

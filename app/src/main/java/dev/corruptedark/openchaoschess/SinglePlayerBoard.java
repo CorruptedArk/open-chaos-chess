@@ -37,6 +37,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -343,6 +344,8 @@ public class SinglePlayerBoard extends AppCompatActivity {
                 bloodThirstQueued = !bloodThirstQueued;
                 if (bloodThirstQueued)
                     Toast.makeText(view.getContext(), R.string.bloodthirst_notification, Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(view.getContext(), R.string.bloodthirst_toggle_cancelled, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -378,6 +381,8 @@ public class SinglePlayerBoard extends AppCompatActivity {
                     bloodThirstQueued = !bloodThirstQueued;
                     if (bloodThirstQueued)
                         Toast.makeText(this, R.string.bloodthirst_notification, Toast.LENGTH_SHORT).show();
+                    else
+                        Toast.makeText(this, R.string.bloodthirst_toggle_cancelled, Toast.LENGTH_SHORT).show();
                     return true;
                 case android.R.id.home:
                     singleGame.saveBoard(board);

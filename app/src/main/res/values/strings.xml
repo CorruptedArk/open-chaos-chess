@@ -91,4 +91,5 @@
     <string name="gameplay_settings_file">gameplaysettings.txt</string>
     <string name="bloodthirsty_by_default">Bloodthirsty by default</string>
     <string name="wait_for_move">Wait until the move has finished</string>
+    <string name="bloodthirst_toggle_cancelled">Bloodthirst toggle cancelled</string>
 </resources>
