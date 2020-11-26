@@ -25,7 +25,8 @@ If applicable, add screenshots to help explain your problem.
 **Smartphone (please complete the following information):**
  - Device: [e.g. Nexus 5]
  - OS: [e.g. Android 9.0]
- - Version [e.g. 1.6.4]
+ - Version: [e.g. 1.6.4]
+ - Build Location: [e.g. F-Droid release, CorruptedArk's GitHub release/build from source]
 
 **Additional context**
 Add any other context about the problem here.
