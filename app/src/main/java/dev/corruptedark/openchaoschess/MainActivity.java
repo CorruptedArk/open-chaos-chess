@@ -24,6 +24,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Bundle;
@@ -71,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
     Button hostGameButton;
     Button joinGameButton;
     Button aboutButton;
+    Button issuesButton;
     Button quitButton;
     ImageButton settingsButton;
     ImageButton achievementsButton;
@@ -114,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
         joinGameButton = (Button)findViewById(R.id.join_game_button);
         aboutButton = (Button)findViewById(R.id.about_button);
         quitButton = (Button)findViewById(R.id.quit_button);
+        issuesButton = (Button)findViewById(R.id.issues_button);
         settingsButton = (ImageButton)findViewById(R.id.settings_button);
         achievementsButton = (ImageButton)findViewById(R.id.achievements_button);
         knightButton = (ImageButton)findViewById(R.id.knight_button);
@@ -158,6 +161,7 @@ public class MainActivity extends AppCompatActivity {
         int buttonGap = (int)(height * .015);
 
         int textHeight = (int)(height * .03);
+        int horizontalPadding = convertDpToPx(10);
 
         RelativeLayout.LayoutParams mainTitleParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, buttonHeight);
         mainTitleParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
@@ -185,6 +189,7 @@ public class MainActivity extends AppCompatActivity {
         playButtonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         playButtonParams.addRule(RelativeLayout.BELOW, R.id.mainImage);
         playButtonParams.setMargins(0, buttonGap,0,0);
+        playButton.setPadding(horizontalPadding, 0, horizontalPadding, 0);
         playButton.setLayoutParams(playButtonParams);
 
         hostGameButton.setTextSize(TypedValue.COMPLEX_UNIT_PX,textHeight);
@@ -192,6 +197,7 @@ public class MainActivity extends AppCompatActivity {
         hostGameButtonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         hostGameButtonParams.addRule(RelativeLayout.BELOW, R.id.play_button);
         hostGameButtonParams.setMargins(0, buttonGap,0,0);
+        hostGameButton.setPadding(horizontalPadding, 0, horizontalPadding, 0);
         hostGameButton.setLayoutParams(hostGameButtonParams);
 
         joinGameButton.setTextSize(TypedValue.COMPLEX_UNIT_PX,textHeight);
@@ -199,6 +205,7 @@ public class MainActivity extends AppCompatActivity {
         joinGameButtonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         joinGameButtonParams.addRule(RelativeLayout.BELOW, R.id.host_game_button);
         joinGameButtonParams.setMargins(0, buttonGap,0,0);
+        joinGameButton.setPadding(horizontalPadding, 0, horizontalPadding, 0);
         joinGameButton.setLayoutParams(joinGameButtonParams);
 
         aboutButton.setTextSize(TypedValue.COMPLEX_UNIT_PX,textHeight);
@@ -206,13 +213,23 @@ public class MainActivity extends AppCompatActivity {
         aboutButtonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         aboutButtonParams.addRule(RelativeLayout.BELOW, R.id.join_game_button);
         aboutButtonParams.setMargins(0, buttonGap,0,0);
+        aboutButton.setPadding(horizontalPadding, 0, horizontalPadding, 0);
         aboutButton.setLayoutParams(aboutButtonParams);
+
+        issuesButton.setTextSize(TypedValue.COMPLEX_UNIT_PX,textHeight);
+        RelativeLayout.LayoutParams issuesButtonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        issuesButtonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        issuesButtonParams.addRule(RelativeLayout.BELOW, R.id.about_button);
+        issuesButtonParams.setMargins(0, buttonGap,0,0);
+        issuesButton.setPadding(horizontalPadding, 0, horizontalPadding, 0);
+        issuesButton.setLayoutParams(issuesButtonParams);
 
         quitButton.setTextSize(TypedValue.COMPLEX_UNIT_PX,textHeight);
         RelativeLayout.LayoutParams quitButtonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         quitButtonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        quitButtonParams.addRule(RelativeLayout.BELOW, R.id.about_button);
+        quitButtonParams.addRule(RelativeLayout.BELOW, R.id.issues_button);
         quitButtonParams.setMargins(0, buttonGap,0,0);
+        quitButton.setPadding(horizontalPadding, 0, horizontalPadding, 0);
         quitButton.setLayoutParams(quitButtonParams);
 
         RelativeLayout.LayoutParams settingsButtonParams = new RelativeLayout.LayoutParams(buttonHeight, buttonHeight);
@@ -239,6 +256,8 @@ public class MainActivity extends AppCompatActivity {
         joinGameButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
         aboutButton.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         aboutButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
+        issuesButton.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        issuesButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
         quitButton.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         quitButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
         settingsButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
@@ -268,9 +287,10 @@ public class MainActivity extends AppCompatActivity {
 
         int iconWidth = (int)(width * 0.3);
         int buttonHeight = (int)(height * .075);
-        int buttonGap = (int)(height * .015);
+        int buttonGap = (int)(height * .01);
 
         int textHeight = (int)(height * .03);
+        int horizontalPadding = convertDpToPx(10);
 
         RelativeLayout.LayoutParams mainTitleParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, buttonHeight);
         mainTitleParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
@@ -298,6 +318,7 @@ public class MainActivity extends AppCompatActivity {
         playButtonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         playButtonParams.addRule(RelativeLayout.BELOW, R.id.mainImage);
         playButtonParams.setMargins(0, buttonGap,0,0);
+        playButton.setPadding(horizontalPadding, 0, horizontalPadding, 0);
         playButton.setLayoutParams(playButtonParams);
 
         hostGameButton.setTextSize(TypedValue.COMPLEX_UNIT_PX,textHeight);
@@ -305,6 +326,7 @@ public class MainActivity extends AppCompatActivity {
         hostGameButtonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         hostGameButtonParams.addRule(RelativeLayout.BELOW, R.id.play_button);
         hostGameButtonParams.setMargins(0, buttonGap,0,0);
+        hostGameButton.setPadding(horizontalPadding, 0, horizontalPadding, 0);
         hostGameButton.setLayoutParams(hostGameButtonParams);
 
         joinGameButton.setTextSize(TypedValue.COMPLEX_UNIT_PX,textHeight);
@@ -312,6 +334,7 @@ public class MainActivity extends AppCompatActivity {
         joinGameButtonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         joinGameButtonParams.addRule(RelativeLayout.BELOW, R.id.host_game_button);
         joinGameButtonParams.setMargins(0, buttonGap,0,0);
+        joinGameButton.setPadding(horizontalPadding, 0, horizontalPadding, 0);
         joinGameButton.setLayoutParams(joinGameButtonParams);
 
         aboutButton.setTextSize(TypedValue.COMPLEX_UNIT_PX,textHeight);
@@ -319,15 +342,24 @@ public class MainActivity extends AppCompatActivity {
         aboutButtonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         aboutButtonParams.addRule(RelativeLayout.BELOW, R.id.join_game_button);
         aboutButtonParams.setMargins(0, buttonGap,0,0);
+        aboutButton.setPadding(horizontalPadding, 0, horizontalPadding, 0);
         aboutButton.setLayoutParams(aboutButtonParams);
+
+        issuesButton.setTextSize(TypedValue.COMPLEX_UNIT_PX,textHeight);
+        RelativeLayout.LayoutParams issuesButtonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        issuesButtonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        issuesButtonParams.addRule(RelativeLayout.BELOW, R.id.about_button);
+        issuesButtonParams.setMargins(0, buttonGap,0,0);
+        issuesButton.setPadding(horizontalPadding, 0, horizontalPadding, 0);
+        issuesButton.setLayoutParams(issuesButtonParams);
 
         quitButton.setTextSize(TypedValue.COMPLEX_UNIT_PX,textHeight);
         RelativeLayout.LayoutParams quitButtonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         quitButtonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        quitButtonParams.addRule(RelativeLayout.BELOW, R.id.about_button);
+        quitButtonParams.addRule(RelativeLayout.BELOW, R.id.issues_button);
         quitButtonParams.setMargins(0, buttonGap,0,0);
+        quitButton.setPadding(horizontalPadding, 0, horizontalPadding, 0);
         quitButton.setLayoutParams(quitButtonParams);
-
 
         RelativeLayout.LayoutParams settingsButtonParams = new RelativeLayout.LayoutParams(buttonHeight, buttonHeight);
         settingsButtonParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
@@ -355,6 +387,8 @@ public class MainActivity extends AppCompatActivity {
         joinGameButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
         aboutButton.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         aboutButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
+        issuesButton.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        issuesButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
         quitButton.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         quitButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
         settingsButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
@@ -404,6 +438,15 @@ public class MainActivity extends AppCompatActivity {
 
         startActivity(new Intent(MainActivity.this,AboutActivity.class));
     }
+
+    public void issuesButtonClicked(View view)
+    {
+        String url = getString(R.string.issues_url);
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
+        startActivity(intent);
+    }
+
 
     public void quitButtonClicked(View view){
         finish();

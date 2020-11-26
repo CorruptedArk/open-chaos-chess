@@ -92,5 +92,7 @@
     <string name="bloodthirsty_by_default">Blutrünstig standardmäßig</string>
     <string name="wait_for_move">Wait until the move has finished</string>
     <string name="bloodthirst_toggle_cancelled">Bloodthirst toggle cancelled</string>
+    <string name="issues">Issues</string>
+    <string name="issues_url">https://github.com/CorruptedArk/open-chaos-chess/issues</string>
 </resources>
 

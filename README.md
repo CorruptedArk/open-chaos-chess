@@ -30,11 +30,11 @@ As of the most recent commit to the master branch, achievements and single playe
 ----
 
 ## Screenshots
-<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" alt="Main menu" width="200" />
-<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" alt="Normal Game Start" width="200" />
-<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" alt="Normal Game Playing" width="200" />
-<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" alt="Knights Only Start" width="200" />
-<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/5.png" alt="Knights Only Playing" width="200" />
+<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1-2.png" alt="Main menu" width="200" />
+<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2-2.png" alt="Normal Game Start" width="200" />
+<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/3-2.png" alt="Normal Game Playing" width="200" />
+<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/4-2.png" alt="Knights Only Start" width="200" />
+<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/5-2.png" alt="Knights Only Playing" width="200" />
 
 ----
 

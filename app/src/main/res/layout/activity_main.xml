@@ -29,99 +29,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="dev.corruptedark.openchaoschess.MainActivity">
 
-    <ImageView
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:id="@+id/mainImage"
-        android:contentDescription="@string/app_name"
-        app:srcCompat="@drawable/ic_icon"
-        android:layout_marginTop="17dp"
-        android:layout_below="@+id/main_slogan"
-        android:layout_centerHorizontal="true" />
-
-    <Button
-        android:text="@string/quit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:id="@+id/quit_button"
-        android:layout_below="@+id/about_button"
-        android:background="@color/colorAccent"
-        android:textSize="25sp"
-        android:onClick="quitButtonClicked"
-        android:layout_centerHorizontal="true"/>
-
-    <Button
-        android:text="@string/play"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:id="@+id/play_button"
-        android:textSize="25sp"
-        android:background="@color/colorAccent"
-        android:onClick="playButtonClicked"
-        android:layout_below="@+id/mainImage"
-        android:layout_centerHorizontal="true"/>
-
-    <Button
-        android:text="@string/host_game"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:id="@+id/host_game_button"
-        android:textSize="25sp"
-        android:background="@color/colorAccent"
-        android:onClick="hostGameButtonClicked"
-        android:layout_below="@+id/play_button"
-        android:layout_centerHorizontal="true" />
-
-    <Button
-        android:text="@string/join_game"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:id="@+id/join_game_button"
-        android:textSize="25sp"
-        android:background="@color/colorAccent"
-        android:onClick="joinGameButtonClicked"
-        android:layout_below="@+id/host_game_button"
-        android:layout_centerHorizontal="true" />
-
-    <Button
-        android:text="@string/about"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:id="@+id/about_button"
-        android:textSize="25sp"
-        android:background="@color/colorAccent"
-        android:layout_below="@+id/join_game_button"
-        android:onClick="aboutButtonClicked"
-        android:layout_centerHorizontal="true" />
-
-
-    <ImageButton
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        app:srcCompat="@drawable/ic_medal"
-        android:id="@+id/achievements_button"
-        android:scaleType="fitCenter"
-        android:background="@color/colorAccent"
-        android:layout_alignParentRight="true"
-        android:onClick="achievementsClicked"
-        android:layout_alignParentBottom="true" />
-
-    <ImageButton
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        app:srcCompat="@drawable/ic_settings"
-        android:id="@+id/settings_button"
-        android:scaleType="fitCenter"
-        android:background="@color/colorAccent"
-        android:layout_alignParentLeft="true"
-        android:onClick="settingsButtonClicked"
-        android:layout_alignParentBottom="true" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -148,6 +55,123 @@
         android:textSize="16sp"
         android:layout_below="@+id/main_title"
         android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:id="@+id/mainImage"
+        android:contentDescription="@string/app_name"
+        app:srcCompat="@drawable/ic_icon"
+        android:layout_marginTop="17dp"
+        android:layout_below="@+id/main_slogan"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:text="@string/play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:id="@+id/play_button"
+        android:textSize="25sp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:background="@color/colorAccent"
+        android:onClick="playButtonClicked"
+        android:layout_below="@+id/mainImage"
+        android:layout_centerHorizontal="true"/>
+
+    <Button
+        android:text="@string/host_game"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:id="@+id/host_game_button"
+        android:textSize="25sp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:background="@color/colorAccent"
+        android:onClick="hostGameButtonClicked"
+        android:layout_below="@+id/play_button"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:text="@string/join_game"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:id="@+id/join_game_button"
+        android:textSize="25sp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:background="@color/colorAccent"
+        android:onClick="joinGameButtonClicked"
+        android:layout_below="@+id/host_game_button"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:text="@string/about"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:id="@+id/about_button"
+        android:textSize="25sp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:background="@color/colorAccent"
+        android:layout_below="@+id/join_game_button"
+        android:onClick="aboutButtonClicked"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:text="@string/issues"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:id="@+id/issues_button"
+        android:textSize="25sp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:background="@color/colorAccent"
+        android:layout_below="@+id/about_button"
+        android:onClick="issuesButtonClicked"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:text="@string/quit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:id="@+id/quit_button"
+        android:layout_below="@+id/issues_button"
+        android:background="@color/colorAccent"
+        android:textSize="25sp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:onClick="quitButtonClicked"
+        android:layout_centerHorizontal="true"/>
+
+
+    <ImageButton
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:srcCompat="@drawable/ic_medal"
+        android:id="@+id/achievements_button"
+        android:scaleType="fitCenter"
+        android:background="@color/colorAccent"
+        android:layout_alignParentRight="true"
+        android:onClick="achievementsClicked"
+        android:layout_alignParentBottom="true" />
+
+    <ImageButton
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:srcCompat="@drawable/ic_settings"
+        android:id="@+id/settings_button"
+        android:scaleType="fitCenter"
+        android:background="@color/colorAccent"
+        android:layout_alignParentLeft="true"
+        android:onClick="settingsButtonClicked"
+        android:layout_alignParentBottom="true" />
 
     <ImageButton
         android:layout_width="wrap_content"
