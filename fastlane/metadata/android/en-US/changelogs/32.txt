@@ -1,0 +1,9 @@
+v1.6.5
+Addition:
+-New button in the main activity sends users to the issue page on my Github repository
+
+Change:
+-Main menu text buttons now have horizontal padding
+
+
+
