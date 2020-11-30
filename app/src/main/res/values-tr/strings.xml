@@ -1,0 +1,95 @@
+<!--
+  Open Chaos Chess is a free as in speech version of Chaos Chess
+  Chaos Chess is a chess game where you control the piece that moves, but not how it moves
+      Copyright (C) 2019  Noah Stanford <noahstandingford@gmail.com>
+      Open Chaos Chess is free software: you can redistribute it and/or modify
+      it under the terms of the GNU General Public License as published by
+      the Free Software Foundation, either version 3 of the License, or
+      (at your option) any later version.
+      Open Chaos Chess is distributed in the hope that it will be fun,
+      but WITHOUT ANY WARRANTY; without even the implied warranty of
+      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+      GNU General Public License for more details.
+      You should have received a copy of the GNU General Public License
+      along with this program.  If not, see <https://www.gnu.org/licenses/>.
+      -->
+<resources>
+    <string name="app_name">Open Chaos Chess</string>
+    <string name="new_game">Yeni Oyun</string>
+    <string name="player_points">Oyuncu Puanı:   </string>
+    <string name="computer_points">Bilgisayar Puanı:   </string>
+    <string name="you_won">Harika dostum! Kazandın!</string>
+    <string name="you_lost">Lanet olsun dostum, kaybettin!</string>
+    <string name="cant_move_that_bruh">Oynayamazsın bilader!</string>
+    <string name="not_your_turn_stupid">Sıra sende değil bilader!</string>
+    <string name="game_over_bruh">Oyun bitti bilader!</string>
+    <string name="that_sucks">Ah lanet olsun dostum, bu berbat!</string>
+    <string name="about">Hakkında</string>
+    <string name="credits">v%1$s by Noah Stanford (aka CorruptedArk)
+                            \n originally for CIS 175 Fall 2016 at MCCC as Chaos Chess
+                            \n Simone Pessotto\'ya (diğer adıyla Pes8) renk seçme ekranı için teşekkürler
+                            \n Jonas Lowe\'a renk seçme ayarı fikri için teşekkürler
+                            \n GitHub\'dan LibreHacker\'a Rusça çeviri için teşekkürler
+                            \n GitHub\'dan Lian C. Begett/RedsickleDE\'ye Almanca çeviri için teşekkürler
+                            \n GitHub\'dan czarkoff\'a \'Kana Susamış\' fikrini önerdiği için teşekkürler
+                            \n GitHub\'dan berkaygunduzz\'a Türkçe çeviri için teşekkürler
+                            </string>
+    <string name="descript">Open Chaos Chess, Chaos Chess\'in bir çeşidi olarak özgür bir yazılımdır.
+                            Chaos Chess bir çeşit satrançtır. Bu satrançta hamle yapacak taşı sen seçersin fakat taş rasgele bir şekilde hareket eder. Tabi maçlar da \'şah mat\' ederek değil rakibin taşlarını eleyerek kazanılır. İyi eğlenceler, şans seninle olsun!
+                            \n\nOpen Chaos Chess  Telif Hakkı © 2019 Noah Stanford
+                            \nBu yazılım KESİNLİKLE HİÇBİR GARANTİ VERMEZ.
+                            \nBu özgür bir yazılımdır ve gerekli koşullar ile yeniden dağıtmakta özgürsünüz.
+                            \nGNU General Public Lisansı\'nın tamamı için: https://www.gnu.org/licenses/gpl-3.0.txt
+                            \n
+                            \nVarsayılan olarak taşlar herhangi bir şeyi gözeterek hamle yapmaz. Fakat \'Kana Susamış\' modu etkinken taşlar mümkün olduğunca her zaman saldıracaktır.
+                            </string>
+    <string name="contact">Facebook: Noah James Stanford\nTwitter: @CorruptedArk\nGithub: CorruptedArk\n\nSitem: corruptedark.wordpress.com\n\nEmail: noahstandingford@gmail.com\n\n</string>
+    <string name="tied_bro">HAYDA, DÜĞÜMLENDİ!</string>
+    <string name="noice">Harika!</string>
+    <string name="quit">Çık</string>
+    <string name="play">Tek Kişilik</string>
+    <string name="quick_match">Hızlı Oyun</string>
+    <string name="create_game">Davet Gönder</string>
+    <string name="check_invites">Davetleri Kontrol Et</string>
+    <string name="opponent_points">Rakibin Puanı:   </string>
+    <string name="your_points">Senin Puanın:   </string>
+    <string name="sign_out">Çıkış Yap</string>
+    <string name="slogan">Taşı seçersin, hamleyi değil</string>
+    <string name="new_slogan">Taşı seçersin, hamleyi değil\nŞimdi özgürlükle!</string>
+    <string name="secret_hello">Ee, merhaba, buraya nasıl geldiğini anladığından emin değilim. Ama madem burdasın, ismini sorabilir miyim?</string>
+    <string name="background_color">Arka Plan Rengi:</string>
+    <string name="bar_color">Bildirim Çubuğu Rengi:</string>
+    <string name="secondary_color">İkinci Renk:</string>
+    <string name="board_color_1">Oyun Tahtası Rengi 1:</string>
+    <string name="board_color_2">Oyun Tahtası Rengi 2:</string>
+    <string name="piece_color">Taş Rengi:</string>
+    <string name="selection_color">Seçim Rengi:</string>
+    <string name="set_to_defaults">Varsayılana ayarla</string>
+    <string name="save_colors">Renkleri Kaydet</string>
+    <string name="text_color">Yazı Rengi:</string>
+    <string name="settings_file">settings.txt</string>
+    <string name="BT_UUID">fc0ebdde–e425–4123–92a8–17bd8a90a769</string>
+    <string name="host_game">Oyun Kur</string>
+    <string name="join_game">Oyuna Katıl</string>
+    <string name="multiplayer_guide">Eğer rakibinle eşleşmediysen bağlnamadan önce ayarlardan eşleş.</string>
+    <string name="knights_only">Sadece atlar?</string>
+    <string name="start_host">Başlat</string>
+    <string name="stop_host">Durdur</string>
+    <string name="paired_devices">Eşlenilmiş Cihazlar:</string>
+    <string name="host_status">Durum:</string>
+    <string name="import_file">Dosyadan içe aktar</string>
+    <string name="export_file">Dışa aktar</string>
+    <string name="bloodthirst">Kana Susamış  </string>
+    <string name="bloodthirst_notification">Kana Susamış yeni oyunda etkin olacaktır</string>
+    <string name="solo">Tek Kişilik</string>
+    <string name="versus">Karşı</string>
+    <string name="settings">Ayarlar</string>
+    <string name="colors_saved">Renkler kaydedildi</string>
+    <string name="color_save_failed">Renkler kaydedilemedi</string>
+    <string name="gameplay_settings_file">gameplaysettings.txt</string>
+    <string name="bloodthirsty_by_default">Kana Susamış\'ı varsayılan yap</string>
+    <string name="wait_for_move">Hamlenin bitmesini bekle</string>
+    <string name="bloodthirst_toggle_cancelled">Kana Susamış kapatıldı</string>
+    <string name="issues">Sorunlar</string>
+    <string name="issues_url">https://github.com/CorruptedArk/open-chaos-chess/issues</string>
+</resources>
