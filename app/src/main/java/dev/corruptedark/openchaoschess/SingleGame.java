@@ -28,7 +28,7 @@ public class SingleGame {
     public final int OPPONENT = 1;
     public final int NONE = 0;
 
-    private static final int BOARD_SIZE = 8;
+    public static final int BOARD_SIZE = 8;
 
     private Square animatedSquare = null;
 

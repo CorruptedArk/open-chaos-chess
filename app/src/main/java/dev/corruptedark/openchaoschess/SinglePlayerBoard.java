@@ -94,6 +94,8 @@ public class SinglePlayerBoard extends AppCompatActivity {
     private boolean bloodThirsty;
     private boolean bloodThirstQueued = false;
 
+    private boolean aggressiveComputer;
+
     TextView wonLabel, lostLabel, tieLabel, cantMoveThatLabel, notYourTurnLabel, gameOverLabel, thatSucksLabel, noiceLabel, playerPointLabel, computerPointLabel;
 
 
@@ -827,9 +829,23 @@ public class SinglePlayerBoard extends AppCompatActivity {
             for (int j = 0; j < boardSize; j++)
                 if (board[i][j].getTeam() == OPPONENT)
                     computerPieces.add(board[i][j]);
+
+        if (aggressiveComputer) {
+            List<Square> aggressivePieces = new ArrayList<>();
+
+            for (Square piece : computerPieces)
+                if (mover.pieceHasEnemies(board, piece))
+                    aggressivePieces.add(piece);
+
+            if (!aggressivePieces.isEmpty())
+                computerPieces = aggressivePieces;
+        }
+
         if (computerPieces.size() > 0) {
             int computerScore = singleGame.getComputerPoints();
+
             picked = computerPieces.get(rand.nextInt(computerPieces.size()));
+
             while (!mover.movePiece(board, board[picked.getI()][picked.getJ()], singleGame, bloodThirsty)) {
                 computerPieces.remove(picked);
                 if (computerPieces.size() == 0)
@@ -927,8 +943,6 @@ public class SinglePlayerBoard extends AppCompatActivity {
                     });
                     boardMain.addView(board[i][j]);
                 }
-
-
             }
         }
 

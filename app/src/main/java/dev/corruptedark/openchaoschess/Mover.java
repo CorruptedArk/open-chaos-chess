@@ -186,6 +186,35 @@ public class Mover {
         return destination;
     }
 
+    boolean pieceHasEnemies(Square[][] board, Square square) {
+        boolean hasEnemies;
+        switch (square.getPiece()) {
+            case Piece.PAWN:
+                hasEnemies = pawnHasEnemies(board, square);
+                break;
+            case Piece.ROOK:
+                hasEnemies = rookHasEnemies(board, square);
+                break;
+            case Piece.KNIGHT:
+                hasEnemies = knightHasEnemies(board, square);
+                break;
+            case Piece.BISHOP:
+                hasEnemies = bishopHasEnemies(board, square);
+                break;
+            case Piece.KING:
+                hasEnemies = kingHasEnemies(board, square);
+                break;
+            case Piece.QUEEN:
+                hasEnemies = queenHasEnemies(board, square);
+                break;
+            default:
+                hasEnemies = false;
+                break;
+        }
+
+        return hasEnemies;
+    }
+
     //Single game functions start
     public synchronized boolean movePiece(Square[][] board, Square square, SingleGame singleGame, boolean bloodThirsty) {
         boolean moveSuccess;
@@ -214,6 +243,10 @@ public class Mover {
         }
 
         return moveSuccess;
+    }
+
+    boolean pawnHasEnemies(Square[][] board, Square square) {
+        return enemyInWayLeftUp(board, square, 1) || enemyInWayRightUp(board, square, 1);
     }
 
     boolean movePawn(Square[][] board, Square square, SingleGame singleGame, boolean bloodThirsty) {
@@ -347,44 +380,6 @@ public class Mover {
         return moveSuccess;
     }
 
-    ArrayList<Square> getEnemiesOfRook(Square[][] board, Square square) {
-        ArrayList<Square> enemies = new ArrayList<>();
-
-        int distance = 0;
-        while (nothingInWayForward(board, square, distance)) {
-            distance++;
-        }
-        if (enemyInWayForward(board, square, distance)) {
-            enemies.add(board[square.getI()][square.getJ() + square.getTeam() * distance]);
-        }
-
-        distance = 0;
-        while (nothingInWayLeft(board, square, distance)) {
-            distance++;
-        }
-        if (enemyInWayLeft(board, square, distance)) {
-            enemies.add(board[square.getI() + square.getTeam() * distance][square.getJ()]);
-        }
-
-        distance = 0;
-        while (nothingInWayRight(board, square, distance)) {
-            distance++;
-        }
-        if (enemyInWayRight(board, square, distance)) {
-            enemies.add(board[square.getI() - square.getTeam() * distance][square.getJ()]);
-        }
-
-        distance = 0;
-        while (nothingInWayBack(board, square, distance)) {
-            distance++;
-        }
-        if (enemyInWayBack(board, square, distance)) {
-            enemies.add(board[square.getI()][square.getJ() - square.getTeam() * distance]);
-        }
-
-        return enemies;
-    }
-
     ArrayList<Square> getEnemiesOfRook(Square[][] board, Square square, int maxDistance) {
         ArrayList<Square> enemies = new ArrayList<>();
 
@@ -421,6 +416,18 @@ public class Mover {
         }
 
         return enemies;
+    }
+
+    ArrayList<Square> getEnemiesOfRook(Square[][] board, Square square) {
+        return getEnemiesOfRook(board, square, SingleGame.BOARD_SIZE);
+    }
+
+    boolean rookHasEnemies(Square[][] board, Square square, int maxDistance) {
+        return !getEnemiesOfRook(board, square, maxDistance).isEmpty();
+    }
+
+    boolean rookHasEnemies(Square[][] board, Square square) {
+        return rookHasEnemies(board, square, SingleGame.BOARD_SIZE);
     }
 
     boolean moveRook(Square[][] board, Square square, SingleGame singleGame, int max, boolean bloodThirsty) {
@@ -852,6 +859,20 @@ public class Mover {
         return moves;
     }
 
+    boolean knightHasEnemies(Square[][] board, Square square) {
+        ArrayList<Square> moves = getKnightMoves(board, square);
+        boolean hasEnemies = false;
+
+        for(Square move : moves) {
+            if (move.getTeam() == -square.getTeam()) {
+                hasEnemies = true;
+                break;
+            }
+        }
+
+        return hasEnemies;
+    }
+
     boolean moveKnight(Square[][] board, Square square, SingleGame singleGame, boolean bloodThirsty) {
 
         boolean moveSuccess = false;
@@ -896,44 +917,6 @@ public class Mover {
         return moveSuccess;
     }
 
-    ArrayList<Square> getEnemiesOfBishop(Square[][] board, Square square) {
-        ArrayList<Square> enemies = new ArrayList<>();
-
-        int distance = 0;
-        while (nothingInWayRightUp(board, square, distance)) {
-            distance++;
-        }
-        if (enemyInWayRightUp(board, square, distance)) {
-            enemies.add(board[square.getI() - square.getTeam() * distance][square.getJ() + square.getTeam() * distance]);
-        }
-
-        distance = 0;
-        while (nothingInWayLeftUp(board, square, distance)) {
-            distance++;
-        }
-        if (enemyInWayLeftUp(board, square, distance)) {
-            enemies.add(board[square.getI() + square.getTeam() * distance][square.getJ() + square.getTeam() * distance]);
-        }
-
-        distance = 0;
-        while (nothingInWayLeftDown(board, square, distance)) {
-            distance++;
-        }
-        if (enemyInWayLeftDown(board, square, distance)) {
-            enemies.add(board[square.getI() + square.getTeam() * distance][square.getJ() - square.getTeam() * distance]);
-        }
-
-        distance = 0;
-        while (nothingInWayRightDown(board, square, distance)) {
-            distance++;
-        }
-        if (enemyInWayRightDown(board, square, distance)) {
-            enemies.add(board[square.getI() - square.getTeam() * distance][square.getJ() - square.getTeam() * distance]);
-        }
-
-        return enemies;
-    }
-
     ArrayList<Square> getEnemiesOfBishop(Square[][] board, Square square, int maxDistance) {
         ArrayList<Square> enemies = new ArrayList<>();
 
@@ -970,6 +953,18 @@ public class Mover {
         }
 
         return enemies;
+    }
+
+    ArrayList<Square> getEnemiesOfBishop(Square[][] board, Square square) {
+        return getEnemiesOfBishop(board, square, SingleGame.BOARD_SIZE);
+    }
+
+    boolean bishopHasEnemies(Square[][] board, Square square, int maxDistance) {
+        return !getEnemiesOfBishop(board, square, maxDistance).isEmpty();
+    }
+
+    boolean bishopHasEnemies(Square[][] board, Square square) {
+        return bishopHasEnemies(board, square, SingleGame.BOARD_SIZE);
     }
 
     boolean moveBishop(Square[][] board, Square square, SingleGame singleGame, int max, boolean bloodThirsty) {
@@ -1340,6 +1335,10 @@ public class Mover {
         return moveSuccess;
     }
 
+    boolean kingHasEnemies(Square[][] board, Square square) {
+        return rookHasEnemies(board, square, 1) || bishopHasEnemies(board, square, 1);
+    }
+
     boolean moveKing(Square[][] board, Square square, SingleGame singleGame, boolean bloodThirsty) {
         List<KQMODE> options = new ArrayList<>();
 
@@ -1382,6 +1381,10 @@ public class Mover {
         }
 
         return moveSuccess;
+    }
+
+    boolean queenHasEnemies(Square[][] board, Square square){
+        return rookHasEnemies(board, square) || bishopHasEnemies(board, square);
     }
 
     boolean moveQueen(Square[][] board, Square square, SingleGame singleGame, boolean bloodThirsty) {
