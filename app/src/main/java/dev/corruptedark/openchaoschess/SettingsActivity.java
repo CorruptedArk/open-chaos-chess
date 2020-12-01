@@ -61,6 +61,7 @@ import java.util.ArrayList;
 
 public class SettingsActivity extends AppCompatActivity {
     AppCompatCheckBox bloodthirstDefaultToggle;
+    AppCompatCheckBox aggressiveComputerToggle;
     TextView backgroundColorLabel;
     TextView barColorLabel;
     TextView secondaryColorLabel;
@@ -97,6 +98,7 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
 
         bloodthirstDefaultToggle = (AppCompatCheckBox)findViewById(R.id.bloodthirst_default_toggle);
+        aggressiveComputerToggle = (AppCompatCheckBox)findViewById(R.id.aggressive_computer_toggle);
 
         backgroundColorLabel = (TextView)findViewById(R.id.background_color_label);
         barColorLabel = (TextView)findViewById(R.id.bar_color_label);
@@ -150,6 +152,8 @@ public class SettingsActivity extends AppCompatActivity {
         layout.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BACKGROUND_COLOR));
         bloodthirstDefaultToggle.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         bloodthirstDefaultToggle.setHighlightColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
+        aggressiveComputerToggle.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        aggressiveComputerToggle.setHighlightColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
         backgroundColorLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         barColorLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         secondaryColorLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
@@ -174,6 +178,17 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 GameplaySettingsManager.getInstance(view.getContext()).setBloodThirstByDefault(bloodthirstDefaultToggle.isChecked());
+            }
+        });
+
+        TextViewCompat.setCompoundDrawableTintList(aggressiveComputerToggle, new ColorStateList(states, colors));
+
+        aggressiveComputerToggle.setChecked(GameplaySettingsManager.getInstance(this).getAggressiveComputers());
+
+        aggressiveComputerToggle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GameplaySettingsManager.getInstance(view.getContext()).setAggressiveComputer(aggressiveComputerToggle.isChecked());
             }
         });
 
@@ -231,6 +246,8 @@ public class SettingsActivity extends AppCompatActivity {
         layout.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BACKGROUND_COLOR));
         bloodthirstDefaultToggle.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         bloodthirstDefaultToggle.setHighlightColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
+        aggressiveComputerToggle.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        aggressiveComputerToggle.setHighlightColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
         backgroundColorLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         barColorLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         secondaryColorLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));

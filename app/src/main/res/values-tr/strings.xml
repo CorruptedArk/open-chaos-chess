@@ -93,4 +93,5 @@
     <string name="bloodthirst_toggle_cancelled">Kana Susamış kapatıldı</string>
     <string name="issues">Sorunlar</string>
     <string name="issues_url">https://github.com/CorruptedArk/open-chaos-chess/issues</string>
+    <string name="aggressive_computer">Aggressive computers</string>
 </resources>

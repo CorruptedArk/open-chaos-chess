@@ -318,7 +318,7 @@ public class SinglePlayerBoard extends AppCompatActivity {
         }
 
         bloodThirsty = GameplaySettingsManager.getInstance(this).getBloodThirstByDefault();
-
+        aggressiveComputer = GameplaySettingsManager.getInstance(this).getAggressiveComputers();
     }
 
     @Override

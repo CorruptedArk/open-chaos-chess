@@ -96,5 +96,6 @@
     <string name="bloodthirst_toggle_cancelled">Bloodthirst toggle cancelled</string>
     <string name="issues">Issues</string>
     <string name="issues_url">https://github.com/CorruptedArk/open-chaos-chess/issues</string>
+    <string name="aggressive_computer">Aggressive computer</string>
 </resources>
 
