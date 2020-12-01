@@ -46,6 +46,8 @@ As of the most recent commit to the master branch, achievements and single playe
 
 [Lian C. Begett/RedsickleDE](https://github.com/RedsickleDE) - German Translations
 
+[berkaygunduzz](https://github.com/berkaygunduzz) - Turkish Translations
+
 [czarkoff](https://github.com/czarkoff) - Suggested idea for feature: Bloodthirst
 
 [itsanogo](https://github.com/itsanogo) - Suggested Bloodthirst by default toggle
