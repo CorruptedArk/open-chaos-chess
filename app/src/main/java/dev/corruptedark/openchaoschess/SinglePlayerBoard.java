@@ -154,25 +154,8 @@ public class SinglePlayerBoard extends AppCompatActivity {
         if (singleGame.hasBoard()) {
             board = singleGame.restoreBoard();
             createSquares(boardSize);
-            for (int i = 0; i < boardSize; i++)
-                for (int j = 0; j < boardSize; j++) {
-                    board[i][j].setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            moveThread = new MoveThread(view, context, boardColor1, boardColor2, selectColor);
-                            moveThread.start();
-                        }
-                    });
-                    board[i][j].setPieceColor(pieceColor);
-                    boardMain.addView(board[i][j]);
-                }
         } else {
-            board = new Square[boardSize][boardSize];
-            for (int i = 0; i < boardSize; i++)
-                for (int j = 0; j < boardSize; j++)
-                    board[i][j] = new Square(this, pieceColor);
-            startNewGame(getIntent().getBooleanExtra("knightsOnly", false));
-            singleGame.newGame();
+            startNewGame(singleGame.isKnightsOnly());
         }
 
         animatedSquare = new Square(this, pieceColor);
@@ -430,7 +413,7 @@ public class SinglePlayerBoard extends AppCompatActivity {
         }
         clearPieces();
         singleGame.newGame();
-        startNewGame(getIntent().getBooleanExtra("knightsOnly", false));
+        startNewGame(singleGame.isKnightsOnly());
         playerPointLabel.setText(getResources().getText(R.string.player_points).toString() + " " + singleGame.getPlayerPoints());
         computerPointLabel.setText(getResources().getText(R.string.computer_points).toString() + " " + singleGame.getComputerPoints());
         return;
@@ -911,6 +894,33 @@ public class SinglePlayerBoard extends AppCompatActivity {
         boolean colorPicker = false;
         int color;
 
+        if(!singleGame.hasBoard()) {
+            board = new Square[boardSize][boardSize];
+            for (int i = 0; i < boardSize; i++) {
+                board[i] = new Square[boardSize];
+                for (int j = 0; j < boardSize; j++) {
+                    board[i][j] = new Square(this, pieceColor);
+                    board[i][j].setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (moveThread == null || !moveThread.isAlive()) {
+                                moveThread = new MoveThread(view, context, boardColor1, boardColor2, selectColor);
+                                moveThread.start();
+                            }
+                        }
+                    });
+                    boardMain.addView(board[i][j]);
+                }
+            }
+        }
+        else {
+            for (int i = 0; i < boardSize; i++) {
+                for (int j = 0; j < boardSize; j++) {
+                    boardMain.addView(board[i][j]);
+                }
+            }
+        }
+
         for (int i = 0; i < size; i++) {
 
             colorPicker = !colorPicker;
@@ -931,18 +941,6 @@ public class SinglePlayerBoard extends AppCompatActivity {
                 board[i][j].setX(xPosition + i * squareSize);
                 board[i][j].setY(yPosition + j * squareSize);
                 board[i][j].setLayoutParams(new RelativeLayout.LayoutParams(squareSize, squareSize));
-                if (singleGame.getGameCount() == 0) {
-                    board[i][j].setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            if (moveThread == null || !moveThread.isAlive()) {
-                                moveThread = new MoveThread(view, context, boardColor1, boardColor2, selectColor);
-                                moveThread.start();
-                            }
-                        }
-                    });
-                    boardMain.addView(board[i][j]);
-                }
             }
         }
 

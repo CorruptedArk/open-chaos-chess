@@ -39,6 +39,7 @@ public class SingleGame {
     private static int gameCount;
     private boolean canPlayerMove;
     private boolean canComputerMove;
+    private boolean knightsOnly = false;
     private static boolean hasBoard = false;
 
 
@@ -70,6 +71,7 @@ public class SingleGame {
         moveCount = 0;
         turn = YOU;
         gameCount++;
+        hasBoard = false;
     }
 
     public int getPlayerPoints(){
@@ -220,7 +222,6 @@ public class SingleGame {
     }
 
     public Square[][] restoreBoard(){
-        hasBoard = false;
         return boardStatic;
     }
 
@@ -234,6 +235,14 @@ public class SingleGame {
 
     public Square getAnimatedSquare() {
         return animatedSquare;
+    }
+
+    public void setKnightsOnly(boolean knightsOnly) {
+        this.knightsOnly = knightsOnly;
+    }
+
+    public boolean isKnightsOnly() {
+        return knightsOnly;
     }
 }
 

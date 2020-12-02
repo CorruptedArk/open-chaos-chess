@@ -65,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
     final int KNIGHT_TIME = 10000;
     final int CHECK_INBOX = 69;
 
+    volatile boolean buttonsClickable = true;
+
     RelativeLayout mainLayout;
     TextView mainTitle;
     TextView mainSlogan;
@@ -403,46 +405,55 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-    public void settingsButtonClicked(View view) {
-        startActivity(new Intent(MainActivity.this,SettingsActivity.class));
-    }
-
     public void playButtonClicked(View view){
-        Intent intent = new Intent(MainActivity.this, SinglePlayerBoard.class);
-        startActivity(intent);
+        if (buttonsClickable) {
+            buttonsClickable = false;
+            if(SingleGame.getInstance().isKnightsOnly()) {
+                SingleGame.getInstance().newGame();
+                SingleGame.getInstance().setKnightsOnly(false);
+            }
+            Intent intent = new Intent(MainActivity.this, SinglePlayerBoard.class);
+            startActivity(intent);
+        }
     }
 
     public void hostGameButtonClicked(View view)
     {
-        //TODO
-
-        Intent intent = new Intent(MainActivity.this,StartHostActivity.class);
-        startActivity(intent);
+        if (buttonsClickable) {
+            buttonsClickable = false;
+            Intent intent = new Intent(MainActivity.this, StartHostActivity.class);
+            startActivity(intent);
+        }
     }
 
     public void joinGameButtonClicked(View view)
     {
-        //TODO
-
-        Intent intent = new Intent(MainActivity.this,StartClientActivity.class);
-        startActivity(intent);
+        if (buttonsClickable) {
+            buttonsClickable = false;
+            Intent intent = new Intent(MainActivity.this, StartClientActivity.class);
+            startActivity(intent);
+        }
     }
 
     public void aboutButtonClicked(View view){
+        if (buttonsClickable) {
+            buttonsClickable = false;
+            achievementHandler.incrementInMemory(AchievementHandler.OPENED_ABOUT);
+            achievementHandler.saveValues();
 
-        achievementHandler.incrementInMemory(AchievementHandler.OPENED_ABOUT);
-        achievementHandler.saveValues();
-
-        startActivity(new Intent(MainActivity.this,AboutActivity.class));
+            startActivity(new Intent(MainActivity.this, AboutActivity.class));
+        }
     }
 
     public void issuesButtonClicked(View view)
     {
-        String url = getString(R.string.issues_url);
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse(url));
-        startActivity(intent);
+        if (buttonsClickable) {
+            buttonsClickable = false;
+            String url = getString(R.string.issues_url);
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(url));
+            startActivity(intent);
+        }
     }
 
 
@@ -450,19 +461,34 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
+    public void settingsButtonClicked(View view) {
+        if (buttonsClickable) {
+            buttonsClickable = false;
+            startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+        }
+    }
 
     public void achievementsClicked(View view){
-        startActivity(new Intent(MainActivity.this, AchievementsActivity.class));
+        if (buttonsClickable) {
+            buttonsClickable = false;
+            startActivity(new Intent(MainActivity.this, AchievementsActivity.class));
+        }
     }
 
     public void knightButtonClicked(View view){
-        Intent intent = new Intent(MainActivity.this, SinglePlayerBoard.class);
-        intent.putExtra("knightsOnly",true);
-        //SingleGame.getInstance().newGame();
+        if (buttonsClickable) {
+            buttonsClickable = false;
+            Intent intent = new Intent(MainActivity.this, SinglePlayerBoard.class);
 
-        achievementHandler.incrementInMemory(AchievementHandler.HORSING_AROUND);
+            if(!SingleGame.getInstance().isKnightsOnly()) {
+                SingleGame.getInstance().newGame();
+                SingleGame.getInstance().setKnightsOnly(true);
+            }
 
-        startActivity(intent);
+            achievementHandler.incrementInMemory(AchievementHandler.HORSING_AROUND);
+
+            startActivity(intent);
+        }
     }
 
     private int convertDpToPx(int dp){
@@ -494,4 +520,9 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(request, response, data);
     }
 
+    @Override
+    protected void onPostResume() {
+        buttonsClickable = true;
+        super.onPostResume();
+    }
 }
