@@ -1,0 +1,15 @@
+v1.7.0
+Change:
+-Knight button now starts new game if knights only mode is not active and solo play button starts a new game if it is active
+-Solo play is now guaranteed to open a normal game
+
+Additions:
+-Turkish translations by berkaygunduzz on Github
+-Aggressive computer mode as suggested by vi on Github
+
+Fix:
+-Fixed ability to start activities twice with double button press on main menu
+
+
+
+
