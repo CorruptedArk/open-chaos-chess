@@ -1,5 +1,5 @@
 v1.7.0
-Change:
+Changes:
 -Knight button now starts new game if knights only mode is not active and solo play button starts a new game if it is active
 -Solo play is now guaranteed to open a normal game
 
