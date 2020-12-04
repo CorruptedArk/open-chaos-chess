@@ -1,3 +1,4 @@
+./gradlew :app:assembleRelease
 version_name=`grep 'versionName' app/build.gradle | awk '{for(i=1;i<=NF;i++){ if($i ~ /[0-9].*[0-9]/){print $i} } }' | tr -d \"`
 notes_file=`mktemp XXXXXXXXXX.v$version_name.md`
 cp release-template.md $notes_file
