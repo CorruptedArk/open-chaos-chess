@@ -80,6 +80,8 @@ public class SinglePlayerBoard extends AppCompatActivity {
     RelativeLayout boardLayout;
     private Square animatedSquare;
 
+    private boolean squaresAdded;
+
     Toolbar toolbar;
 
     AchievementHandler achievementHandler;
@@ -151,6 +153,7 @@ public class SinglePlayerBoard extends AppCompatActivity {
         mover = new Mover(this);
         singleGame = SingleGame.getInstance();
 
+        squaresAdded = false;
         if (singleGame.hasBoard()) {
             board = singleGame.restoreBoard();
             createSquares(boardSize);
@@ -894,31 +897,35 @@ public class SinglePlayerBoard extends AppCompatActivity {
         boolean colorPicker = false;
         int color;
 
-        if(!singleGame.hasBoard()) {
-            board = new Square[boardSize][boardSize];
-            for (int i = 0; i < boardSize; i++) {
-                board[i] = new Square[boardSize];
-                for (int j = 0; j < boardSize; j++) {
-                    board[i][j] = new Square(this, pieceColor);
-                    board[i][j].setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            if (moveThread == null || !moveThread.isAlive()) {
-                                moveThread = new MoveThread(view, context, boardColor1, boardColor2, selectColor);
-                                moveThread.start();
+        if (!squaresAdded) {
+            if (!singleGame.hasBoard()) {
+                board = new Square[boardSize][boardSize];
+                for (int i = 0; i < boardSize; i++) {
+                    board[i] = new Square[boardSize];
+                    for (int j = 0; j < boardSize; j++) {
+                        board[i][j] = new Square(this, pieceColor);
+                        board[i][j].setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (moveThread == null || !moveThread.isAlive()) {
+                                    moveThread = new MoveThread(view, context, boardColor1, boardColor2, selectColor);
+                                    moveThread.start();
+                                }
                             }
-                        }
-                    });
-                    boardMain.addView(board[i][j]);
+                        });
+                        boardMain.addView(board[i][j]);
+                    }
                 }
             }
-        }
-        else {
-            for (int i = 0; i < boardSize; i++) {
-                for (int j = 0; j < boardSize; j++) {
-                    boardMain.addView(board[i][j]);
+            else {
+                for (int i = 0; i < boardSize; i++) {
+                    for (int j = 0; j < boardSize; j++) {
+                        boardMain.addView(board[i][j]);
+                    }
                 }
             }
+
+            squaresAdded = true;
         }
 
         for (int i = 0; i < size; i++) {
