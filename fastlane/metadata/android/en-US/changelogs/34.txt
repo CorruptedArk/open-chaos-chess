@@ -1,0 +1,7 @@
+v1.7.1
+Fix:
+-Fixed animations breaking on new game
+
+
+
+
