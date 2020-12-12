@@ -1,0 +1,10 @@
+v1.7.2
+-Fix build compatibility with F-Droid
+
+v1.7.1
+Fix:
+-Fixed animations breaking on new game
+
+
+
+
