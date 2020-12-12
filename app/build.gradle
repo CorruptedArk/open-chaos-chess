@@ -31,7 +31,7 @@ keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 android {
 
     signingConfigs {
-        release {
+        gitRelease {
             keyAlias keystoreProperties['keyAlias']
             keyPassword keystoreProperties['keyPassword']
             storeFile file(keystoreProperties['storeFile'])
@@ -62,10 +62,14 @@ android {
         }
 
         release {
-            signingConfig signingConfigs.release
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             archivesBaseName = name
+        }
+
+        gitRelease {
+            initWith release
+            signingConfig signingConfigs.gitRelease
         }
     }
 }
