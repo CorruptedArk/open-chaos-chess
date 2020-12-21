@@ -98,5 +98,6 @@
     <string name="issues">Issues</string>
     <string name="issues_url">https://github.com/CorruptedArk/open-chaos-chess/issues</string>
     <string name="aggressive_computer">Aggressive computer</string>
+    <string name="setting_applied_on_new_game">Setting will be applied on new game</string>
 </resources>
 

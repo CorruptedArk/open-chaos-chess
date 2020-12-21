@@ -28,6 +28,7 @@ import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
@@ -60,6 +61,7 @@ import androidx.core.widget.TextViewCompat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class SinglePlayerBoard extends AppCompatActivity {
@@ -96,7 +98,7 @@ public class SinglePlayerBoard extends AppCompatActivity {
     private boolean bloodThirsty;
     private boolean bloodThirstQueued = false;
 
-    private boolean aggressiveComputer;
+    private static volatile boolean aggressiveComputer;
 
     TextView wonLabel, lostLabel, tieLabel, cantMoveThatLabel, notYourTurnLabel, gameOverLabel, thatSucksLabel, noiceLabel, playerPointLabel, computerPointLabel;
 
@@ -158,6 +160,7 @@ public class SinglePlayerBoard extends AppCompatActivity {
             board = singleGame.restoreBoard();
             createSquares(boardSize);
         } else {
+            aggressiveComputer = GameplaySettingsManager.getInstance(this).getAggressiveComputers();
             startNewGame(singleGame.isKnightsOnly());
         }
 
@@ -304,7 +307,6 @@ public class SinglePlayerBoard extends AppCompatActivity {
         }
 
         bloodThirsty = GameplaySettingsManager.getInstance(this).getBloodThirstByDefault();
-        aggressiveComputer = GameplaySettingsManager.getInstance(this).getAggressiveComputers();
     }
 
     @Override
@@ -393,7 +395,6 @@ public class SinglePlayerBoard extends AppCompatActivity {
         return Math.round(dp * (getResources().getDisplayMetrics().xdpi / DisplayMetrics.DENSITY_DEFAULT));
     }
 
-
     private void newGameButton_Click() {
         tieLabel.setVisibility(View.INVISIBLE);
         wonLabel.setVisibility(View.INVISIBLE);
@@ -408,6 +409,8 @@ public class SinglePlayerBoard extends AppCompatActivity {
             bloodThirsty = !bloodThirsty;
             bloodThirstQueued = false;
         }
+
+        aggressiveComputer = GameplaySettingsManager.getInstance(this).getAggressiveComputers();
 
         selected = defaultSquare;
         while(moveThread != null && moveThread.isAlive())
@@ -468,13 +471,13 @@ public class SinglePlayerBoard extends AppCompatActivity {
     public synchronized void moveSelectedButton_Click(final View view) {
         achievementHandler.incrementInMemory(AchievementHandler.STARTED_GAME);
         achievementHandler.saveValues();
-        thatSucksLabel.post(new Runnable() {
+        runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 thatSucksLabel.setVisibility(View.INVISIBLE);
             }
         });
-        noiceLabel.post(new Runnable() {
+        runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 noiceLabel.setVisibility(View.INVISIBLE);
@@ -483,13 +486,13 @@ public class SinglePlayerBoard extends AppCompatActivity {
         int playerScore = singleGame.getPlayerPoints();
         if (singleGame.getTurn() == YOU) {
             if (!singleGame.getCanComputerMove(mover, board) && !singleGame.getCanPlayerMove(mover, board)) {
-                cantMoveThatLabel.post(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         cantMoveThatLabel.setVisibility(View.VISIBLE);
                     }
                 });
-                gameOverLabel.post(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         gameOverLabel.setVisibility(View.VISIBLE);
@@ -497,7 +500,7 @@ public class SinglePlayerBoard extends AppCompatActivity {
                 });
                 singleGame.setTurn(NONE);
                 if (singleGame.getComputerPoints() == singleGame.getPlayerPoints())
-                    tieLabel.post(new Runnable() {
+                    runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             tieLabel.setVisibility(View.VISIBLE);
@@ -511,7 +514,7 @@ public class SinglePlayerBoard extends AppCompatActivity {
                         }
                     });
                 else if (singleGame.getComputerPoints() < singleGame.getPlayerPoints()) {
-                    wonLabel.post(new Runnable() {
+                    runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             wonLabel.setVisibility(View.VISIBLE);
@@ -531,7 +534,7 @@ public class SinglePlayerBoard extends AppCompatActivity {
                     });
 
                 } else
-                    lostLabel.post(new Runnable() {
+                    runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             lostLabel.setVisibility(View.VISIBLE);
@@ -552,7 +555,7 @@ public class SinglePlayerBoard extends AppCompatActivity {
                         }
                     });
             } else if (bishopTie()) {
-                gameOverLabel.post(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         gameOverLabel.setVisibility(View.VISIBLE);
@@ -560,7 +563,7 @@ public class SinglePlayerBoard extends AppCompatActivity {
                 });
                 singleGame.setTurn(NONE);
                 if (singleGame.getComputerPoints() == singleGame.getPlayerPoints())
-                    tieLabel.post(new Runnable() {
+                    runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             tieLabel.setVisibility(View.VISIBLE);
@@ -574,7 +577,7 @@ public class SinglePlayerBoard extends AppCompatActivity {
                         }
                     });
                 else if (singleGame.getComputerPoints() < singleGame.getPlayerPoints()) {
-                    wonLabel.post(new Runnable() {
+                    runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             wonLabel.setVisibility(View.VISIBLE);
@@ -594,7 +597,7 @@ public class SinglePlayerBoard extends AppCompatActivity {
                     });
 
                 } else
-                    lostLabel.post(new Runnable() {
+                    runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             lostLabel.setVisibility(View.VISIBLE);
@@ -615,13 +618,13 @@ public class SinglePlayerBoard extends AppCompatActivity {
                     });
             } else if (selected.getI() == -1) {
                 // Nothing selected
-                cantMoveThatLabel.post(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         cantMoveThatLabel.setVisibility(View.INVISIBLE);
                     }
                 });
-                notYourTurnLabel.post(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         notYourTurnLabel.setVisibility(View.INVISIBLE);
@@ -630,7 +633,7 @@ public class SinglePlayerBoard extends AppCompatActivity {
 
 
             } else if (mover.movePiece(board, board[selected.getI()][selected.getJ()], singleGame, bloodThirsty)) {
-                selected.post(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         int color;
@@ -646,7 +649,7 @@ public class SinglePlayerBoard extends AppCompatActivity {
                 });
 
                 if (singleGame.getPlayerPoints() > playerScore) {
-                    noiceLabel.post(new Runnable() {
+                    runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             noiceLabel.setVisibility(View.VISIBLE);
@@ -654,7 +657,7 @@ public class SinglePlayerBoard extends AppCompatActivity {
                         }
                     });
                 } else {
-                    noiceLabel.post(new Runnable() {
+                    runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             noiceLabel.setVisibility(View.INVISIBLE);
@@ -662,13 +665,13 @@ public class SinglePlayerBoard extends AppCompatActivity {
                     });
                 }
 
-                cantMoveThatLabel.post(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         cantMoveThatLabel.setVisibility(View.INVISIBLE);
                     }
                 });
-                notYourTurnLabel.post(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         notYourTurnLabel.setVisibility(View.INVISIBLE);
@@ -678,7 +681,7 @@ public class SinglePlayerBoard extends AppCompatActivity {
                 singleGame.setTurn(OPPONENT);
 
 
-                playerPointLabel.post(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         playerPointLabel.setText(getResources().getText(R.string.player_points).toString() + " " + singleGame.getPlayerPoints());
@@ -693,7 +696,7 @@ public class SinglePlayerBoard extends AppCompatActivity {
                     }
                     if (singleGame.getCanComputerMove(mover, board))
                         moveComputer();
-                    computerPointLabel.post(new Runnable() {
+                    runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             computerPointLabel.setText(getResources().getText(R.string.computer_points).toString() + " " + singleGame.getComputerPoints());
@@ -702,7 +705,7 @@ public class SinglePlayerBoard extends AppCompatActivity {
                 } while (!singleGame.getCanPlayerMove(mover, board) && singleGame.getCanComputerMove(mover, board) && singleGame.getPlayerCount() > 0);
 
                 if (singleGame.getPlayerCount() == 0) {
-                    lostLabel.post(new Runnable() {
+                    runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             lostLabel.setVisibility(View.VISIBLE);
@@ -724,7 +727,7 @@ public class SinglePlayerBoard extends AppCompatActivity {
 
                     singleGame.setTurn(NONE);
                 } else if (singleGame.getComputerCount() == 0) {
-                    wonLabel.post(new Runnable() {
+                    runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             wonLabel.setVisibility(View.VISIBLE);
@@ -746,13 +749,13 @@ public class SinglePlayerBoard extends AppCompatActivity {
 
                 }
             } else {
-                cantMoveThatLabel.post(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         cantMoveThatLabel.setVisibility(View.VISIBLE);
                     }
                 });
-                notYourTurnLabel.post(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         notYourTurnLabel.setVisibility(View.INVISIBLE);
@@ -764,13 +767,13 @@ public class SinglePlayerBoard extends AppCompatActivity {
 
         } else if (singleGame.getTurn() == OPPONENT) {
             if (singleGame.getCanComputerMove(mover, board)) {
-                cantMoveThatLabel.post(new Runnable() {
+               runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         cantMoveThatLabel.setVisibility(View.VISIBLE);
                     }
                 });
-                notYourTurnLabel.post(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         notYourTurnLabel.setVisibility(View.VISIBLE);
@@ -781,7 +784,7 @@ public class SinglePlayerBoard extends AppCompatActivity {
                 moveSelectedButton_Click(view);
             }
         } else {
-            gameOverLabel.post(new Runnable() {
+            runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     gameOverLabel.setVisibility(View.VISIBLE);
@@ -793,14 +796,16 @@ public class SinglePlayerBoard extends AppCompatActivity {
 
     }
 
-    synchronized void moveComputer() {
-        thatSucksLabel.post(new Runnable() {
+    void moveComputer() {
+        //Looper.prepare();
+
+        runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 thatSucksLabel.setVisibility(View.INVISIBLE);
             }
         });
-        noiceLabel.post(new Runnable() {
+        runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 noiceLabel.setVisibility(View.INVISIBLE);
@@ -840,7 +845,7 @@ public class SinglePlayerBoard extends AppCompatActivity {
             }
 
             if (selected.getTeam() == OPPONENT) {
-                selected.post(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         int color;
@@ -857,7 +862,7 @@ public class SinglePlayerBoard extends AppCompatActivity {
             }
 
             if (singleGame.getComputerPoints() > computerScore)
-                thatSucksLabel.post(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         thatSucksLabel.setVisibility(View.VISIBLE);
@@ -865,7 +870,7 @@ public class SinglePlayerBoard extends AppCompatActivity {
                     }
                 });
             else
-                thatSucksLabel.post(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         thatSucksLabel.setVisibility(View.INVISIBLE);
@@ -875,7 +880,7 @@ public class SinglePlayerBoard extends AppCompatActivity {
 
             singleGame.setTurn(YOU);
 
-            notYourTurnLabel.post(new Runnable() {
+            runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     notYourTurnLabel.setVisibility(View.INVISIBLE);

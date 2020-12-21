@@ -189,6 +189,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 GameplaySettingsManager.getInstance(view.getContext()).setAggressiveComputer(aggressiveComputerToggle.isChecked());
+                Toast.makeText(view.getContext(), R.string.setting_applied_on_new_game, Toast.LENGTH_SHORT).show();
             }
         });
 
