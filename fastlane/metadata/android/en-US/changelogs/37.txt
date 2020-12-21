@@ -1,0 +1,12 @@
+v1.7.4
+Change:
+-Toast notification now appears when aggression toggle is clicked
+
+Fixes:
+-Fixed aggression not toggling on new game
+-Fixed labels not toggling visibility consistently
+
+
+
+
+
