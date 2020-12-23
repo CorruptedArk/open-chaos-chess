@@ -1,0 +1,12 @@
+v1.7.5
+Change:
+-Positions of kings and queens swapped as request by d5xtgr on Github
+
+Fixes:
+-Fixed application of colors to board
+-Fixed memory leaks from static fields
+
+
+
+
+
