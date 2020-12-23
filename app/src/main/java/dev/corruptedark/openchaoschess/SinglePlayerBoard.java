@@ -1014,12 +1014,12 @@ public class SinglePlayerBoard extends AppCompatActivity {
             board[5][7].setPiece(Piece.BISHOP);
 
             // Set Kings
-            board[3][0].setPiece(Piece.KING);
-            board[3][7].setPiece(Piece.KING);
+            board[4][0].setPiece(Piece.KING);
+            board[4][7].setPiece(Piece.KING);
 
             // Set Queens
-            board[4][0].setPiece(Piece.QUEEN);
-            board[4][7].setPiece(Piece.QUEEN);
+            board[3][0].setPiece(Piece.QUEEN);
+            board[3][7].setPiece(Piece.QUEEN);
         }
 
         return;
