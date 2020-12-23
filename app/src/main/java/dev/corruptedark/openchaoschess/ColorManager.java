@@ -42,8 +42,8 @@ public class ColorManager {
     public static final int SELECTION_COLOR = 6;
     public static final int TEXT_COLOR = 7;
 
-    private Context context;
-    private static ColorManager instance;
+    //private Context context;
+    private static volatile ColorManager instance;
     private File settingsFile;
     private InputStream fileReader;
     private OutputStream fileWriter;
@@ -52,7 +52,6 @@ public class ColorManager {
 
     private ColorManager(Context context) {
 
-        this.context = context;
         settingsFile = new File(context.getApplicationContext().getFilesDir(),context.getString(R.string.settings_file));
         if(settingsFile.exists()) {
             try{
@@ -130,7 +129,7 @@ public class ColorManager {
         return successful;
     }
 
-    private String readTextFromUri(Uri uri) throws Exception {
+    private String readTextFromUri(Uri uri, Context context) throws Exception {
 
         String contents;
 
@@ -150,10 +149,10 @@ public class ColorManager {
         return contents;
     }
 
-    public void importColorsFromUri(Uri uri) {
+    public void importColorsFromUri(Uri uri, Context context) {
         try
         {
-            String colorText = readTextFromUri(uri);
+            String colorText = readTextFromUri(uri, context);
             contentArray = colorText.split(" ");
 
             Toast.makeText(context, "Colors imported successfully", Toast.LENGTH_SHORT).show();
@@ -166,7 +165,7 @@ public class ColorManager {
 
     }
 
-    public void exportColorsToDirectory(Uri uri) {
+    public void exportColorsToDirectory(Uri uri, Context context) {
         StringBuilder contents = new StringBuilder();
 
         for(int i = 0; i < contentArray.length; i++)

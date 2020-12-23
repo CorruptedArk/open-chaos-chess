@@ -20,6 +20,7 @@
 package dev.corruptedark.openchaoschess;
 
 
+import android.content.Context;
 import android.view.View;
 
 public class MoveThread extends Thread {
@@ -31,38 +32,38 @@ public class MoveThread extends Thread {
     private boolean single;
     private SinglePlayerBoard singlePlayerBoard;
     private MultiPlayerBoard multiPlayerBoard;
-    private int color1;
-    private int color2;
-    private int selectColor;
+    private volatile ColorManager colorManager;
 
-    public MoveThread(View view, SinglePlayerBoard singlePlayerBoard, int color1, int color2, int selectColor){
+    public MoveThread(View view, SinglePlayerBoard singlePlayerBoard) {
         single = true;
         this.view = view;
         this.singlePlayerBoard = singlePlayerBoard;
-        this.color1 = color1;
-        this.color2 = color2;
-        this.selectColor = selectColor;
     }
 
-    public MoveThread(View view, MultiPlayerBoard multiPlayerBoard, int color1, int color2, int selectColor)
-    {
+    public MoveThread(View view, MultiPlayerBoard multiPlayerBoard) {
         single = false;
         this.view = view;
         this.multiPlayerBoard = multiPlayerBoard;
-        this.color1 = color1;
-        this.color2 = color2;
-        this.selectColor = selectColor;
     }
 
     public void run() {
         final Square clicked;
         final Square selected;
-        if(single)
-        {
+        Context context;
+
+        if (singlePlayerBoard != null) {
+            context = singlePlayerBoard;
+        }
+        else {
+            context = multiPlayerBoard;
+        }
+
+        colorManager = ColorManager.getInstance(singlePlayerBoard);
+
+        if (single) {
             clicked = (Square) view;
             selected = singlePlayerBoard.selected;
-            if (clicked.getTeam() == YOU && !singlePlayerBoard.selected.equals(clicked))
-            {
+            if (clicked.getTeam() == YOU && !singlePlayerBoard.selected.equals(clicked)) {
                 singlePlayerBoard.cantMoveThatLabel.post(new Runnable() {
                     @Override
                     public void run() {
@@ -73,7 +74,7 @@ public class MoveThread extends Thread {
                     singlePlayerBoard.selected.post(new Runnable() {
                         @Override
                         public void run() {
-                            selected.setBackgroundColor(color1);
+                            selected.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
                             singlePlayerBoard.boardMain.invalidate();
                         }
                     });
@@ -81,7 +82,7 @@ public class MoveThread extends Thread {
                     singlePlayerBoard.selected.post(new Runnable() {
                         @Override
                         public void run() {
-                            selected.setBackgroundColor(color2);
+                            selected.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_2));
                             singlePlayerBoard.boardMain.invalidate();
                         }
                     });
@@ -89,18 +90,16 @@ public class MoveThread extends Thread {
                 singlePlayerBoard.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        clicked.setBackgroundColor(selectColor);
+                        clicked.setBackgroundColor(colorManager.getColorFromFile(ColorManager.SELECTION_COLOR));
                         singlePlayerBoard.boardMain.invalidate();
                     }
                 });
-            }
-            else if (singlePlayerBoard.selected == clicked)
-            {
+            } else if (singlePlayerBoard.selected == clicked) {
                 if (singlePlayerBoard.selected.getColor())
                     singlePlayerBoard.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            clicked.setBackgroundColor(color1);
+                            clicked.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
                             singlePlayerBoard.boardMain.invalidate();
                         }
                     });
@@ -109,20 +108,17 @@ public class MoveThread extends Thread {
                     singlePlayerBoard.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            clicked.setBackgroundColor(color2);
+                            clicked.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_2));
                             singlePlayerBoard.boardMain.invalidate();
                         }
                     });
                 singlePlayerBoard.moveSelectedButton_Click(view);
 
             }
-        }
-        else
-        {
+        } else {
             clicked = (Square) view;
             selected = multiPlayerBoard.selected;
-            if (clicked.getTeam() == YOU && !multiPlayerBoard.selected.equals(clicked))
-            {
+            if (clicked.getTeam() == YOU && !multiPlayerBoard.selected.equals(clicked)) {
                 multiPlayerBoard.cantMoveThatLabel.post(new Runnable() {
                     @Override
                     public void run() {
@@ -133,7 +129,7 @@ public class MoveThread extends Thread {
                     multiPlayerBoard.selected.post(new Runnable() {
                         @Override
                         public void run() {
-                            selected.setBackgroundColor(color1);
+                            selected.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
                             multiPlayerBoard.boardMain.invalidate();
                         }
                     });
@@ -141,7 +137,7 @@ public class MoveThread extends Thread {
                     multiPlayerBoard.selected.post(new Runnable() {
                         @Override
                         public void run() {
-                            selected.setBackgroundColor(color2);
+                            selected.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_2));
                             multiPlayerBoard.boardMain.invalidate();
                         }
                     });
@@ -149,18 +145,16 @@ public class MoveThread extends Thread {
                 multiPlayerBoard.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        clicked.setBackgroundColor(selectColor);
+                        clicked.setBackgroundColor(colorManager.getColorFromFile(ColorManager.SELECTION_COLOR));
                         multiPlayerBoard.boardMain.invalidate();
                     }
                 });
-            }
-            else if (multiPlayerBoard.selected == clicked)
-            {
+            } else if (multiPlayerBoard.selected == clicked) {
                 if (multiPlayerBoard.selected.getColor())
                     multiPlayerBoard.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            clicked.setBackgroundColor(color1);
+                            clicked.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
                             multiPlayerBoard.boardMain.invalidate();
                         }
                     });
@@ -169,7 +163,7 @@ public class MoveThread extends Thread {
                     multiPlayerBoard.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            clicked.setBackgroundColor(color2);
+                            clicked.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_2));
                             multiPlayerBoard.boardMain.invalidate();
                         }
                     });

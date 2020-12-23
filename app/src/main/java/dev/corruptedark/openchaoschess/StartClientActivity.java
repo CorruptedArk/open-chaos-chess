@@ -67,7 +67,7 @@ public class StartClientActivity extends AppCompatActivity {
         pairedDevicesLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         pairedDevicesListView.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BACKGROUND_COLOR));
 
-        gameConnectionHandler = new GameConnectionHandler();
+        gameConnectionHandler = GameConnectionHandler.getInstance();
         gameConnectionHandler.startBluetooth(this);
 
         pairedDevicesListView.setSelector(new ColorDrawable(colorManager.getColorFromFile(ColorManager.SELECTION_COLOR)));
@@ -90,7 +90,7 @@ public class StartClientActivity extends AppCompatActivity {
 
     public void connectToHost(BluetoothDevice device) {
         Toast.makeText(this, "Starting connection to host", Toast.LENGTH_SHORT).show();
-        gameConnectionHandler.connectToHost(device);
+        gameConnectionHandler.connectToHost(device, this);
     }
 
     public void stopClient()

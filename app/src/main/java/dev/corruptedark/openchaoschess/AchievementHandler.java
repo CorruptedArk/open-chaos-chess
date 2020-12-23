@@ -37,7 +37,7 @@ import java.util.Objects;
 
 public class AchievementHandler {
 
-    private Context context;
+    //private Context context;
 
     private static int currentIndex = 0;
     public static final Achievement STARTED_GAME = new Achievement(currentIndex++,1,"Started Game","You opened the game! Congratulations!");
@@ -78,7 +78,7 @@ public class AchievementHandler {
 
     private AchievementHandler(Context context) {
 
-        this.context = context.getApplicationContext();
+        //this.context = context.getApplicationContext();
 
         achievementList = new Achievement[ACHIEVEMENT_COUNT];
 
@@ -103,7 +103,7 @@ public class AchievementHandler {
 
         achievementValueList = new int[ACHIEVEMENT_COUNT];
 
-        achievementsFile = new File(this.context.getFilesDir(),FILENAME);
+        achievementsFile = new File(context.getFilesDir(),FILENAME);
 
         if(achievementsFile.exists()) {
 
@@ -203,7 +203,7 @@ public class AchievementHandler {
         return new ArrayList<>(Arrays.asList(achievementList));
     }
 
-    private String readTextFromUri(Uri uri) throws Exception {
+    private String readTextFromUri(Uri uri, Context context) throws Exception {
 
         String contents;
 
@@ -223,10 +223,10 @@ public class AchievementHandler {
         return contents;
     }
 
-    public void importAchievementsFromUri(Uri uri) {
+    public void importAchievementsFromUri(Uri uri, Context context) {
         try
         {
-            String achievementText = readTextFromUri(uri);
+            String achievementText = readTextFromUri(uri, context);
 
             String[] contentArray = achievementText.split("\n");
 
@@ -246,7 +246,7 @@ public class AchievementHandler {
 
     }
 
-    public void exportAchievementsToDirectory(Uri uri) {
+    public void exportAchievementsToDirectory(Uri uri, Context context) {
 
 
         StringBuilder builder = new StringBuilder();

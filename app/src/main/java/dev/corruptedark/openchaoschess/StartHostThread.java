@@ -67,7 +67,7 @@ public class StartHostThread extends Thread {
 
         Toast.makeText(callingActivity, "Starting Service", Toast.LENGTH_LONG).show();
 
-        GameConnectionHandler.setMultiPlayerService(multiPlayerService, callingActivity, knightsOnly, bloodthirsty,true);
+        GameConnectionHandler.getInstance().setMultiPlayerService(multiPlayerService, callingActivity, knightsOnly, bloodthirsty,true);
     }
 
     public StartHostThread(Activity callingActivity, BluetoothAdapter adapter, boolean knightsOnly, boolean bloodthirsty)

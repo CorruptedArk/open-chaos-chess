@@ -38,19 +38,33 @@ public class GameConnectionHandler {
 
     public static String IS_HOST_KEY = "isHost";
 
+    private static GameConnectionHandler instance;
+
     private BluetoothAdapter adapter;
     private boolean bluetoothSupported;
     public static final int REQUEST_ENABLE_BT = 69;
-    private Activity callingActivity;
+    //private Activity callingActivity;
 
 
     public final String RUNNING = "running";
     public final String NOT_RUNNING = "not running";
 
-    private static MultiPlayerService multiPlayerService = null;
+    private MultiPlayerService multiPlayerService = null;
 
     private StartHostThread startHostThread;
     private StartClientThread startClientThread;
+
+    private GameConnectionHandler() {}
+
+    public static GameConnectionHandler getInstance() {
+
+        if (instance == null) {
+            instance = new GameConnectionHandler();
+        }
+
+        return instance;
+    }
+
 
     /**
      * Opens a request to start bluetooth if bluetooth is supported.
@@ -61,7 +75,7 @@ public class GameConnectionHandler {
      */
     public void startBluetooth(Activity callingActivity)
     {
-        this.callingActivity = callingActivity;
+        //this.callingActivity = callingActivity;
         adapter = BluetoothAdapter.getDefaultAdapter();
 
         if (adapter == null)
@@ -125,7 +139,7 @@ public class GameConnectionHandler {
         return devices;
     }
 
-    public void connectToHost(BluetoothDevice device)
+    public void connectToHost(BluetoothDevice device, Activity callingActivity)
     {
         if(startClientThread == null || !startClientThread.isAlive()) {
             startClientThread = new StartClientThread(device, callingActivity, adapter);
@@ -139,7 +153,7 @@ public class GameConnectionHandler {
         }
     }
 
-    public void startHost(boolean knightsOnly, boolean bloodthirsty)
+    public void startHost(boolean knightsOnly, boolean bloodthirsty, Activity callingActivity)
     {
         if(startHostThread == null || !startHostThread.isAlive()) {
             startHostThread = new StartHostThread(callingActivity, adapter, knightsOnly, bloodthirsty);
@@ -162,7 +176,7 @@ public class GameConnectionHandler {
         }
     }
 
-    public static void setMultiPlayerService(MultiPlayerService service, Activity callingActivity, boolean knightsOnly, boolean bloodthirsty, boolean isHost)
+    public void setMultiPlayerService(MultiPlayerService service, Activity callingActivity, boolean knightsOnly, boolean bloodthirsty, boolean isHost)
     {
         multiPlayerService = service;
 
@@ -199,7 +213,7 @@ public class GameConnectionHandler {
     }
 
 
-    public static MultiPlayerService getMultiPlayerService(Activity callingActivity)
+    public MultiPlayerService getMultiPlayerService(Activity callingActivity)
     {
         multiPlayerService.hasNewMessage(callingActivity);
         return multiPlayerService;

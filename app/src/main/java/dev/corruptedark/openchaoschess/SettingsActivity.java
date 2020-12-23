@@ -233,6 +233,7 @@ public class SettingsActivity extends AppCompatActivity {
         colorManager.updateColor(ColorManager.BOARD_COLOR_1, getColorInt(boardColor1Button));
         colorManager.updateColor(ColorManager.BOARD_COLOR_2, getColorInt(boardColor2Button));
         colorManager.updateColor(ColorManager.PIECE_COLOR, getColorInt(pieceColorButton));
+        colorManager.updateColor(ColorManager.SELECTION_COLOR, getColorInt(selectionColorButton));
         colorManager.updateColor(ColorManager.TEXT_COLOR, getColorInt(textColorButton));
 
         if(colorManager.saveChangesToFile())
@@ -332,14 +333,14 @@ public class SettingsActivity extends AppCompatActivity {
             Uri uri = null;
             if (data != null) {
                 uri = data.getData();
-                colorManager.importColorsFromUri(uri);
+                colorManager.importColorsFromUri(uri, this);
             }
         }
         else if (requestCode == Requests.EXPORT.ordinal() && resultCode == Activity.RESULT_OK) {
             Uri uri = null;
             if (data != null) {
                 uri = data.getData();
-                colorManager.exportColorsToDirectory(uri);
+                colorManager.exportColorsToDirectory(uri, this);
             }
         }
 

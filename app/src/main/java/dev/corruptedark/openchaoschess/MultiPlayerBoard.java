@@ -602,7 +602,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
                     super.run();
                     Looper.prepare();
 
-                    multiPlayerService = GameConnectionHandler.getMultiPlayerService(context);
+                    multiPlayerService = GameConnectionHandler.getInstance().getMultiPlayerService(context);
                     multiPlayerService.sendData(context,NEW_GAME + bloodthirsty);
 
 
@@ -784,6 +784,10 @@ public class MultiPlayerBoard extends AppCompatActivity {
 
     public synchronized void moveSelectedButton_Click(final View view)
     {
+        boardColor1 = colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1);
+        boardColor2 = colorManager.getColorFromFile(ColorManager.BOARD_COLOR_2);
+        selectColor = colorManager.getColorFromFile(ColorManager.SELECTION_COLOR);
+        pieceColor = colorManager.getColorFromFile(ColorManager.PIECE_COLOR);
         achievementHandler.incrementInMemory(AchievementHandler.STARTED_GAME);
         achievementHandler.saveValues();
         thatSucksLabel.post(new Runnable() {
@@ -827,7 +831,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
                             achievementHandler.incrementInMemory(AchievementHandler.PLAYED_50_GAMES);
                             achievementHandler.incrementInMemory(AchievementHandler.PLAYED_100_GAMES);
                             achievementHandler.saveValues();
-                            multiPlayerService = GameConnectionHandler.getMultiPlayerService(context);
+                            multiPlayerService = GameConnectionHandler.getInstance().getMultiPlayerService(context);
                             multiPlayerService.sendData(context,TIE);
                             multiGame.setTurn(NONE);
                             listenForNewGame();
@@ -896,7 +900,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
                             achievementHandler.incrementInMemory(AchievementHandler.PLAYED_50_GAMES);
                             achievementHandler.incrementInMemory(AchievementHandler.PLAYED_100_GAMES);
                             achievementHandler.saveValues();
-                            multiPlayerService = GameConnectionHandler.getMultiPlayerService(context);
+                            multiPlayerService = GameConnectionHandler.getInstance().getMultiPlayerService(context);
                             multiPlayerService.sendData(context,TIE);
                             multiGame.setTurn(NONE);
                             listenForNewGame();
@@ -1129,7 +1133,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
 
     synchronized void moveOpponent() {
 
-        multiPlayerService = GameConnectionHandler.getMultiPlayerService(context);
+        multiPlayerService = GameConnectionHandler.getInstance().getMultiPlayerService(context);
 
         if(moveOpponentThread == null || !moveOpponentThread.isAlive())
             moveOpponentThread = new Thread(){
@@ -1317,7 +1321,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
 
     synchronized void sendYourMove(Square selected, Square destination) {
 
-        multiPlayerService = GameConnectionHandler.getMultiPlayerService(context);
+        multiPlayerService = GameConnectionHandler.getInstance().getMultiPlayerService(context);
 
         String data = selected.getI() + "," + selected.getJ() + "," + destination.getI() + "," + destination.getJ();
 
@@ -1368,7 +1372,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
                         @Override
                         public void onClick(View view) {
                             if(moveThread == null || !moveThread.isAlive()) {
-                                moveThread = new MoveThread(view, context, boardColor1, boardColor2, selectColor);
+                                moveThread = new MoveThread(view, context/*, colorManager*/);
                                 moveThread.start();
                             }
                         }

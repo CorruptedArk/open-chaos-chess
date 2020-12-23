@@ -157,7 +157,7 @@ public class AchievementsActivity extends AppCompatActivity {
             if(data != null)
             {
                 uri = data.getData();
-                AchievementHandler.getInstance(this).importAchievementsFromUri(uri);
+                AchievementHandler.getInstance(this).importAchievementsFromUri(uri, this);
 
                 ArrayList<Achievement> achievementAdapterList = AchievementHandler.getInstance(this).getList();
 
@@ -176,7 +176,7 @@ public class AchievementsActivity extends AppCompatActivity {
             Uri uri = null;
             if(data != null) {
                 uri = data.getData();
-                AchievementHandler.getInstance(this).exportAchievementsToDirectory(uri);
+                AchievementHandler.getInstance(this).exportAchievementsToDirectory(uri, this);
             }
         }
 

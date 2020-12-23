@@ -12,9 +12,8 @@ import java.util.ArrayList;
 
 public class GameplaySettingsManager {
 
-    private static GameplaySettingsManager instance;
+    private static volatile GameplaySettingsManager instance;
 
-    private Context context;
     private File settingsFile;
     private InputStream fileReader;
     private OutputStream fileWriter;
@@ -27,7 +26,6 @@ public class GameplaySettingsManager {
     private final String DELIMITER = " ";
 
     private GameplaySettingsManager(Context context) {
-        this.context = context;
         settingsFile = new File(context.getApplicationContext().getFilesDir(),context.getString(R.string.gameplay_settings_file));
         if(settingsFile.exists()) {
             try{

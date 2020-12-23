@@ -92,7 +92,7 @@ public class StartHostActivity extends AppCompatActivity {
         stopHostButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
         stopHostButton.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
 
-        gameConnectionHandler = new GameConnectionHandler();
+        gameConnectionHandler = GameConnectionHandler.getInstance();
         gameConnectionHandler.startBluetooth(this);
         hostStatusLabel.setText(getString(R.string.host_status) + " " + gameConnectionHandler.getHostStatus());
     }
@@ -100,7 +100,7 @@ public class StartHostActivity extends AppCompatActivity {
     public void startHosting(View view)
     {
         Toast.makeText(this,"Starting host", Toast.LENGTH_SHORT).show();
-        gameConnectionHandler.startHost(knightsOnlyCheckBox.isChecked(), bloodthirstyCheckBox.isChecked());
+        gameConnectionHandler.startHost(knightsOnlyCheckBox.isChecked(), bloodthirstyCheckBox.isChecked(), this);
         hostStatusLabel.setText(getString(R.string.host_status) + " " + gameConnectionHandler.getHostStatus());
     }
 

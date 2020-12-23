@@ -469,6 +469,10 @@ public class SinglePlayerBoard extends AppCompatActivity {
     }
 
     public synchronized void moveSelectedButton_Click(final View view) {
+        boardColor1 = colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1);
+        boardColor2 = colorManager.getColorFromFile(ColorManager.BOARD_COLOR_2);
+        selectColor = colorManager.getColorFromFile(ColorManager.SELECTION_COLOR);
+        pieceColor = colorManager.getColorFromFile(ColorManager.PIECE_COLOR);
         achievementHandler.incrementInMemory(AchievementHandler.STARTED_GAME);
         achievementHandler.saveValues();
         runOnUiThread(new Runnable() {
@@ -913,11 +917,12 @@ public class SinglePlayerBoard extends AppCompatActivity {
                             @Override
                             public void onClick(View view) {
                                 if (moveThread == null || !moveThread.isAlive()) {
-                                    moveThread = new MoveThread(view, context, boardColor1, boardColor2, selectColor);
+                                    moveThread = new MoveThread(view, context/*, colorManager*/);
                                     moveThread.start();
                                 }
                             }
                         });
+                        board[i][j].setPieceColor(pieceColor);
                         boardMain.addView(board[i][j]);
                     }
                 }
@@ -925,6 +930,7 @@ public class SinglePlayerBoard extends AppCompatActivity {
             else {
                 for (int i = 0; i < boardSize; i++) {
                     for (int j = 0; j < boardSize; j++) {
+                        board[i][j].setPieceColor(pieceColor);
                         boardMain.addView(board[i][j]);
                     }
                 }
