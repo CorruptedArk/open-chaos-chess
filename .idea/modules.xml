@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Open_Chaos_Chess.iml" filepath="$PROJECT_DIR$/.idea/modules/Open_Chaos_Chess.iml" group="Open_Chaos_Chess" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="Open Chaos Chess/app" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Open_Chaos_Chess.iml" filepath="$PROJECT_DIR$/.idea/modules/Open_Chaos_Chess.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Open_Chaos_Chess.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Open_Chaos_Chess.app.iml" />
     </modules>
   </component>
 </project>
