@@ -1,0 +1,9 @@
+v1.7.6
+
+Fixes:
+-Fixed crash when starting multiplayer
+-Fixed Noice label not showing in multiplayer
+-Fixed a crash on older devices
+-Fixed various issues with threading
+
+
