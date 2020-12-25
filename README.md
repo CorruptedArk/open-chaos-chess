@@ -40,7 +40,7 @@ As of the most recent commit to the master branch, achievements and single playe
 
 ## Direct Contributors
 
-[CorruptedArk](https://github.com/CorruptedArk) - Orignal Author
+[CorruptedArk](https://github.com/CorruptedArk) - Original Author
 
 [LibreHacker](https://github.com/LibreHacker) - Russian Translations
 
