@@ -118,7 +118,7 @@ public class Mover {
 
     }
 
-    private void animateMove(final Square start, final Square end, final MultiGame multiGame) {
+    public void animateMove(final Square start, final Square end, final MultiGame multiGame) {
         final Square animatedSquare = multiGame.getAnimatedSquare();
 
         final int team = start.getTeam();

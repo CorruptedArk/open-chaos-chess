@@ -104,7 +104,13 @@ public class AboutActivity extends AppCompatActivity {
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-        Display display = getWindowManager().getDefaultDisplay();
+        Display display;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+            display = getDisplay();
+        }
+        else {
+            display = getWindowManager().getDefaultDisplay();
+        }
         Point size = new Point();
         display.getSize(size);
 

@@ -143,7 +143,13 @@ public class SinglePlayerBoard extends AppCompatActivity {
         selected.setPiece(Piece.NONE);
         boardSize = 8;
 
-        Display display = getWindowManager().getDefaultDisplay();
+        Display display;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+            display = getDisplay();
+        }
+        else {
+            display = getWindowManager().getDefaultDisplay();
+        }
         Point size = new Point();
         display.getSize(size);
         int width = size.x;
@@ -195,7 +201,13 @@ public class SinglePlayerBoard extends AppCompatActivity {
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-        Display display = getWindowManager().getDefaultDisplay();
+        Display display;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+            display = getDisplay();
+        }
+        else {
+            display = getWindowManager().getDefaultDisplay();
+        }
         Point size = new Point();
         display.getSize(size);
 

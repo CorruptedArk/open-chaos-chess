@@ -149,7 +149,13 @@ public class MainActivity extends AppCompatActivity {
         super.onPostCreate(savedInstanceState);
 
 
-        Display display = getDisplay();
+        Display display;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+            display = getDisplay();
+        }
+        else {
+            display = getWindowManager().getDefaultDisplay();
+        }
         Point size = new Point();
         display.getSize(size);
 
@@ -278,7 +284,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        Display display = getDisplay();
+        Display display;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+            display = getDisplay();
+        }
+        else {
+            display = getWindowManager().getDefaultDisplay();
+        }
         Point size = new Point();
         display.getSize(size);
 

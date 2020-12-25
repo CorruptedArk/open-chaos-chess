@@ -58,7 +58,7 @@ public class MoveThread extends Thread {
             context = multiPlayerBoard;
         }
 
-        colorManager = ColorManager.getInstance(singlePlayerBoard);
+        colorManager = ColorManager.getInstance(context);
 
         if (single) {
             clicked = (Square) view;
