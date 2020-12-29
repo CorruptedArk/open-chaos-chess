@@ -1,0 +1,5 @@
+v1.7.7
+
+Fixes:
+-Fixed cut off text on phones with large fonts and display size set
+-Improved smoothness of animations
