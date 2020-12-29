@@ -20,37 +20,47 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/client_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/client_layout"
     android:orientation="vertical"
     tools:context=".StartClientActivity">
 
-    <TextView
-        android:id="@+id/client_instructions"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/multiplayer_guide"
-        android:textSize="25sp"
-        android:ellipsize="none"
-        android:layout_gravity="center"
-        android:layout_margin="10dp"/>
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/paired_devices_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="left|center_vertical"
-        android:text="@string/paired_devices"
-        android:textSize="25sp"
-        android:layout_margin="10dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <ListView
-        android:id="@+id/paired_device_list_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="@color/materialcolorpicker__grey"
-        android:dividerHeight="1dp"
-        android:layout_margin="10dp"/>
+            <TextView
+                android:id="@+id/client_instructions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:ellipsize="none"
+                android:text="@string/multiplayer_guide"
+                android:textSize="25sp" />
 
+            <TextView
+                android:id="@+id/paired_devices_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:layout_margin="10dp"
+                android:text="@string/paired_devices"
+                android:textSize="25sp" />
+
+            <ListView
+                android:id="@+id/paired_device_list_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:divider="@color/materialcolorpicker__grey"
+                android:dividerHeight="1dp" />
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>
