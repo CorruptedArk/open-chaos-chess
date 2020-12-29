@@ -61,6 +61,9 @@ import androidx.core.widget.TextViewCompat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.RunnableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 
@@ -69,6 +72,8 @@ public class SinglePlayerBoard extends AppCompatActivity {
     public final int YOU = -1;
     public final int OPPONENT = 1;
     public final int NONE = 0;
+
+    public final int SLEEP_DURATION = 1000;
 
     int boardSize, squareSize, xPosition, yPosition;
     Square[][] board;
@@ -696,28 +701,37 @@ public class SinglePlayerBoard extends AppCompatActivity {
                 singleGame.incrementMoveCount();
                 singleGame.setTurn(OPPONENT);
 
-
-                runOnUiThread(new Runnable() {
+                Runnable uiRunnable = new Runnable() {
                     @Override
                     public void run() {
                         playerPointLabel.setText(getResources().getText(R.string.player_points).toString() + " " + singleGame.getPlayerPoints());
                     }
-                });
+                };
+
+                RunnableFuture<Void> uiTask = new FutureTask<>(uiRunnable, null);
+
+                runOnUiThread(uiTask);
 
                 do {
                     try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
+                        uiTask.get();
+                        Thread.sleep(SLEEP_DURATION);
+                    } catch (InterruptedException | ExecutionException e) {
                         e.printStackTrace();
                     }
                     if (singleGame.getCanComputerMove(mover, board))
                         moveComputer();
-                    runOnUiThread(new Runnable() {
+
+                    uiRunnable = new Runnable() {
                         @Override
                         public void run() {
                             computerPointLabel.setText(getResources().getText(R.string.computer_points).toString() + " " + singleGame.getComputerPoints());
                         }
-                    });
+                    };
+
+                    uiTask = new FutureTask<>(uiRunnable, null);
+
+                    runOnUiThread(uiTask);
                 } while (!singleGame.getCanPlayerMove(mover, board) && singleGame.getCanComputerMove(mover, board) && singleGame.getPlayerCount() > 0);
 
                 if (singleGame.getPlayerCount() == 0) {
