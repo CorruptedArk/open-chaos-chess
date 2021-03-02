@@ -43,6 +43,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.CheckBox;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -105,7 +107,7 @@ public class SinglePlayerBoard extends AppCompatActivity {
 
     private static volatile boolean aggressiveComputer;
 
-    TextView wonLabel, lostLabel, tieLabel, cantMoveThatLabel, notYourTurnLabel, gameOverLabel, thatSucksLabel, noiceLabel, playerPointLabel, computerPointLabel;
+    TextView wonLabel, lostLabel, tieLabel, cantMoveThatLabel, notYourTurnLabel, gameOverLabel, thatSucksLabel, noiceLabel, playerPointLabel, computerPointLabel, plusOneLabel;
 
 
     @Override
@@ -133,6 +135,7 @@ public class SinglePlayerBoard extends AppCompatActivity {
         playerPointLabel = (TextView) findViewById(R.id.player_points);
         computerPointLabel = (TextView) findViewById(R.id.computer_points);
         tieLabel = (TextView) findViewById(R.id.tie_label);
+        plusOneLabel = (TextView) findViewById(R.id.plus_one_label);
 
 
         colorManager = ColorManager.getInstance(this);
@@ -151,8 +154,7 @@ public class SinglePlayerBoard extends AppCompatActivity {
         Display display;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
             display = getDisplay();
-        }
-        else {
+        } else {
             display = getWindowManager().getDefaultDisplay();
         }
         Point size = new Point();
@@ -209,8 +211,7 @@ public class SinglePlayerBoard extends AppCompatActivity {
         Display display;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
             display = getDisplay();
-        }
-        else {
+        } else {
             display = getWindowManager().getDefaultDisplay();
         }
         Point size = new Point();
@@ -303,6 +304,12 @@ public class SinglePlayerBoard extends AppCompatActivity {
         thatSucksLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX, (int) (height * .02));
         thatSucksLabel.setGravity(Gravity.CENTER);
 
+        RelativeLayout.LayoutParams plusOneParams = new RelativeLayout.LayoutParams(2 * iconWidth, (int) (height * .03));
+        plusOneParams.addRule(RelativeLayout.ALIGN_BASELINE, R.id.player_points);
+        plusOneLabel.setLayoutParams(plusOneParams);
+        plusOneLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX, (int) (height * .025));
+        plusOneLabel.setGravity(Gravity.CENTER);
+
         boardLayout.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BACKGROUND_COLOR));
         toolbar.setTitle(R.string.solo);
         toolbar.setBackgroundColor(colorManager.getColorFromFile(ColorManager.SECONDARY_COLOR));
@@ -317,6 +324,9 @@ public class SinglePlayerBoard extends AppCompatActivity {
         notYourTurnLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         gameOverLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         thatSucksLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        plusOneLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        plusOneLabel.setVisibility(View.GONE);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -369,8 +379,7 @@ public class SinglePlayerBoard extends AppCompatActivity {
                 for (int j = 0; j < boardSize; j++)
                     boardMain.removeView(board[i][j]);
             super.onBackPressed();
-        }
-        else {
+        } else {
             Toast.makeText(this, R.string.wait_for_move, Toast.LENGTH_SHORT).show();
         }
 
@@ -430,8 +439,7 @@ public class SinglePlayerBoard extends AppCompatActivity {
         aggressiveComputer = GameplaySettingsManager.getInstance(this).getAggressiveComputers();
 
         selected = defaultSquare;
-        while(moveThread != null && moveThread.isAlive())
-        {
+        while (moveThread != null && moveThread.isAlive()) {
             moveThread.interrupt();
         }
         clearPieces();
@@ -504,7 +512,7 @@ public class SinglePlayerBoard extends AppCompatActivity {
                 noiceLabel.setVisibility(View.INVISIBLE);
             }
         });
-        int playerScore = singleGame.getPlayerPoints();
+        final int playerScore = singleGame.getPlayerPoints();
         if (singleGame.getTurn() == YOU) {
             if (!singleGame.getCanComputerMove(mover, board) && !singleGame.getCanPlayerMove(mover, board)) {
                 runOnUiThread(new Runnable() {
@@ -669,23 +677,6 @@ public class SinglePlayerBoard extends AppCompatActivity {
                     }
                 });
 
-                if (singleGame.getPlayerPoints() > playerScore) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            noiceLabel.setVisibility(View.VISIBLE);
-                            thatSucksLabel.setVisibility(View.INVISIBLE);
-                        }
-                    });
-                } else {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            noiceLabel.setVisibility(View.INVISIBLE);
-                        }
-                    });
-                }
-
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -701,10 +692,46 @@ public class SinglePlayerBoard extends AppCompatActivity {
                 singleGame.incrementMoveCount();
                 singleGame.setTurn(OPPONENT);
 
+                final int innerScore = playerScore;
                 Runnable uiRunnable = new Runnable() {
+
                     @Override
                     public void run() {
-                        playerPointLabel.setText(getResources().getText(R.string.player_points).toString() + " " + singleGame.getPlayerPoints());
+                        if (singleGame.getPlayerPoints() > innerScore) {
+
+                            TranslateAnimation translateAnimation = new TranslateAnimation(0, 0, convertDpToPx(10), convertDpToPx(-10));
+
+                            Animation.AnimationListener translateListener = new Animation.AnimationListener() {
+                                @Override
+                                public void onAnimationStart(Animation animation) {
+                                    plusOneLabel.setVisibility(View.VISIBLE);
+                                }
+
+                                @Override
+                                public void onAnimationEnd(Animation animation) {
+                                    plusOneLabel.setVisibility(View.GONE);
+                                    playerPointLabel.setText(getResources().getText(R.string.player_points).toString() + " " + singleGame.getPlayerPoints());
+                                }
+
+                                @Override
+                                public void onAnimationRepeat(Animation animation) {
+                                    plusOneLabel.setVisibility(View.GONE);
+                                }
+                            };
+
+                            translateAnimation.setAnimationListener(translateListener);
+                            translateAnimation.setDuration(300);
+
+                            plusOneLabel.setAnimation(translateAnimation);
+
+                            plusOneLabel.animate();
+                            noiceLabel.setVisibility(View.VISIBLE);
+                            thatSucksLabel.setVisibility(View.INVISIBLE);
+
+                        } else {
+                            noiceLabel.setVisibility(View.INVISIBLE);
+                        }
+
                     }
                 };
 
@@ -797,7 +824,7 @@ public class SinglePlayerBoard extends AppCompatActivity {
 
         } else if (singleGame.getTurn() == OPPONENT) {
             if (singleGame.getCanComputerMove(mover, board)) {
-               runOnUiThread(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         cantMoveThatLabel.setVisibility(View.VISIBLE);
@@ -952,8 +979,7 @@ public class SinglePlayerBoard extends AppCompatActivity {
                         boardMain.addView(board[i][j]);
                     }
                 }
-            }
-            else {
+            } else {
                 for (int i = 0; i < boardSize; i++) {
                     for (int j = 0; j < boardSize; j++) {
                         board[i][j].setPieceColor(pieceColor);

@@ -165,5 +165,15 @@
         android:background="#ff3c3c3c"
         android:visibility="invisible"/>
 
+    <TextView
+        android:text="@string/plus_one"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@id/player_points"
+        android:layout_below="@id/player_points"
+        android:id="@+id/plus_one_label"
+        android:textSize="25sp"
+        android:visibility="visible"/>
+
 
 </RelativeLayout>

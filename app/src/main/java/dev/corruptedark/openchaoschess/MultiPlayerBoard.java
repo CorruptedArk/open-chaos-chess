@@ -43,6 +43,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -102,7 +104,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
     int selectColor;
     int pieceColor;
 
-    TextView wonLabel, lostLabel, tieLabel, cantMoveThatLabel, notYourTurnLabel, gameOverLabel, thatSucksLabel, noiceLabel, yourPointLabel, opponentPointLabel;
+    TextView wonLabel, lostLabel, tieLabel, cantMoveThatLabel, notYourTurnLabel, gameOverLabel, thatSucksLabel, noiceLabel, yourPointLabel, opponentPointLabel, plusOneLabel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +134,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
         yourPointLabel = (TextView) findViewById(id.your_points);
         opponentPointLabel = (TextView) findViewById(id.opponent_points);
         tieLabel = (TextView) findViewById(id.tie_label);
+        plusOneLabel = (TextView) findViewById(R.id.plus_one_label);
 
         colorManager = ColorManager.getInstance(this);
 
@@ -465,6 +468,12 @@ public class MultiPlayerBoard extends AppCompatActivity {
         thatSucksLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX, (int) (height * .02));
         thatSucksLabel.setGravity(Gravity.CENTER);
 
+        RelativeLayout.LayoutParams plusOneParams = new RelativeLayout.LayoutParams(2 * iconWidth, (int) (height * .03));
+        plusOneParams.addRule(RelativeLayout.ALIGN_BASELINE, R.id.your_points);
+        plusOneLabel.setLayoutParams(plusOneParams);
+        plusOneLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX, (int) (height * .025));
+        plusOneLabel.setGravity(Gravity.CENTER);
+
         boardLayout.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BACKGROUND_COLOR));
         toolbar.setTitle(string.versus);
         toolbar.setBackgroundColor(colorManager.getColorFromFile(ColorManager.SECONDARY_COLOR));
@@ -479,6 +488,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
         notYourTurnLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         gameOverLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         thatSucksLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        plusOneLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
 
         newGameAlertFragment = new NewGameAlertFragment(MultiPlayerBoard.this, TAG, isHost);
 
@@ -971,22 +981,6 @@ public class MultiPlayerBoard extends AppCompatActivity {
                     }
                 });
 
-                if (multiGame.getYourPoints() > yourScore) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            noiceLabel.setVisibility(View.VISIBLE);
-                            thatSucksLabel.setVisibility(View.INVISIBLE);
-                        }
-                    });
-                } else {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            noiceLabel.setVisibility(View.INVISIBLE);
-                        }
-                    });
-                }
 
                 runOnUiThread(new Runnable() {
                     @Override
@@ -1003,10 +997,44 @@ public class MultiPlayerBoard extends AppCompatActivity {
                 multiGame.incrementMoveCount();
                 multiGame.setTurn(OPPONENT);
 
-
+                final int innerScore = yourScore;
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        if (multiGame.getYourPoints() > innerScore) {
+
+                            TranslateAnimation translateAnimation = new TranslateAnimation(0, 0, convertDpToPx(10), convertDpToPx(-10));
+
+                            Animation.AnimationListener translateListener = new Animation.AnimationListener() {
+                                @Override
+                                public void onAnimationStart(Animation animation) {
+                                    plusOneLabel.setVisibility(View.VISIBLE);
+                                }
+
+                                @Override
+                                public void onAnimationEnd(Animation animation) {
+                                    plusOneLabel.setVisibility(View.GONE);
+                                    yourPointLabel.setText(getResources().getText(R.string.player_points).toString() + " " + multiGame.getYourPoints());
+                                }
+
+                                @Override
+                                public void onAnimationRepeat(Animation animation) {
+                                    plusOneLabel.setVisibility(View.GONE);
+                                }
+                            };
+
+                            translateAnimation.setAnimationListener(translateListener);
+                            translateAnimation.setDuration(300);
+
+                            plusOneLabel.setAnimation(translateAnimation);
+
+                            plusOneLabel.animate();
+                            noiceLabel.setVisibility(View.VISIBLE);
+                            thatSucksLabel.setVisibility(View.INVISIBLE);
+
+                        } else {
+                            noiceLabel.setVisibility(View.INVISIBLE);
+                        }
                         yourPointLabel.setText(getResources().getText(string.your_points).toString() + " " + multiGame.getYourPoints());
                     }
                 });
