@@ -23,12 +23,9 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 
 
-import android.graphics.ColorFilter;
 import android.graphics.Point;
-import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Looper;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
@@ -38,14 +35,12 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
-import android.widget.CheckBox;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,10 +49,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.MarginLayoutParamsCompat;
-import androidx.core.view.MenuItemCompat;
 import androidx.core.widget.CompoundButtonCompat;
-import androidx.core.widget.TextViewCompat;
 
 
 import java.util.ArrayList;
@@ -66,7 +58,6 @@ import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.RunnableFuture;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class SinglePlayerBoard extends AppCompatActivity {
@@ -113,7 +104,7 @@ public class SinglePlayerBoard extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_board);
+        setContentView(R.layout.activity_single_player_board);
 
         achievementHandler = AchievementHandler.getInstance(this);
 
