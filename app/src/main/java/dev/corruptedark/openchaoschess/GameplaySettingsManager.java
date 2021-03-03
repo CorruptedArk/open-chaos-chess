@@ -108,7 +108,7 @@ public class GameplaySettingsManager {
             handicapEnabled = false;
         }
         else {
-            handicapEnabled = Boolean.parseBoolean(contentArray.get(AGGRESSIVE_COMPUTER));
+            handicapEnabled = Boolean.parseBoolean(contentArray.get(HANDICAP_ENABLED));
         }
 
         return handicapEnabled;

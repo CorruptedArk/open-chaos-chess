@@ -1041,8 +1041,15 @@ public class SinglePlayerBoard extends AppCompatActivity {
             // Set Rooks
             board[0][0].setPiece(Piece.ROOK);
             board[7][0].setPiece(Piece.ROOK);
-            board[0][7].setPiece(Piece.ROOK);
-            board[7][7].setPiece(Piece.ROOK);
+            if (GameplaySettingsManager.getInstance(this).getHandicapEnabled()) {
+                board[0][7].setPiece(Piece.PAWN);
+                board[7][7].setPiece(Piece.PAWN);
+
+            }
+            else {
+                board[0][7].setPiece(Piece.ROOK);
+                board[7][7].setPiece(Piece.ROOK);
+            }
 
             // Set Knights
             board[1][0].setPiece(Piece.KNIGHT);
@@ -1062,7 +1069,14 @@ public class SinglePlayerBoard extends AppCompatActivity {
 
             // Set Queens
             board[3][0].setPiece(Piece.QUEEN);
-            board[3][7].setPiece(Piece.QUEEN);
+
+            if (GameplaySettingsManager.getInstance(this).getHandicapEnabled()) {
+                board[3][7].setPiece(Piece.PAWN);
+            }
+            else {
+                board[3][7].setPiece(Piece.QUEEN);
+            }
+
         }
 
         return;
