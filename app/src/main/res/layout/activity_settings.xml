@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   Open Chaos Chess is a free as in speech version of Chaos Chess
   Chaos Chess is a chess game where you control the piece that moves, but not how it moves
       Copyright (C) 2019  Noah Stanford <noahstandingford@gmail.com>
@@ -19,29 +18,30 @@
       -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/settings_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/settings_layout"
     tools:context="dev.corruptedark.openchaoschess.SettingsActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/settings_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentTop="true"
         android:background="?attr/colorPrimary"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        android:layout_alignParentTop="true" />
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
 
 
     <ScrollView
         android:id="@+id/settings_scrollview"
-        android:layout_above="@+id/bottom_buttons"
-        android:layout_below="@id/settings_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/activity_horizontal_margin"
+        android:layout_above="@+id/bottom_buttons"
+        android:layout_below="@id/settings_toolbar"
         android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -54,14 +54,14 @@
 
                 <androidx.appcompat.widget.AppCompatCheckBox
                     android:id="@+id/bloodthirst_default_toggle"
-                    android:button="@null"
-                    android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
-                    android:textSize="30sp"
-                    android:text="@string/bloodthirsty_by_default"/>
+                    android:button="@null"
+                    android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                    android:text="@string/bloodthirsty_by_default"
+                    android:textSize="30sp" />
 
 
             </LinearLayout>
@@ -73,14 +73,32 @@
 
                 <androidx.appcompat.widget.AppCompatCheckBox
                     android:id="@+id/aggressive_computer_toggle"
-                    android:button="@null"
-                    android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
-                    android:textSize="30sp"
-                    android:text="@string/aggressive_computer"/>
+                    android:button="@null"
+                    android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                    android:text="@string/aggressive_computer"
+                    android:textSize="30sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatCheckBox
+                    android:id="@+id/handicap_toggle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:button="@null"
+                    android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                    android:text="@string/enable_handicap"
+                    android:textSize="30sp" />
 
 
             </LinearLayout>
@@ -95,24 +113,24 @@
                     android:id="@+id/background_color_label"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textSize="30sp"
-                    android:text="@string/background_color"
-                    android:layout_weight=".99"
                     android:layout_gravity="center_vertical"
-                    android:textColor="?android:attr/textColorPrimary" />
+                    android:layout_weight=".99"
+                    android:text="@string/background_color"
+                    android:textColor="?android:attr/textColorPrimary"
+                    android:textSize="30sp" />
 
                 <FrameLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="1sp"
-                    android:background="#000000">
+                    android:background="#000000"
+                    android:padding="1sp">
+
                     <ImageButton
+                        android:id="@+id/background_color_button"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        android:id="@+id/background_color_button"
-                        android:background="?android:attr/colorBackground"
-
                         android:layout_gravity="center_vertical"
+                        android:background="?android:attr/colorBackground"
                         android:onClick="colorBoxClicked" />
                 </FrameLayout>
 
@@ -124,27 +142,30 @@
                 android:layout_height="60dp"
                 android:orientation="horizontal"
                 android:weightSum="1">
+
                 <TextView
                     android:id="@+id/bar_color_label"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textSize="30sp"
-                    android:text="@string/bar_color"
-                    android:layout_weight=".99"
                     android:layout_gravity="center_vertical"
-                    android:textColor="?android:attr/textColorPrimary" />
+                    android:layout_weight=".99"
+                    android:text="@string/bar_color"
+                    android:textColor="?android:attr/textColorPrimary"
+                    android:textSize="30sp" />
+
                 <FrameLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="1sp"
-                    android:background="#000000">
+                    android:background="#000000"
+                    android:padding="1sp">
+
                     <ImageButton
+                        android:id="@+id/bar_color_button"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        android:id="@+id/bar_color_button"
-                        android:background="@color/colorPrimaryDark"
-
                         android:layout_gravity="center_vertical"
+
+                        android:background="@color/colorPrimaryDark"
                         android:onClick="colorBoxClicked" />
                 </FrameLayout>
 
@@ -161,23 +182,24 @@
                     android:id="@+id/secondary_color_label"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textSize="30sp"
-                    android:text="@string/secondary_color"
-                    android:layout_weight=".99"
                     android:layout_gravity="center_vertical"
-                    android:textColor="?android:attr/textColorPrimary" />
+                    android:layout_weight=".99"
+                    android:text="@string/secondary_color"
+                    android:textColor="?android:attr/textColorPrimary"
+                    android:textSize="30sp" />
 
                 <FrameLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="1sp"
-                    android:background="#000000">
+                    android:background="#000000"
+                    android:padding="1sp">
+
                     <ImageButton
+                        android:id="@+id/secondary_color_button"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        android:id="@+id/secondary_color_button"
-                        android:background="@color/colorPrimary"
                         android:layout_gravity="center_vertical"
+                        android:background="@color/colorPrimary"
                         android:onClick="colorBoxClicked" />
                 </FrameLayout>
             </LinearLayout>
@@ -192,23 +214,24 @@
                     android:id="@+id/board_color1_label"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textSize="30sp"
-                    android:text="@string/board_color_1"
-                    android:layout_weight=".99"
                     android:layout_gravity="center_vertical"
-                    android:textColor="?android:attr/textColorPrimary" />
+                    android:layout_weight=".99"
+                    android:text="@string/board_color_1"
+                    android:textColor="?android:attr/textColorPrimary"
+                    android:textSize="30sp" />
 
                 <FrameLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="1sp"
-                    android:background="#000000">
+                    android:background="#000000"
+                    android:padding="1sp">
+
                     <ImageButton
+                        android:id="@+id/board_color1_button"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        android:id="@+id/board_color1_button"
-                        android:background="@color/colorAccent"
                         android:layout_gravity="center_vertical"
+                        android:background="@color/colorAccent"
                         android:onClick="colorBoxClicked" />
                 </FrameLayout>
 
@@ -219,27 +242,29 @@
                 android:layout_height="60dp"
                 android:orientation="horizontal"
                 android:weightSum="1">
+
                 <TextView
                     android:id="@+id/board_color2_label"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textSize="30sp"
-                    android:text="@string/board_color_2"
-                    android:layout_weight=".99"
                     android:layout_gravity="center_vertical"
-                    android:textColor="?android:attr/textColorPrimary" />
+                    android:layout_weight=".99"
+                    android:text="@string/board_color_2"
+                    android:textColor="?android:attr/textColorPrimary"
+                    android:textSize="30sp" />
 
                 <FrameLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="1sp"
-                    android:background="#000000">
+                    android:background="#000000"
+                    android:padding="1sp">
+
                     <ImageButton
+                        android:id="@+id/board_color2_button"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        android:id="@+id/board_color2_button"
-                        android:background="@android:color/black"
                         android:layout_gravity="center_vertical"
+                        android:background="@android:color/black"
                         android:onClick="colorBoxClicked" />
                 </FrameLayout>
 
@@ -250,32 +275,34 @@
                 android:layout_height="60dp"
                 android:orientation="horizontal"
                 android:weightSum="1">
+
                 <TextView
                     android:id="@+id/piece_color_label"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textSize="30sp"
-                    android:text="@string/piece_color"
-                    android:layout_weight=".99"
                     android:layout_gravity="center_vertical"
-                    android:textColor="?android:attr/textColorPrimary" />
+                    android:layout_weight=".99"
+                    android:text="@string/piece_color"
+                    android:textColor="?android:attr/textColorPrimary"
+                    android:textSize="30sp" />
 
                 <FrameLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="1sp"
-                    android:background="#000000">
+                    android:background="#000000"
+                    android:padding="1sp">
 
                     <ImageButton
+                        android:id="@+id/piece_color_button"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        android:id="@+id/piece_color_button"
-                        android:background="@android:color/white"
                         android:layout_gravity="center_vertical"
+                        android:background="@android:color/white"
                         android:onClick="colorBoxClicked" />
                 </FrameLayout>
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
@@ -286,23 +313,24 @@
                     android:id="@+id/selection_color_label"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textSize="30sp"
-                    android:text="@string/selection_color"
-                    android:layout_weight=".99"
                     android:layout_gravity="center_vertical"
-                    android:textColor="?android:attr/textColorPrimary" />
+                    android:layout_weight=".99"
+                    android:text="@string/selection_color"
+                    android:textColor="?android:attr/textColorPrimary"
+                    android:textSize="30sp" />
 
                 <FrameLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="1sp"
-                    android:background="#000000">
+                    android:background="#000000"
+                    android:padding="1sp">
+
                     <ImageButton
+                        android:id="@+id/selection_color_button"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        android:id="@+id/selection_color_button"
-                        android:background="#ff888888"
                         android:layout_gravity="center_vertical"
+                        android:background="#ff888888"
                         android:onClick="colorBoxClicked" />
                 </FrameLayout>
 
@@ -318,23 +346,24 @@
                     android:id="@+id/text_color_label"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textSize="30sp"
-                    android:text="@string/text_color"
-                    android:layout_weight=".99"
                     android:layout_gravity="center_vertical"
-                    android:textColor="?android:attr/textColorPrimary" />
+                    android:layout_weight=".99"
+                    android:text="@string/text_color"
+                    android:textColor="?android:attr/textColorPrimary"
+                    android:textSize="30sp" />
 
                 <FrameLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="1sp"
-                    android:background="#000000">
+                    android:background="#000000"
+                    android:padding="1sp">
+
                     <ImageButton
+                        android:id="@+id/text_color_button"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        android:id="@+id/text_color_button"
-                        android:background="#ffffffff"
                         android:layout_gravity="center_vertical"
+                        android:background="#ffffffff"
                         android:onClick="colorBoxClicked" />
                 </FrameLayout>
 
@@ -347,32 +376,32 @@
         android:id="@+id/bottom_buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        android:layout_alignParentBottom="true">
+        android:paddingBottom="@dimen/activity_vertical_margin">
 
         <Button
-            android:text="@string/set_to_defaults"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight=".5"
             android:id="@+id/set_defaults_button"
-            android:onClick="setDefaultsButtonClicked"
-            android:background="@color/colorAccent"
-            android:layout_marginRight="5dp"/>
-
-        <Button
-            android:text="@string/save_colors"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
             android:layout_weight=".5"
-            android:id="@+id/save_color_button"
-            android:onClick="saveColorsButtonClicked"
             android:background="@color/colorAccent"
-            android:layout_marginLeft="5dp"/>
+            android:onClick="setDefaultsButtonClicked"
+            android:text="@string/set_to_defaults" />
+
+        <Button
+            android:id="@+id/save_color_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_weight=".5"
+            android:background="@color/colorAccent"
+            android:onClick="saveColorsButtonClicked"
+            android:text="@string/save_colors" />
     </LinearLayout>
 
 </RelativeLayout>

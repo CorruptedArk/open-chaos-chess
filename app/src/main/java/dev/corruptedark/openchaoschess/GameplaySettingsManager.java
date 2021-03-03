@@ -22,6 +22,7 @@ public class GameplaySettingsManager {
 
     private final int BLOODTHIRST_BY_DEFAULT = 0;
     private final int AGGRESSIVE_COMPUTER = 1;
+    private final int HANDICAP_ENABLED = 2;
 
     private final String DELIMITER = " ";
 
@@ -43,7 +44,7 @@ public class GameplaySettingsManager {
         else {
             try {
                 fileWriter = new FileOutputStream(settingsFile,false);
-                String contents = "false false";
+                String contents = "false false false";
                 contentArray = new ArrayList<>(Arrays.asList(contents.split(DELIMITER)));
                 fileWriter.write(contents.getBytes());
                 fileWriter.close();
@@ -95,6 +96,39 @@ public class GameplaySettingsManager {
         saveChangesToFile();
     }
 
+    public boolean getHandicapEnabled() {
+        boolean handicapEnabled;
+
+        if (contentArray.size() < HANDICAP_ENABLED + 1) {
+            int sizeDiff = HANDICAP_ENABLED + 1 - contentArray.size();
+            for (int i = 0; i < sizeDiff; i++) {
+                contentArray.add("false");
+            }
+            saveChangesToFile();
+            handicapEnabled = false;
+        }
+        else {
+            handicapEnabled = Boolean.parseBoolean(contentArray.get(AGGRESSIVE_COMPUTER));
+        }
+
+        return handicapEnabled;
+    }
+
+    public void setHandicapEnabled(boolean handicapEnabled) {
+        if (contentArray.size() < HANDICAP_ENABLED + 1) {
+            int sizeDiff = HANDICAP_ENABLED + 1 - contentArray.size();
+            for (int i = 0; i < sizeDiff; i++) {
+                contentArray.add("false");
+            }
+        }
+
+        contentArray.set(HANDICAP_ENABLED, Boolean.toString(handicapEnabled));
+        saveChangesToFile();
+    }
+
+    /**
+     * @return true if changes were saved successfully and false otherwise
+     */
     private boolean saveChangesToFile() {
         boolean successful;
         StringBuilder contents = new StringBuilder();

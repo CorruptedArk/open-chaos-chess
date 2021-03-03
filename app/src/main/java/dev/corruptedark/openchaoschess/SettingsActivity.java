@@ -59,9 +59,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 
+import dev.corruptedark.openchaoschess.R.id;
+
 public class SettingsActivity extends AppCompatActivity {
     AppCompatCheckBox bloodthirstDefaultToggle;
     AppCompatCheckBox aggressiveComputerToggle;
+    AppCompatCheckBox handicapToggle;
     TextView backgroundColorLabel;
     TextView barColorLabel;
     TextView secondaryColorLabel;
@@ -99,6 +102,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         bloodthirstDefaultToggle = (AppCompatCheckBox)findViewById(R.id.bloodthirst_default_toggle);
         aggressiveComputerToggle = (AppCompatCheckBox)findViewById(R.id.aggressive_computer_toggle);
+        handicapToggle = (AppCompatCheckBox)findViewById(R.id.handicap_toggle);
 
         backgroundColorLabel = (TextView)findViewById(R.id.background_color_label);
         barColorLabel = (TextView)findViewById(R.id.bar_color_label);
@@ -154,6 +158,8 @@ public class SettingsActivity extends AppCompatActivity {
         bloodthirstDefaultToggle.setHighlightColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
         aggressiveComputerToggle.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         aggressiveComputerToggle.setHighlightColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
+        handicapToggle.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        handicapToggle.setHighlightColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
         backgroundColorLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         barColorLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         secondaryColorLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
@@ -193,6 +199,16 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+        handicapToggle.setChecked(GameplaySettingsManager.getInstance(this).getHandicapEnabled());
+
+        handicapToggle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GameplaySettingsManager.getInstance(view.getContext()).setHandicapEnabled(handicapToggle.isChecked());
+                Toast.makeText(view.getContext(), R.string.setting_applied_on_new_game, Toast.LENGTH_SHORT).show();
+            }
+        });
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -226,7 +242,6 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public void saveColorsButtonClicked(View view) {
-        String contents = String.format("%s %s %s %s %s %s %s %s",getColorString(backgroundColorButton), getColorString(barColorButton), getColorString(secondaryColorButton), getColorString(boardColor1Button), getColorString(boardColor2Button), getColorString(pieceColorButton), getColorString(selectionColorButton), getColorString(textColorButton));
         colorManager.updateColor(ColorManager.BACKGROUND_COLOR, getColorInt(backgroundColorButton));
         colorManager.updateColor(ColorManager.BAR_COLOR, getColorInt(barColorButton));
         colorManager.updateColor(ColorManager.SECONDARY_COLOR, getColorInt(secondaryColorButton));
@@ -288,7 +303,6 @@ public class SettingsActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.import_export_menu, menu);
         return true;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
