@@ -54,7 +54,9 @@ As of the most recent commit to the master branch, achievements and single playe
 
 [Gitoffthelawn](https://github.com/Gitoffthelawn) - Suggested explanation of location permissions
 
-[vi](https://github.com/vi) - Suggested a mode with more aggressive computers
+[vi](https://github.com/vi) - Suggested a mode with more aggressive computers as well as a player handicap mode
+
+[Vulldozer](https://github.com/Vulldozer) - Suggested a quality of life improvement on capturing pieces
 
 If you want to contribute, please read [CONTRIBUTING](CONTRIBUTING.md).
 

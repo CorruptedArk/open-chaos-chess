@@ -1,0 +1,7 @@
+v1.7.8
+
+
+Additions:
+-Add handicap mode that converts player queen and rooks into pawns and requested by vi on Github
+-Add +1 animation when a player captures a piece as suggested by Vulldozer on Github
+
