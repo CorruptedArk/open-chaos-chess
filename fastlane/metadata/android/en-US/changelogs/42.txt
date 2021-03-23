@@ -1,0 +1,6 @@
+v1.7.9
+
+
+Fixes:
+-Fix captures no longer providing feedback after closing and opening board
+-More performance improvements
