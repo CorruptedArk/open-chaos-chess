@@ -26,6 +26,8 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
@@ -128,7 +130,6 @@ public class SinglePlayerBoard extends AppCompatActivity {
         tieLabel = (TextView) findViewById(R.id.tie_label);
         plusOneLabel = (TextView) findViewById(R.id.plus_one_label);
 
-
         colorManager = ColorManager.getInstance(this);
 
         boardColor1 = colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1);
@@ -191,6 +192,7 @@ public class SinglePlayerBoard extends AppCompatActivity {
         gameOverLabel.bringToFront();
         thatSucksLabel.bringToFront();
         animatedSquare.bringToFront();
+        plusOneLabel.bringToFront();
         boardMain.invalidate();
 
     }
@@ -682,74 +684,103 @@ public class SinglePlayerBoard extends AppCompatActivity {
                 });
                 singleGame.incrementMoveCount();
                 singleGame.setTurn(OPPONENT);
+                Animation.AnimationListener translateListener = new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                        plusOneLabel.setVisibility(View.VISIBLE);
+                    }
 
-                final int innerScore = playerScore;
-                Runnable uiRunnable = new Runnable() {
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        plusOneLabel.setVisibility(View.INVISIBLE);
+                        playerPointLabel.setText(getResources().getText(R.string.player_points).toString() + " " + singleGame.getPlayerPoints());
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+                        //plusOneLabel.setVisibility(View.INVISIBLE);
+                    }
+                };
+                final TranslateAnimation translateAnimation = new TranslateAnimation(0, 0, convertDpToPx(10), convertDpToPx(-10));
+                translateAnimation.setAnimationListener(translateListener);
+                translateAnimation.setDuration(300);
+
+                //plusOneLabel.setAnimation(translateAnimation);
+                Runnable uiRunnable1 = new Runnable() {
 
                     @Override
                     public void run() {
-                        if (singleGame.getPlayerPoints() > innerScore) {
+                        if (singleGame.getPlayerPoints() > playerScore) {
 
-                            TranslateAnimation translateAnimation = new TranslateAnimation(0, 0, convertDpToPx(10), convertDpToPx(-10));
-
-                            Animation.AnimationListener translateListener = new Animation.AnimationListener() {
+                            plusOneLabel.startAnimation(translateAnimation);
+                            runOnUiThread(new Runnable() {
                                 @Override
-                                public void onAnimationStart(Animation animation) {
-                                    plusOneLabel.setVisibility(View.VISIBLE);
+                                public void run() {
+                                    noiceLabel.setVisibility(View.VISIBLE);
+                                    thatSucksLabel.setVisibility(View.INVISIBLE);
                                 }
-
-                                @Override
-                                public void onAnimationEnd(Animation animation) {
-                                    plusOneLabel.setVisibility(View.GONE);
-                                    playerPointLabel.setText(getResources().getText(R.string.player_points).toString() + " " + singleGame.getPlayerPoints());
-                                }
-
-                                @Override
-                                public void onAnimationRepeat(Animation animation) {
-                                    plusOneLabel.setVisibility(View.GONE);
-                                }
-                            };
-
-                            translateAnimation.setAnimationListener(translateListener);
-                            translateAnimation.setDuration(300);
-
-                            plusOneLabel.setAnimation(translateAnimation);
-
-                            plusOneLabel.animate();
-                            noiceLabel.setVisibility(View.VISIBLE);
-                            thatSucksLabel.setVisibility(View.INVISIBLE);
+                            });
 
                         } else {
-                            noiceLabel.setVisibility(View.INVISIBLE);
-                        }
 
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    noiceLabel.setVisibility(View.INVISIBLE);
+                                }
+                            });
+
+                        }
+                        //boardMain.invalidate();
                     }
                 };
 
-                RunnableFuture<Void> uiTask = new FutureTask<>(uiRunnable, null);
+                RunnableFuture<Void> uiTask1 = new FutureTask<>(uiRunnable1, null);
 
-                runOnUiThread(uiTask);
+                //uiTask1.run();
+                runOnUiThread(uiTask1);
+                //new Handler(Looper.getMainLooper()).post(uiTask1);
 
+                try {
+                    uiTask1.get();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                Runnable uiRunnable2 = new Runnable() {
+                    @Override
+                    public void run() {
+                        computerPointLabel.setText(getResources().getText(R.string.computer_points).toString() + " " + singleGame.getComputerPoints());
+                    }
+                };
+
+                RunnableFuture<Void> uiTask2 = null;
                 do {
                     try {
-                        uiTask.get();
-                        Thread.sleep(SLEEP_DURATION);
-                    } catch (InterruptedException | ExecutionException e) {
+                        if(uiTask1 != null) {
+                            uiTask1.get();
+                        }
+                        if(uiTask2 != null) {
+                            uiTask2.get();
+
+                        }
+
+                        if (singleGame.getCanComputerMove(mover, board)) {
+                            Thread.sleep(SLEEP_DURATION);
+                            moveComputer();
+                        }
+
+
+                        uiTask2 = new FutureTask<>(uiRunnable2, null);
+
+                        runOnUiThread(uiTask2);
+                        //uiTask2.run();
+                    } catch (InterruptedException | ExecutionException | NullPointerException e) {
                         e.printStackTrace();
                     }
-                    if (singleGame.getCanComputerMove(mover, board))
-                        moveComputer();
 
-                    uiRunnable = new Runnable() {
-                        @Override
-                        public void run() {
-                            computerPointLabel.setText(getResources().getText(R.string.computer_points).toString() + " " + singleGame.getComputerPoints());
-                        }
-                    };
-
-                    uiTask = new FutureTask<>(uiRunnable, null);
-
-                    runOnUiThread(uiTask);
                 } while (!singleGame.getCanPlayerMove(mover, board) && singleGame.getCanComputerMove(mover, board) && singleGame.getPlayerCount() > 0);
 
                 if (singleGame.getPlayerCount() == 0) {
@@ -846,17 +877,16 @@ public class SinglePlayerBoard extends AppCompatActivity {
 
     void moveComputer() {
         //Looper.prepare();
-
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                thatSucksLabel.setVisibility(View.INVISIBLE);
+                noiceLabel.setVisibility(View.INVISIBLE);
             }
         });
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                noiceLabel.setVisibility(View.INVISIBLE);
+                thatSucksLabel.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -950,22 +980,25 @@ public class SinglePlayerBoard extends AppCompatActivity {
         boolean colorPicker = false;
         int color;
 
+        View.OnClickListener onClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (moveThread == null || !moveThread.isAlive()) {
+                    moveThread = new MoveThread(view, context/*, colorManager*/);
+                    moveThread.start();
+                }
+            }
+        };
+
         if (!squaresAdded) {
             if (!singleGame.hasBoard()) {
+
                 board = new Square[boardSize][boardSize];
                 for (int i = 0; i < boardSize; i++) {
                     board[i] = new Square[boardSize];
                     for (int j = 0; j < boardSize; j++) {
-                        board[i][j] = new Square(this, pieceColor);
-                        board[i][j].setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                if (moveThread == null || !moveThread.isAlive()) {
-                                    moveThread = new MoveThread(view, context/*, colorManager*/);
-                                    moveThread.start();
-                                }
-                            }
-                        });
+                        board[i][j] = new Square(context, pieceColor);
+                        //board[i][j].setOnClickListener(onClickListener);
                         board[i][j].setPieceColor(pieceColor);
                         boardMain.addView(board[i][j]);
                     }
@@ -981,6 +1014,10 @@ public class SinglePlayerBoard extends AppCompatActivity {
 
             squaresAdded = true;
         }
+
+        for (int i = 0; i < boardSize; i++)
+            for (int j = 0; j < boardSize; j++)
+                board[i][j].setOnClickListener(onClickListener);
 
         for (int i = 0; i < size; i++) {
 
