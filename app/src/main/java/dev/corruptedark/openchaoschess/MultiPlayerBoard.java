@@ -1355,21 +1355,22 @@ public class MultiPlayerBoard extends AppCompatActivity {
         boolean colorPicker = false;
         int color;
 
+        View.OnClickListener onClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (moveThread == null || !moveThread.isAlive()) {
+                    moveThread = new MoveThread(view, context/*, colorManager*/);
+                    moveThread.start();
+                }
+            }
+        };
+
         if (!squaresAdded) {
             board = new Square[boardSize][boardSize];
             for (int i = 0; i < boardSize; i++) {
                 board[i] = new Square[boardSize];
                 for (int j = 0; j < boardSize; j++) {
                     board[i][j] = new Square(this, pieceColor);
-                    board[i][j].setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            if (moveThread == null || !moveThread.isAlive()) {
-                                moveThread = new MoveThread(view, context/*, colorManager*/);
-                                moveThread.start();
-                            }
-                        }
-                    });
                     board[i][j].setPieceColor(pieceColor);
                     boardMain.addView(board[i][j]);
                 }
@@ -1377,6 +1378,10 @@ public class MultiPlayerBoard extends AppCompatActivity {
 
             squaresAdded = true;
         }
+
+        for (int i = 0; i < boardSize; i++)
+            for (int j = 0; j < boardSize; j++)
+                board[i][j].setOnClickListener(onClickListener);
 
         for (int i = 0; i < size; i++) {
 
