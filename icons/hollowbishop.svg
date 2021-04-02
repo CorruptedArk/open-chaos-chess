@@ -19,7 +19,6 @@
       You should have received a copy of the GNU General Public License
       along with this program.  If not, see <https://www.gnu.org/licenses/>.
       -->
-
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -33,30 +32,31 @@
    viewBox="0 0 13.229166 13.229167"
    version="1.1"
    id="svg4641"
-   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
+   inkscape:version="1.0.2 (e86c870879, 2021-01-15)"
    sodipodi:docname="hollowbishop.svg">
   <defs
      id="defs4635" />
   <sodipodi:namedview
      id="base"
-     pagecolor="#ffffff"
+     pagecolor="#000000"
      bordercolor="#666666"
      borderopacity="1.0"
-     inkscape:pageopacity="0.0"
+     inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="5.6"
-     inkscape:cx="34.940646"
-     inkscape:cy="42.840882"
+     inkscape:zoom="10.365199"
+     inkscape:cx="41.844476"
+     inkscape:cy="26.973551"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
      units="px"
-     inkscape:pagecheckerboard="true"
-     inkscape:window-width="1366"
-     inkscape:window-height="705"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1" />
+     inkscape:pagecheckerboard="false"
+     inkscape:window-width="736"
+     inkscape:window-height="704"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="0"
+     inkscape:document-rotation="0" />
   <metadata
      id="metadata4638">
     <rdf:RDF>
@@ -117,5 +117,14 @@
        x="3.3763592"
        y="295.46265"
        ry="0.71050847" />
+    <rect
+       style="opacity:0.999795;fill:#ffffff;stroke:none;stroke-width:0.236138;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       id="rect962"
+       width="0.48561749"
+       height="2.1061196"
+       x="105.11189"
+       y="265.75946"
+       ry="0.1927994"
+       transform="rotate(20.145946)" />
   </g>
 </svg>
