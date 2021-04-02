@@ -176,7 +176,9 @@ public class SettingsActivity extends AppCompatActivity {
         int[][] states = {{android.R.attr.state_checked}, {}};
         int[] colors = {colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1), colorManager.getColorFromFile(ColorManager.TEXT_COLOR)};
 
-        TextViewCompat.setCompoundDrawableTintList(bloodthirstDefaultToggle, new ColorStateList(states, colors));
+        ColorStateList colorStateList = new ColorStateList(states, colors);
+
+        TextViewCompat.setCompoundDrawableTintList(bloodthirstDefaultToggle, colorStateList);
 
         bloodthirstDefaultToggle.setChecked(GameplaySettingsManager.getInstance(this).getBloodThirstByDefault());
 
@@ -187,7 +189,7 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
-        TextViewCompat.setCompoundDrawableTintList(aggressiveComputerToggle, new ColorStateList(states, colors));
+        TextViewCompat.setCompoundDrawableTintList(aggressiveComputerToggle, colorStateList);
 
         aggressiveComputerToggle.setChecked(GameplaySettingsManager.getInstance(this).getAggressiveComputers());
 
@@ -198,6 +200,8 @@ public class SettingsActivity extends AppCompatActivity {
                 Toast.makeText(view.getContext(), R.string.setting_applied_on_new_game, Toast.LENGTH_SHORT).show();
             }
         });
+
+        TextViewCompat.setCompoundDrawableTintList(handicapToggle, colorStateList);
 
         handicapToggle.setChecked(GameplaySettingsManager.getInstance(this).getHandicapEnabled());
 
@@ -280,7 +284,11 @@ public class SettingsActivity extends AppCompatActivity {
 
         int[][] states = {{android.R.attr.state_checked}, {}};
         int[] colors = {colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1), colorManager.getColorFromFile(ColorManager.TEXT_COLOR)};
-        TextViewCompat.setCompoundDrawableTintList(bloodthirstDefaultToggle, new ColorStateList(states, colors));
+        ColorStateList colorStateList = new ColorStateList(states, colors);
+
+        TextViewCompat.setCompoundDrawableTintList(bloodthirstDefaultToggle, colorStateList);
+        TextViewCompat.setCompoundDrawableTintList(aggressiveComputerToggle, colorStateList);
+        TextViewCompat.setCompoundDrawableTintList(handicapToggle, colorStateList);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
