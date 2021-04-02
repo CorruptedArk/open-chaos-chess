@@ -48,6 +48,8 @@ As of the most recent commit to the master branch, achievements and single playe
 
 [berkaygunduzz](https://github.com/berkaygunduzz) - Turkish Translations
 
+[Vulldozer](https://github.com/Vulldozer) - Arabic Translations and suggested a quality of life improvement on capturing pieces
+
 [czarkoff](https://github.com/czarkoff) - Suggested idea for feature: Bloodthirst
 
 [itsanogo](https://github.com/itsanogo) - Suggested Bloodthirst by default toggle
@@ -55,8 +57,6 @@ As of the most recent commit to the master branch, achievements and single playe
 [Gitoffthelawn](https://github.com/Gitoffthelawn) - Suggested explanation of location permissions
 
 [vi](https://github.com/vi) - Suggested a mode with more aggressive computers as well as a player handicap mode
-
-[Vulldozer](https://github.com/Vulldozer) - Suggested a quality of life improvement on capturing pieces
 
 If you want to contribute, please read [CONTRIBUTING](CONTRIBUTING.md).
 
