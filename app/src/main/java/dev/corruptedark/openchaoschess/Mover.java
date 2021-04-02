@@ -35,11 +35,16 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.RunnableFuture;
 
 public class Mover {
     public final int YOU = -1;
     public final int OPPONENT = 1;
     public final int NONE = 0;
+
+    public final int SLEEP_DURATION = 1000;
 
     private enum Direction {UP, BACK, LEFT, RIGHT, LEFTUP, RIGHTUP, LEFTBACK, RIGHTBACK, _2R1U, _1R2U, _1L2U, _2L1U, _2L1D, _1L2D, _1R2D, _2R1D}
 
@@ -105,15 +110,41 @@ public class Mover {
 
         animation.setDuration(duration);
 
-        ((Activity)context).runOnUiThread(new Runnable() {
+        Runnable animationRunnable = new Runnable() {
             @Override
             public void run() {
                 animatedSquare.startAnimation(animation);
             }
-        });
+        };
+
+        RunnableFuture<Void> animationTask = new FutureTask<>(animationRunnable, null);
+
+        ((Activity)context).runOnUiThread(animationTask);
+        //animationTask.run();
+
+       /* try {
+            animationTask.get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }*/
+
+        /*((Activity)context).runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                animatedSquare.startAnimation(animation);
+            }
+        });*/
+
 
         while (!animation.hasEnded()) {
-            Log.v("Open Chaos Chess", "Animation still running.");
+            //Log.v("Open Chaos Chess", "Animation still running.");
+            try {
+                Thread.sleep(SLEEP_DURATION);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
     }
@@ -177,7 +208,12 @@ public class Mover {
         });
 
         while (!animation.hasEnded()) {
-            Log.v("Open Chaos Chess", "Animation still running.");
+            //Log.v("Open Chaos Chess", "Animation still running.");
+            try {
+                Thread.sleep(SLEEP_DURATION);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
     }
