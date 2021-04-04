@@ -3,7 +3,7 @@ Change:
 -More differentiation between bishops and kings
 
 Addition:
--Arabic translations by Vulldozer
+-Arabic translations by Vulldozer on Github
 
 Fixes:
 -Improved memory usage
