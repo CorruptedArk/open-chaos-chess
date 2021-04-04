@@ -1,0 +1,10 @@
+v1.8.0
+Change:
+-More differentiation between bishops and kings
+
+Addition:
+-Arabic translations by Vulldozer
+
+Fixes:
+-Improved memory usage
+-Fixed some toggles not changing color when color settings are saved
