@@ -102,4 +102,5 @@
     <string name="setting_applied_on_new_game">Setting will be applied on new game</string>
     <string name="plus_one">+1</string>
     <string name="enable_handicap">Enable handicap</string>
+    <string name="chess960">Chess960 mode</string>
 </resources>

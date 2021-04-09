@@ -96,10 +96,11 @@
     <string name="bloodthirsty_by_default">Bloodthirsty by default</string>
     <string name="wait_for_move">Wait until the move has finished</string>
     <string name="bloodthirst_toggle_cancelled">Bloodthirst toggle cancelled</string>
-    <string name="issues">Issues</string>
+    <string name="issues">Недочёты</string>
     <string name="issues_url">https://github.com/CorruptedArk/open-chaos-chess/issues</string>
-    <string name="aggressive_computer">Aggressive computer</string>
+    <string name="aggressive_computer">Агрессивный ИИ</string>
     <string name="setting_applied_on_new_game">Setting will be applied on new game</string>
     <string name="plus_one">+1</string>
-    <string name="enable_handicap">Enable handicap</string>
+    <string name="enable_handicap">Усложнить игру</string>
+    <string name="chess960">Шахматы Фишера</string>
 </resources>

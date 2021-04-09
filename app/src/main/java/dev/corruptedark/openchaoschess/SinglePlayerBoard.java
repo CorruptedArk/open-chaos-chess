@@ -31,6 +31,7 @@ import android.os.Looper;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.Gravity;
@@ -54,13 +55,14 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.widget.CompoundButtonCompat;
 
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.RunnableFuture;
-
 
 public class SinglePlayerBoard extends AppCompatActivity {
 
@@ -1058,6 +1060,82 @@ public class SinglePlayerBoard extends AppCompatActivity {
                 board[i][7].setTeam(YOU);
                 board[i][7].setPiece(Piece.KNIGHT);
             }
+
+        } else if (GameplaySettingsManager.getInstance(this).getChess960()) {
+            // Set Teams
+            for (int i = 0; i < size; i++) {
+                board[i][0].setTeam(OPPONENT);
+                board[i][1].setTeam(OPPONENT);
+                board[i][6].setTeam(YOU);
+                board[i][7].setTeam(YOU);
+            }
+
+            // Set Pawns
+            for (int i = 0; i < size; i++)
+                board[i][6].setPiece(Piece.PAWN);
+
+            for (int i = 0; i < size; i++)
+                board[i][1].setPiece(Piece.PAWN);
+
+
+            // Init random generator and free squares
+            Random rand = new Random();
+            List<Integer> freeSquares = new ArrayList<Integer>();
+            for (int i = 0; i < 8; i++)
+                freeSquares.add(i);
+
+            // Set Rooks
+            int rook1 = rand.nextInt(6);
+            int rook2 = rand.nextInt(6 - rook1) + rook1 + 2;
+            board[rook1][0].setPiece(Piece.ROOK);
+            board[rook2][0].setPiece(Piece.ROOK);
+            freeSquares.remove(freeSquares.indexOf(rook1));
+            freeSquares.remove(freeSquares.indexOf(rook2));
+            if (GameplaySettingsManager.getInstance(this).getHandicapEnabled()) {
+                board[rook1][7].setPiece(Piece.PAWN);
+                board[rook2][7].setPiece(Piece.PAWN);
+
+            } else {
+                board[rook1][7].setPiece(Piece.ROOK);
+                board[rook2][7].setPiece(Piece.ROOK);
+            }
+
+            // Set Kings
+            int king = rook1 + 1 + rand.nextInt(rook2 - rook1 - 1);
+            board[king][0].setPiece(Piece.KING);
+            board[king][7].setPiece(Piece.KING);
+            freeSquares.remove(freeSquares.indexOf(king));
+
+            // Set Knights
+            int knight1 = (int) freeSquares.get(rand.nextInt(5));
+            freeSquares.remove(freeSquares.indexOf(knight1));
+            int knight2 = (int) freeSquares.get(rand.nextInt(4));
+            freeSquares.remove(freeSquares.indexOf(knight2));
+            board[knight1][0].setPiece(Piece.KNIGHT);
+            board[knight2][0].setPiece(Piece.KNIGHT);
+            board[knight1][7].setPiece(Piece.KNIGHT);
+            board[knight2][7].setPiece(Piece.KNIGHT);
+
+            // Set Bishops
+            int bishop1 = (int) freeSquares.get(rand.nextInt(3));
+            freeSquares.remove(freeSquares.indexOf(bishop1));
+            int bishop2 = (int) freeSquares.get(rand.nextInt(2));
+            freeSquares.remove(freeSquares.indexOf(bishop2));
+            board[bishop1][0].setPiece(Piece.BISHOP);
+            board[bishop2][0].setPiece(Piece.BISHOP);
+            board[bishop1][7].setPiece(Piece.BISHOP);
+            board[bishop2][7].setPiece(Piece.BISHOP);
+
+            // Set Queens
+            int queen = (int) freeSquares.get(0);
+            board[queen][0].setPiece(Piece.QUEEN);
+
+            if (GameplaySettingsManager.getInstance(this).getHandicapEnabled()) {
+                board[queen][7].setPiece(Piece.PAWN);
+            } else {
+                board[queen][7].setPiece(Piece.QUEEN);
+            }
+
 
         } else {
             // Set Teams

@@ -23,6 +23,7 @@ public class GameplaySettingsManager {
     private final int BLOODTHIRST_BY_DEFAULT = 0;
     private final int AGGRESSIVE_COMPUTER = 1;
     private final int HANDICAP_ENABLED = 2;
+    private final int CHESS960 = 3;
 
     private final String DELIMITER = " ";
 
@@ -123,6 +124,36 @@ public class GameplaySettingsManager {
         }
 
         contentArray.set(HANDICAP_ENABLED, Boolean.toString(handicapEnabled));
+        saveChangesToFile();
+    }
+
+    public boolean getChess960() {
+        boolean chess960;
+
+        if (contentArray.size() < CHESS960 + 1) {
+            int sizeDiff = CHESS960 + 1 - contentArray.size();
+            for (int i = 0; i < sizeDiff; i++) {
+                contentArray.add("false");
+            }
+            saveChangesToFile();
+            chess960 = false;
+        }
+        else {
+            chess960 = Boolean.parseBoolean(contentArray.get(CHESS960));
+        }
+
+        return chess960;
+    }
+
+    public void setChess960(boolean chess960) {
+        if (contentArray.size() < CHESS960 + 1) {
+            int sizeDiff = CHESS960 + 1 - contentArray.size();
+            for (int i = 0; i < sizeDiff; i++) {
+                contentArray.add("false");
+            }
+        }
+
+        contentArray.set(CHESS960, Boolean.toString(chess960));
         saveChangesToFile();
     }
 
