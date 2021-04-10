@@ -1105,25 +1105,29 @@ public class SinglePlayerBoard extends AppCompatActivity {
             board[king][7].setPiece(Piece.KING);
             freeSquares.remove(freeSquares.indexOf(king));
 
-            // Set Knights
-            int knight1 = (int) freeSquares.get(rand.nextInt(5));
-            freeSquares.remove(freeSquares.indexOf(knight1));
-            int knight2 = (int) freeSquares.get(rand.nextInt(4));
-            freeSquares.remove(freeSquares.indexOf(knight2));
-            board[knight1][0].setPiece(Piece.KNIGHT);
-            board[knight2][0].setPiece(Piece.KNIGHT);
-            board[knight1][7].setPiece(Piece.KNIGHT);
-            board[knight2][7].setPiece(Piece.KNIGHT);
-
             // Set Bishops
-            int bishop1 = (int) freeSquares.get(rand.nextInt(3));
+            int bishop1 = (int) freeSquares.get(rand.nextInt(5));
             freeSquares.remove(freeSquares.indexOf(bishop1));
-            int bishop2 = (int) freeSquares.get(rand.nextInt(2));
+            List<Integer> freeSquares4bishop2 = new ArrayList<Integer>();
+            for(int i = 0; i < 4; i++)
+                if(freeSquares.get(i) % 2 != bishop1 % 2)
+                    freeSquares4bishop2.add(freeSquares.get(i));
+            int bishop2 = (int) freeSquares4bishop2.get(rand.nextInt(freeSquares4bishop2.size()));
             freeSquares.remove(freeSquares.indexOf(bishop2));
             board[bishop1][0].setPiece(Piece.BISHOP);
             board[bishop2][0].setPiece(Piece.BISHOP);
             board[bishop1][7].setPiece(Piece.BISHOP);
             board[bishop2][7].setPiece(Piece.BISHOP);
+
+            // Set Knights
+            int knight1 = (int) freeSquares.get(rand.nextInt(3));
+            freeSquares.remove(freeSquares.indexOf(knight1));
+            int knight2 = (int) freeSquares.get(rand.nextInt(2));
+            freeSquares.remove(freeSquares.indexOf(knight2));
+            board[knight1][0].setPiece(Piece.KNIGHT);
+            board[knight2][0].setPiece(Piece.KNIGHT);
+            board[knight1][7].setPiece(Piece.KNIGHT);
+            board[knight2][7].setPiece(Piece.KNIGHT);
 
             // Set Queens
             int queen = (int) freeSquares.get(0);
