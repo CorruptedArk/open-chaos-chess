@@ -103,4 +103,5 @@
     <string name="plus_one">+1</string>
     <string name="enable_handicap">تشغيل وضع الاعاقة</string>
     <string name="chess960">Chess960 mode</string>
+    <string name="queensAttack">Queens attack</string>
 </resources>

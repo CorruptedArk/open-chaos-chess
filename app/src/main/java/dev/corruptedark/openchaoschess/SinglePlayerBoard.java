@@ -1071,7 +1071,10 @@ public class SinglePlayerBoard extends AppCompatActivity {
                 board[i][6].setPiece(Piece.PAWN);
 
             for (int i = 0; i < size; i++)
-                board[i][1].setPiece(Piece.PAWN);
+                if(GameplaySettingsManager.getInstance(this).getHandicapQueensAttackEnabled())
+                    board[i][1].setPiece(Piece.QUEEN);
+                else
+                    board[i][1].setPiece(Piece.PAWN);
 
             // Default positions
             int rook1 = 0;
