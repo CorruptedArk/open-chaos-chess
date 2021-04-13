@@ -32,7 +32,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.widget.CompoundButtonCompat;
 import androidx.core.widget.TextViewCompat;
 
 import android.os.Bundle;
@@ -42,8 +41,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CheckedTextView;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -51,15 +48,6 @@ import android.widget.Toast;
 
 import com.pes.androidmaterialcolorpickerdialog.ColorPicker;
 import com.pes.androidmaterialcolorpickerdialog.ColorPickerCallback;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-
-import dev.corruptedark.openchaoschess.R.id;
 
 public class SettingsActivity extends AppCompatActivity {
     AppCompatCheckBox bloodthirstDefaultToggle;
@@ -207,7 +195,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         TextViewCompat.setCompoundDrawableTintList(handicapToggle, colorStateList);
 
-        handicapToggle.setChecked(GameplaySettingsManager.getInstance(this).getHandicapEnabled());
+        handicapToggle.setChecked(GameplaySettingsManager.getInstance(this).getHandicapOnlyBishopsKnightsEnabled());
 
         handicapToggle.setOnClickListener(new View.OnClickListener() {
             @Override

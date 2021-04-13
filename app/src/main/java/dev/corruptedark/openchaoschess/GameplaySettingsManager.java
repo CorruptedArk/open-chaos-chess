@@ -97,7 +97,7 @@ public class GameplaySettingsManager {
         saveChangesToFile();
     }
 
-    public boolean getHandicapEnabled() {
+    public boolean getHandicapOnlyBishopsKnightsEnabled() {
         boolean handicapEnabled;
 
         if (contentArray.size() < HANDICAP_ENABLED + 1) {
