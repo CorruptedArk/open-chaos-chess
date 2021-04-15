@@ -42,6 +42,8 @@ As of the most recent commit to the master branch, achievements and single playe
 
 [CorruptedArk](https://github.com/CorruptedArk) - Original Author
 
+[egorguslyan](https://github.com/egorguslyan) - Added Chess960 mode and Queens Attack Handicap, plus other small improvements to logic of building the board
+
 [LibreHacker](https://github.com/LibreHacker) - Russian Translations
 
 [Lian C. Begett/RedsickleDE](https://github.com/RedsickleDE) - German Translations
