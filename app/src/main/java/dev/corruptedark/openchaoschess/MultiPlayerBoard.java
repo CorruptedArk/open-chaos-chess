@@ -58,6 +58,8 @@ public class MultiPlayerBoard extends AppCompatActivity {
     public final int OPPONENT = 1;
     public final int NONE = 0;
 
+    private final double RATIO_THRESHOLD = 0.2;
+
     public final String NEW_GAME = "New Game?";
     public final String YES = "Yes";
     public final String NO = "No";
@@ -158,9 +160,16 @@ public class MultiPlayerBoard extends AppCompatActivity {
         Point size = new Point();
         display.getSize(size);
         int width = size.x;
+        int height = (int)(0.70 * size.y);
 
-        squareSize = (width - convertDpToPx(30)) / 8;
-        xPosition = convertDpToPx(15);
+        if (Math.abs(((double) width)/height - 1.0) <= RATIO_THRESHOLD || (double)width/height > 1) { // ratio not long
+            squareSize = height / 8;
+            xPosition = (width - height) / 2;
+        }
+        else {
+            squareSize = (width - convertDpToPx(30)) / 8;
+            xPosition = convertDpToPx(15);
+        }
         yPosition = convertDpToPx(160);
 
         mover = new Mover(this);

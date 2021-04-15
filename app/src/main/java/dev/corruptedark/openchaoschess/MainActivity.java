@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     public final int OPPONENT = 1;
     public final int NONE = 0;
 
+    private final double RATIO_THRESHOLD = 0.2;
 
     final int SELECT_PLAYERS = 420;
     final int REQUEST_ACHIEVEMENTS = 666;
@@ -162,26 +163,55 @@ public class MainActivity extends AppCompatActivity {
         int width = size.x;
         int height = size.y;
 
-        int iconWidth = (int)(width * 0.3);
-        int buttonHeight = (int)(height * .075);
-        int buttonGap = (int)(height * .015);
+        int iconWidth;
+        int buttonHeight;
+        int buttonGap;
 
-        int textHeight = (int)(height * .03);
+        int titleHeight;
+        int buttonText;
+
+        int textHeight;
         int horizontalPadding = convertDpToPx(10);
 
-        RelativeLayout.LayoutParams mainTitleParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, buttonHeight);
+        if (Math.abs(((double) width)/height - 1.0) <= RATIO_THRESHOLD || (double)width/height > 1) { // ratio not long
+            double titleWeight = 0.1;
+            double iconWeight = 0.4;
+            double buttonWeight = 0.2;
+            double gapWeight = 0.03;
+            double textWeight = 0.05;
+
+            double totalWeight = iconWeight + 6 * buttonWeight + 2 * textWeight + 8 * gapWeight + titleWeight;
+
+            titleHeight = (int)(height * titleWeight / totalWeight);
+            iconWidth = (int)(height * iconWeight / totalWeight);
+            buttonHeight = (int)(height * buttonWeight / totalWeight);
+            buttonText = (int)(height * 0.7 * buttonWeight / totalWeight);
+            buttonGap = (int)(height * gapWeight / totalWeight);
+            textHeight = (int)(height * textWeight / totalWeight);
+        }
+        else {
+            iconWidth = (int)(width * 0.3);
+            buttonHeight = (int)(height * .075);
+            titleHeight = buttonHeight;
+            buttonGap = (int)(height * .015);
+            textHeight = (int)(height * .03);
+            buttonText = textHeight;
+            horizontalPadding = convertDpToPx(10);
+        }
+
+        RelativeLayout.LayoutParams mainTitleParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, titleHeight);
         mainTitleParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         mainTitleParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
         mainTitleParams.setMargins(0, 0,0,0);
         mainTitle.setLayoutParams(mainTitleParams);
-        mainTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX,(int)(height*.05));
+        mainTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, (int)(0.9 * titleHeight));
 
-        RelativeLayout.LayoutParams mainSloganParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, (int)(height*.05));
+        RelativeLayout.LayoutParams mainSloganParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, buttonHeight);
         mainSloganParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         mainSloganParams.addRule(RelativeLayout.BELOW,R.id.main_title);
         mainSloganParams.setMargins(0, 0,0,0);
         mainSlogan.setLayoutParams(mainSloganParams);
-        mainSlogan.setTextSize(TypedValue.COMPLEX_UNIT_PX,(int)(height*.02));
+        mainSlogan.setTextSize(TypedValue.COMPLEX_UNIT_PX, textHeight);
         mainSlogan.setGravity(Gravity.CENTER);
 
         RelativeLayout.LayoutParams iconParams = new RelativeLayout.LayoutParams(iconWidth,iconWidth);
@@ -190,48 +220,48 @@ public class MainActivity extends AppCompatActivity {
         iconParams.setMargins(0, buttonGap,0,0);
         mainImage.setLayoutParams(iconParams);
 
-        playButton.setTextSize(TypedValue.COMPLEX_UNIT_PX,textHeight);
-        RelativeLayout.LayoutParams playButtonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        playButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, buttonText);
+        RelativeLayout.LayoutParams playButtonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, buttonHeight);
         playButtonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         playButtonParams.addRule(RelativeLayout.BELOW, R.id.mainImage);
         playButtonParams.setMargins(0, buttonGap,0,0);
         playButton.setPadding(horizontalPadding, 0, horizontalPadding, 0);
         playButton.setLayoutParams(playButtonParams);
 
-        hostGameButton.setTextSize(TypedValue.COMPLEX_UNIT_PX,textHeight);
-        RelativeLayout.LayoutParams hostGameButtonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        hostGameButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, buttonText);
+        RelativeLayout.LayoutParams hostGameButtonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, buttonHeight);
         hostGameButtonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         hostGameButtonParams.addRule(RelativeLayout.BELOW, R.id.play_button);
         hostGameButtonParams.setMargins(0, buttonGap,0,0);
         hostGameButton.setPadding(horizontalPadding, 0, horizontalPadding, 0);
         hostGameButton.setLayoutParams(hostGameButtonParams);
 
-        joinGameButton.setTextSize(TypedValue.COMPLEX_UNIT_PX,textHeight);
-        RelativeLayout.LayoutParams joinGameButtonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        joinGameButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, buttonText);
+        RelativeLayout.LayoutParams joinGameButtonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, buttonHeight);
         joinGameButtonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         joinGameButtonParams.addRule(RelativeLayout.BELOW, R.id.host_game_button);
         joinGameButtonParams.setMargins(0, buttonGap,0,0);
         joinGameButton.setPadding(horizontalPadding, 0, horizontalPadding, 0);
         joinGameButton.setLayoutParams(joinGameButtonParams);
 
-        aboutButton.setTextSize(TypedValue.COMPLEX_UNIT_PX,textHeight);
-        RelativeLayout.LayoutParams aboutButtonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        aboutButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, buttonText);
+        RelativeLayout.LayoutParams aboutButtonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, buttonHeight);
         aboutButtonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         aboutButtonParams.addRule(RelativeLayout.BELOW, R.id.join_game_button);
         aboutButtonParams.setMargins(0, buttonGap,0,0);
         aboutButton.setPadding(horizontalPadding, 0, horizontalPadding, 0);
         aboutButton.setLayoutParams(aboutButtonParams);
 
-        issuesButton.setTextSize(TypedValue.COMPLEX_UNIT_PX,textHeight);
-        RelativeLayout.LayoutParams issuesButtonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        issuesButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, buttonText);
+        RelativeLayout.LayoutParams issuesButtonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, buttonHeight);
         issuesButtonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         issuesButtonParams.addRule(RelativeLayout.BELOW, R.id.about_button);
         issuesButtonParams.setMargins(0, buttonGap,0,0);
         issuesButton.setPadding(horizontalPadding, 0, horizontalPadding, 0);
         issuesButton.setLayoutParams(issuesButtonParams);
 
-        quitButton.setTextSize(TypedValue.COMPLEX_UNIT_PX,textHeight);
-        RelativeLayout.LayoutParams quitButtonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        quitButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, buttonText);
+        RelativeLayout.LayoutParams quitButtonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, buttonHeight);
         quitButtonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         quitButtonParams.addRule(RelativeLayout.BELOW, R.id.issues_button);
         quitButtonParams.setMargins(0, buttonGap,0,0);
@@ -295,28 +325,57 @@ public class MainActivity extends AppCompatActivity {
         display.getSize(size);
 
         int width = size.x;
-        int height = size.y;
+        int height = (int) (0.9 * size.y);
 
-        int iconWidth = (int)(width * 0.3);
-        int buttonHeight = (int)(height * .075);
-        int buttonGap = (int)(height * .01);
+        int iconWidth;
+        int buttonHeight;
+        int buttonGap;
 
-        int textHeight = (int)(height * .03);
+        int titleHeight;
+        int buttonText;
+
+        int textHeight;
         int horizontalPadding = convertDpToPx(10);
 
-        RelativeLayout.LayoutParams mainTitleParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, buttonHeight);
+        if (Math.abs(((double) width)/height - 1.0) <= RATIO_THRESHOLD || (double)width/height > 1) { // ratio not long
+            double titleWeight = 0.15;
+            double iconWeight = 0.3;
+            double buttonWeight = 0.1;
+            double gapWeight = 0.02;
+            double textWeight = 0.05;
+
+            double totalWeight = iconWeight + 6 * buttonWeight + 2 * textWeight + 8 * gapWeight + titleWeight;
+
+            titleHeight = (int)(height * titleWeight / totalWeight);
+            iconWidth = (int)(height * iconWeight / totalWeight);
+            buttonHeight = (int)(height * buttonWeight / totalWeight);
+            buttonText = (int)(height * 0.7 * buttonWeight / totalWeight);
+            buttonGap = (int)(height * gapWeight / totalWeight);
+            textHeight = (int)(height * textWeight / totalWeight);
+        }
+        else {
+            iconWidth = (int)(width * 0.3);
+            buttonHeight = (int)(height * .075);
+            titleHeight = buttonHeight;
+            buttonGap = (int)(height * .015);
+            textHeight = (int)(height * .03);
+            buttonText = textHeight;
+            horizontalPadding = convertDpToPx(10);
+        }
+
+        RelativeLayout.LayoutParams mainTitleParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, titleHeight);
         mainTitleParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         mainTitleParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
         mainTitleParams.setMargins(0, 0,0,0);
         mainTitle.setLayoutParams(mainTitleParams);
-        mainTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX,(int)(height*.05));
+        mainTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, (int)(0.8 * titleHeight));
 
-        RelativeLayout.LayoutParams mainSloganParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, (int)(height*.05));
+        RelativeLayout.LayoutParams mainSloganParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, 2 * textHeight);
         mainSloganParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         mainSloganParams.addRule(RelativeLayout.BELOW,R.id.main_title);
         mainSloganParams.setMargins(0, 0,0,0);
         mainSlogan.setLayoutParams(mainSloganParams);
-        mainSlogan.setTextSize(TypedValue.COMPLEX_UNIT_PX,(int)(height*.02));
+        mainSlogan.setTextSize(TypedValue.COMPLEX_UNIT_PX, (int) (0.89 * textHeight));
         mainSlogan.setGravity(Gravity.CENTER);
 
         RelativeLayout.LayoutParams iconParams = new RelativeLayout.LayoutParams(iconWidth,iconWidth);
@@ -325,48 +384,48 @@ public class MainActivity extends AppCompatActivity {
         iconParams.setMargins(0, buttonGap,0,0);
         mainImage.setLayoutParams(iconParams);
 
-        playButton.setTextSize(TypedValue.COMPLEX_UNIT_PX,textHeight);
-        RelativeLayout.LayoutParams playButtonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        playButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, buttonText);
+        RelativeLayout.LayoutParams playButtonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, buttonHeight);
         playButtonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         playButtonParams.addRule(RelativeLayout.BELOW, R.id.mainImage);
         playButtonParams.setMargins(0, buttonGap,0,0);
         playButton.setPadding(horizontalPadding, 0, horizontalPadding, 0);
         playButton.setLayoutParams(playButtonParams);
 
-        hostGameButton.setTextSize(TypedValue.COMPLEX_UNIT_PX,textHeight);
-        RelativeLayout.LayoutParams hostGameButtonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        hostGameButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, buttonText);
+        RelativeLayout.LayoutParams hostGameButtonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, buttonHeight);
         hostGameButtonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         hostGameButtonParams.addRule(RelativeLayout.BELOW, R.id.play_button);
         hostGameButtonParams.setMargins(0, buttonGap,0,0);
         hostGameButton.setPadding(horizontalPadding, 0, horizontalPadding, 0);
         hostGameButton.setLayoutParams(hostGameButtonParams);
 
-        joinGameButton.setTextSize(TypedValue.COMPLEX_UNIT_PX,textHeight);
-        RelativeLayout.LayoutParams joinGameButtonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        joinGameButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, buttonText);
+        RelativeLayout.LayoutParams joinGameButtonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, buttonHeight);
         joinGameButtonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         joinGameButtonParams.addRule(RelativeLayout.BELOW, R.id.host_game_button);
         joinGameButtonParams.setMargins(0, buttonGap,0,0);
         joinGameButton.setPadding(horizontalPadding, 0, horizontalPadding, 0);
         joinGameButton.setLayoutParams(joinGameButtonParams);
 
-        aboutButton.setTextSize(TypedValue.COMPLEX_UNIT_PX,textHeight);
-        RelativeLayout.LayoutParams aboutButtonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        aboutButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, buttonText);
+        RelativeLayout.LayoutParams aboutButtonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, buttonHeight);
         aboutButtonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         aboutButtonParams.addRule(RelativeLayout.BELOW, R.id.join_game_button);
         aboutButtonParams.setMargins(0, buttonGap,0,0);
         aboutButton.setPadding(horizontalPadding, 0, horizontalPadding, 0);
         aboutButton.setLayoutParams(aboutButtonParams);
 
-        issuesButton.setTextSize(TypedValue.COMPLEX_UNIT_PX,textHeight);
-        RelativeLayout.LayoutParams issuesButtonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        issuesButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, buttonText);
+        RelativeLayout.LayoutParams issuesButtonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, buttonHeight);
         issuesButtonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         issuesButtonParams.addRule(RelativeLayout.BELOW, R.id.about_button);
         issuesButtonParams.setMargins(0, buttonGap,0,0);
         issuesButton.setPadding(horizontalPadding, 0, horizontalPadding, 0);
         issuesButton.setLayoutParams(issuesButtonParams);
 
-        quitButton.setTextSize(TypedValue.COMPLEX_UNIT_PX,textHeight);
-        RelativeLayout.LayoutParams quitButtonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        quitButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, buttonText);
+        RelativeLayout.LayoutParams quitButtonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, buttonHeight);
         quitButtonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         quitButtonParams.addRule(RelativeLayout.BELOW, R.id.issues_button);
         quitButtonParams.setMargins(0, buttonGap,0,0);
