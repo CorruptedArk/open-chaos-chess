@@ -32,7 +32,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.widget.CompoundButtonCompat;
 import androidx.core.widget.TextViewCompat;
 
 import android.os.Bundle;
@@ -42,8 +41,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CheckedTextView;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -52,19 +49,12 @@ import android.widget.Toast;
 import com.pes.androidmaterialcolorpickerdialog.ColorPicker;
 import com.pes.androidmaterialcolorpickerdialog.ColorPickerCallback;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-
-import dev.corruptedark.openchaoschess.R.id;
-
 public class SettingsActivity extends AppCompatActivity {
     AppCompatCheckBox bloodthirstDefaultToggle;
     AppCompatCheckBox aggressiveComputerToggle;
     AppCompatCheckBox handicapToggle;
+    AppCompatCheckBox chess960Toggle;
+    AppCompatCheckBox queensAttackToggle;
     TextView backgroundColorLabel;
     TextView barColorLabel;
     TextView secondaryColorLabel;
@@ -103,6 +93,8 @@ public class SettingsActivity extends AppCompatActivity {
         bloodthirstDefaultToggle = (AppCompatCheckBox)findViewById(R.id.bloodthirst_default_toggle);
         aggressiveComputerToggle = (AppCompatCheckBox)findViewById(R.id.aggressive_computer_toggle);
         handicapToggle = (AppCompatCheckBox)findViewById(R.id.handicap_toggle);
+        chess960Toggle = (AppCompatCheckBox)findViewById(R.id.chess960_toggle);
+        queensAttackToggle = (AppCompatCheckBox)findViewById(R.id.queensAttack_toggle);
 
         backgroundColorLabel = (TextView)findViewById(R.id.background_color_label);
         barColorLabel = (TextView)findViewById(R.id.bar_color_label);
@@ -160,6 +152,10 @@ public class SettingsActivity extends AppCompatActivity {
         aggressiveComputerToggle.setHighlightColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
         handicapToggle.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         handicapToggle.setHighlightColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
+        chess960Toggle.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        chess960Toggle.setHighlightColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
+        queensAttackToggle.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        queensAttackToggle.setHighlightColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
         backgroundColorLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         barColorLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         secondaryColorLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
@@ -203,12 +199,36 @@ public class SettingsActivity extends AppCompatActivity {
 
         TextViewCompat.setCompoundDrawableTintList(handicapToggle, colorStateList);
 
-        handicapToggle.setChecked(GameplaySettingsManager.getInstance(this).getHandicapEnabled());
+        handicapToggle.setChecked(GameplaySettingsManager.getInstance(this).getHandicapOnlyBishopsKnightsEnabled());
 
         handicapToggle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                GameplaySettingsManager.getInstance(view.getContext()).setHandicapEnabled(handicapToggle.isChecked());
+                GameplaySettingsManager.getInstance(view.getContext()).setHandicapOnlyBishopsKnightsEnabled(handicapToggle.isChecked());
+                Toast.makeText(view.getContext(), R.string.setting_applied_on_new_game, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        TextViewCompat.setCompoundDrawableTintList(chess960Toggle, colorStateList);
+
+        chess960Toggle.setChecked(GameplaySettingsManager.getInstance(this).getChess960());
+
+        chess960Toggle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GameplaySettingsManager.getInstance(view.getContext()).setChess960(chess960Toggle.isChecked());
+                Toast.makeText(view.getContext(), R.string.setting_applied_on_new_game, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        TextViewCompat.setCompoundDrawableTintList(queensAttackToggle, colorStateList);
+
+        queensAttackToggle.setChecked(GameplaySettingsManager.getInstance(this).getHandicapQueensAttackEnabled());
+
+        queensAttackToggle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GameplaySettingsManager.getInstance(view.getContext()).setHandicapQueensAttackEnabled(queensAttackToggle.isChecked());
                 Toast.makeText(view.getContext(), R.string.setting_applied_on_new_game, Toast.LENGTH_SHORT).show();
             }
         });
@@ -289,6 +309,8 @@ public class SettingsActivity extends AppCompatActivity {
         TextViewCompat.setCompoundDrawableTintList(bloodthirstDefaultToggle, colorStateList);
         TextViewCompat.setCompoundDrawableTintList(aggressiveComputerToggle, colorStateList);
         TextViewCompat.setCompoundDrawableTintList(handicapToggle, colorStateList);
+        TextViewCompat.setCompoundDrawableTintList(chess960Toggle, colorStateList);
+        TextViewCompat.setCompoundDrawableTintList(queensAttackToggle, colorStateList);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();

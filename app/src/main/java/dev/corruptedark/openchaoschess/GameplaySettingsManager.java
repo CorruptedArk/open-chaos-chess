@@ -23,6 +23,8 @@ public class GameplaySettingsManager {
     private final int BLOODTHIRST_BY_DEFAULT = 0;
     private final int AGGRESSIVE_COMPUTER = 1;
     private final int HANDICAP_ENABLED = 2;
+    private final int CHESS960 = 3;
+    private final int QUEENS_ATTACK = 4;
 
     private final String DELIMITER = " ";
 
@@ -96,7 +98,7 @@ public class GameplaySettingsManager {
         saveChangesToFile();
     }
 
-    public boolean getHandicapEnabled() {
+    public boolean getHandicapOnlyBishopsKnightsEnabled() {
         boolean handicapEnabled;
 
         if (contentArray.size() < HANDICAP_ENABLED + 1) {
@@ -114,7 +116,7 @@ public class GameplaySettingsManager {
         return handicapEnabled;
     }
 
-    public void setHandicapEnabled(boolean handicapEnabled) {
+    public void setHandicapOnlyBishopsKnightsEnabled(boolean handicapEnabled) {
         if (contentArray.size() < HANDICAP_ENABLED + 1) {
             int sizeDiff = HANDICAP_ENABLED + 1 - contentArray.size();
             for (int i = 0; i < sizeDiff; i++) {
@@ -123,6 +125,66 @@ public class GameplaySettingsManager {
         }
 
         contentArray.set(HANDICAP_ENABLED, Boolean.toString(handicapEnabled));
+        saveChangesToFile();
+    }
+
+    public boolean getChess960() {
+        boolean chess960;
+
+        if (contentArray.size() < CHESS960 + 1) {
+            int sizeDiff = CHESS960 + 1 - contentArray.size();
+            for (int i = 0; i < sizeDiff; i++) {
+                contentArray.add("false");
+            }
+            saveChangesToFile();
+            chess960 = false;
+        }
+        else {
+            chess960 = Boolean.parseBoolean(contentArray.get(CHESS960));
+        }
+
+        return chess960;
+    }
+
+    public void setChess960(boolean chess960) {
+        if (contentArray.size() < CHESS960 + 1) {
+            int sizeDiff = CHESS960 + 1 - contentArray.size();
+            for (int i = 0; i < sizeDiff; i++) {
+                contentArray.add("false");
+            }
+        }
+
+        contentArray.set(CHESS960, Boolean.toString(chess960));
+        saveChangesToFile();
+    }
+
+    public boolean getHandicapQueensAttackEnabled() {
+        boolean handicapEnabled;
+
+        if (contentArray.size() < QUEENS_ATTACK + 1) {
+            int sizeDiff = QUEENS_ATTACK + 1 - contentArray.size();
+            for (int i = 0; i < sizeDiff; i++) {
+                contentArray.add("false");
+            }
+            saveChangesToFile();
+            handicapEnabled = false;
+        }
+        else {
+            handicapEnabled = Boolean.parseBoolean(contentArray.get(QUEENS_ATTACK));
+        }
+
+        return handicapEnabled;
+    }
+
+    public void setHandicapQueensAttackEnabled(boolean handicapEnabled) {
+        if (contentArray.size() < QUEENS_ATTACK + 1) {
+            int sizeDiff = QUEENS_ATTACK + 1 - contentArray.size();
+            for (int i = 0; i < sizeDiff; i++) {
+                contentArray.add("false");
+            }
+        }
+
+        contentArray.set(QUEENS_ATTACK, Boolean.toString(handicapEnabled));
         saveChangesToFile();
     }
 
