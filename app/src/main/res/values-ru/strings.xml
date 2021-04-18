@@ -104,4 +104,5 @@
     <string name="chess960">Шахматы Фишера</string>
     <string name="multiplayer_guide">Нужно произвести сопряжение с устройством оппонента до начала подключения.</string>
     <string name="queensAttack">Атака ферзей</string>
+    <string name="improvedAI">Улучшенный ИИ</string>
 </resources>

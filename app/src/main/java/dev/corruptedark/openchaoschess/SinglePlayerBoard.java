@@ -96,6 +96,7 @@ public class SinglePlayerBoard extends AppCompatActivity {
     private boolean bloodThirstQueued = false;
 
     private static volatile boolean aggressiveComputer;
+    private static volatile boolean improvedAI;
 
     TextView wonLabel, lostLabel, tieLabel, cantMoveThatLabel, notYourTurnLabel, gameOverLabel, thatSucksLabel, noiceLabel, playerPointLabel, computerPointLabel, plusOneLabel;
 
@@ -164,6 +165,7 @@ public class SinglePlayerBoard extends AppCompatActivity {
             createSquares(boardSize);
         } else {
             aggressiveComputer = GameplaySettingsManager.getInstance(this).getAggressiveComputers();
+            improvedAI = GameplaySettingsManager.getInstance(this).getImprovedAI();
             startNewGame(singleGame.isKnightsOnly());
         }
 
@@ -888,37 +890,67 @@ public class SinglePlayerBoard extends AppCompatActivity {
             }
         });
 
+        // Generate pieces list
         List<Square> computerPieces = new ArrayList<>();
-        Square picked;
-        Random rand = new Random();
-
+        List<Square> aggressivePieces = new ArrayList<>();
         for (int i = 0; i < boardSize; i++)
             for (int j = 0; j < boardSize; j++)
                 if (board[i][j].getTeam() == OPPONENT)
                     computerPieces.add(board[i][j]);
 
-        if (aggressiveComputer) {
-            List<Square> aggressivePieces = new ArrayList<>();
-
-            for (Square piece : computerPieces)
-                if (mover.pieceHasEnemies(board, piece))
-                    aggressivePieces.add(piece);
-
-            if (!aggressivePieces.isEmpty())
-                computerPieces = aggressivePieces;
+        int computerPiecesSize = computerPieces.size();
+        for (int i = computerPiecesSize - 1; i >= 0; i--) {
+            if (!mover.canPieceMove(board, computerPieces.get(i), singleGame)) {
+                computerPieces.remove(i);
+            }
         }
 
         if (computerPieces.size() > 0) {
+
+            Square picked;
+            Random rand = new Random();
+
+            // Generate aggressive pieces list
+            if (aggressiveComputer || improvedAI) {
+                for (Square piece : computerPieces)
+                    if (mover.pieceHasEnemies(board, piece))
+                        aggressivePieces.add(piece);
+
+                if (!aggressivePieces.isEmpty() && !improvedAI)
+                    computerPieces = aggressivePieces;
+            }
+
             int computerScore = singleGame.getComputerPoints();
 
-            picked = computerPieces.get(rand.nextInt(computerPieces.size()));
+            if(improvedAI) {
+                List<Square> improvedAIPieces = new ArrayList<>();
+                List<Integer> priority = new ArrayList<>();
+                int maxPriority = -30;
+                for (Square square : computerPieces) {
+                    priority.add(   (mover.pieceInDanger(board, square) ? PieceCost.getPieceCost(square) : 0) +
+                                    (PieceCost.getAttackCost(mover, board, square)) -
+                                    (PieceCost.getDangerCostOfMove(mover, board, square, bloodThirsty)) +
+                                    (aggressivePieces.contains(square) ? 1 : 0));
+                }
 
-            while (!mover.movePiece(board, board[picked.getI()][picked.getJ()], singleGame, bloodThirsty)) {
-                computerPieces.remove(picked);
-                if (computerPieces.size() == 0)
-                    break;
+                for (int pr : priority) {
+                    if(pr > maxPriority)
+                        maxPriority = pr;
+                }
+
+                for (int i = 0; i < computerPieces.size(); i++) {
+                    if(priority.get(i) == maxPriority)
+                        improvedAIPieces.add(computerPieces.get(i));
+                }
+
+                picked = improvedAIPieces.get(rand.nextInt(improvedAIPieces.size()));
+            } else {
                 picked = computerPieces.get(rand.nextInt(computerPieces.size()));
             }
+
+            mover.movePiece(board, board[picked.getI()][picked.getJ()], singleGame, bloodThirsty);
+            computerPieces.remove(picked);
+            //picked = computerPieces.get(rand.nextInt(computerPieces.size()));
 
             if (selected.getTeam() == OPPONENT) {
                 runOnUiThread(new Runnable() {

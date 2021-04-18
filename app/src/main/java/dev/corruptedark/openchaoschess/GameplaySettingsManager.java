@@ -25,6 +25,7 @@ public class GameplaySettingsManager {
     private final int HANDICAP_ENABLED = 2;
     private final int CHESS960 = 3;
     private final int QUEENS_ATTACK = 4;
+    private final int IMPROVED_AI = 5;
 
     private final String DELIMITER = " ";
 
@@ -185,6 +186,36 @@ public class GameplaySettingsManager {
         }
 
         contentArray.set(QUEENS_ATTACK, Boolean.toString(handicapEnabled));
+        saveChangesToFile();
+    }
+
+    public boolean getImprovedAI() {
+        boolean improvedAI;
+
+        if (contentArray.size() < IMPROVED_AI + 1) {
+            int sizeDiff = IMPROVED_AI + 1 - contentArray.size();
+            for (int i = 0; i < sizeDiff; i++) {
+                contentArray.add("false");
+            }
+            saveChangesToFile();
+            improvedAI = false;
+        }
+        else {
+            improvedAI = Boolean.parseBoolean(contentArray.get(IMPROVED_AI));
+        }
+
+        return improvedAI;
+    }
+
+    public void setImprovedAI(boolean improvedAI) {
+        if (contentArray.size() < IMPROVED_AI + 1) {
+            int sizeDiff = IMPROVED_AI + 1 - contentArray.size();
+            for (int i = 0; i < sizeDiff; i++) {
+                contentArray.add("false");
+            }
+        }
+
+        contentArray.set(IMPROVED_AI, Boolean.toString(improvedAI));
         saveChangesToFile();
     }
 
