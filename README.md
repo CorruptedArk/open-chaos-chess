@@ -27,20 +27,6 @@ All future development for Chaos Chess will be in this project.
 ## Current Status
 As of the most recent commit to the master branch, achievements and single player games are working. However, since it is not using any online services, the progress is only saved locally and is lost if app data is wiped or if a player installs on a new device. Multiplayer is now working over Bluetooth for the most part. Pieces are now animated on move. Bloodthirst feature has been implemented. While Bloodthirst is active, pieces will always attack if possible.
 
-## TODO in this fork
-(sorry for my Russian)
-
-- [ ] **Переместить about и issues в меню настроек**
-- [ ] **Группировать настройки гемплея и цветов**
-- [ ] **Прокачанный ИИ**
-
-  Для каждой фигуры расчитать приоритет:
-  
-  - +**ценность фигуры**, если фигура под ударом
-  - +**суммарная ценность атакуемых фигур**
-  - (int) -(**количество клеток под ударом** / **количество доступных клеток**) * **ценность фигуры**
-  - +**1** пешке за пройденное наполовину поле
-
 ----
 
 ## Screenshots
