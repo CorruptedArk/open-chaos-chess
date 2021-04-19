@@ -90,6 +90,25 @@
                 android:orientation="horizontal">
 
                 <androidx.appcompat.widget.AppCompatCheckBox
+                    android:id="@+id/smartComputer_toggle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:button="@null"
+                    android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                    android:text="@string/smartComputer"
+                    android:textSize="30sp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatCheckBox
                     android:id="@+id/handicap_toggle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -136,25 +155,6 @@
                     android:button="@null"
                     android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
                     android:text="@string/queensAttack"
-                    android:textSize="30sp" />
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <androidx.appcompat.widget.AppCompatCheckBox
-                    android:id="@+id/improvedAI_toggle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:button="@null"
-                    android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
-                    android:text="@string/improvedAI"
                     android:textSize="30sp" />
 
 

@@ -97,12 +97,12 @@
     <string name="bloodthirst_toggle_cancelled">Решительность выключена</string>
     <string name="issues">Вопросы</string>
     <string name="issues_url">https://github.com/CorruptedArk/open-chaos-chess/issues</string>
-    <string name="aggressive_computer">Агрессивный ИИ</string>
+    <string name="aggressive_computer">Агрессивный компьютер</string>
     <string name="setting_applied_on_new_game">Настройки применятся к новой игре</string>
     <string name="plus_one">+1</string>
     <string name="enable_handicap">Усложнить игру</string>
     <string name="chess960">Шахматы Фишера</string>
     <string name="multiplayer_guide">Нужно произвести сопряжение с устройством оппонента до начала подключения.</string>
     <string name="queensAttack">Атака ферзей</string>
-    <string name="improvedAI">Улучшенный ИИ</string>
+    <string name="smartComputer">Умный компьютер</string>
 </resources>
