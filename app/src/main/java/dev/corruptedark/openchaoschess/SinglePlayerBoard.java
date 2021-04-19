@@ -430,6 +430,7 @@ public class SinglePlayerBoard extends AppCompatActivity {
         }
 
         aggressiveComputer = GameplaySettingsManager.getInstance(this).getAggressiveComputers();
+        smartComputer = GameplaySettingsManager.getInstance(this).getSmartComputer();
 
         selected = defaultSquare;
         while (moveThread != null && moveThread.isAlive()) {
