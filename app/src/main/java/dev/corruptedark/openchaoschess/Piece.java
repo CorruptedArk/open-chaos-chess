@@ -11,3 +11,4 @@ public class Piece {
     public static final String NONE = " ";
 
 }
+
