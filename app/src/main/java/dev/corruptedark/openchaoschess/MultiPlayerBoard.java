@@ -162,7 +162,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
         int width = size.x;
         int height = (int)(0.70 * size.y);
 
-        if (Math.abs(((double) width)/height - 1.0) <= RATIO_THRESHOLD || (double)width/height > 1) { // ratio not long
+        if (Math.abs(((double) width)/size.y - 1.0) <= RATIO_THRESHOLD || width > size.y) { // ratio not long
             squareSize = height / 8;
             xPosition = (width - height) / 2;
         }
