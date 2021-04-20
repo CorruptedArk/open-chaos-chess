@@ -98,7 +98,7 @@ public class SinglePlayerBoard extends AppCompatActivity {
     private boolean bloodThirstQueued = false;
 
     private static volatile boolean aggressiveComputer;
-    private static volatile boolean improvedAI;
+    private static volatile boolean smartComputer;
 
     TextView wonLabel, lostLabel, tieLabel, cantMoveThatLabel, notYourTurnLabel, gameOverLabel, thatSucksLabel, noiceLabel, playerPointLabel, computerPointLabel, plusOneLabel;
 
@@ -175,7 +175,7 @@ public class SinglePlayerBoard extends AppCompatActivity {
             createSquares(boardSize);
         } else {
             aggressiveComputer = GameplaySettingsManager.getInstance(this).getAggressiveComputers();
-            improvedAI = GameplaySettingsManager.getInstance(this).getImprovedAI();
+            smartComputer = GameplaySettingsManager.getInstance(this).getSmartComputer();
             startNewGame(singleGame.isKnightsOnly());
         }
 
@@ -440,6 +440,7 @@ public class SinglePlayerBoard extends AppCompatActivity {
         }
 
         aggressiveComputer = GameplaySettingsManager.getInstance(this).getAggressiveComputers();
+        smartComputer = GameplaySettingsManager.getInstance(this).getSmartComputer();
 
         selected = defaultSquare;
         while (moveThread != null && moveThread.isAlive()) {
@@ -915,24 +916,22 @@ public class SinglePlayerBoard extends AppCompatActivity {
             }
         }
 
+        // Generate aggressive pieces list
+        if (aggressiveComputer || smartComputer) {
+            for (Square piece : computerPieces)
+                //if (PieceCost.getAttackCost(mover, board, piece) != 0)
+                if(mover.pieceHasEnemies(board, piece))
+                    aggressivePieces.add(piece);
+        }
+
         if (computerPieces.size() > 0) {
 
             Square picked;
             Random rand = new Random();
 
-            // Generate aggressive pieces list
-            if (aggressiveComputer || improvedAI) {
-                for (Square piece : computerPieces)
-                    if (mover.pieceHasEnemies(board, piece))
-                        aggressivePieces.add(piece);
-
-                if (!aggressivePieces.isEmpty() && !improvedAI)
-                    computerPieces = aggressivePieces;
-            }
-
             int computerScore = singleGame.getComputerPoints();
 
-            if(improvedAI) {
+            if(smartComputer) {
                 List<Square> improvedAIPieces = new ArrayList<>();
                 List<Integer> priority = new ArrayList<>();
                 int maxPriority = -30;
@@ -954,13 +953,16 @@ public class SinglePlayerBoard extends AppCompatActivity {
                 }
 
                 picked = improvedAIPieces.get(rand.nextInt(improvedAIPieces.size()));
+            } else if(aggressiveComputer) {
+                if (aggressivePieces.isEmpty())
+                    picked = computerPieces.get(rand.nextInt(computerPieces.size()));
+                else
+                    picked = aggressivePieces.get(rand.nextInt(aggressivePieces.size()));
             } else {
                 picked = computerPieces.get(rand.nextInt(computerPieces.size()));
             }
 
             mover.movePiece(board, board[picked.getI()][picked.getJ()], singleGame, bloodThirsty);
-            computerPieces.remove(picked);
-            //picked = computerPieces.get(rand.nextInt(computerPieces.size()));
 
             if (selected.getTeam() == OPPONENT) {
                 runOnUiThread(new Runnable() {

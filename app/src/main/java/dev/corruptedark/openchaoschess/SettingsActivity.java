@@ -52,10 +52,10 @@ import com.pes.androidmaterialcolorpickerdialog.ColorPickerCallback;
 public class SettingsActivity extends AppCompatActivity {
     AppCompatCheckBox bloodthirstDefaultToggle;
     AppCompatCheckBox aggressiveComputerToggle;
+    AppCompatCheckBox smartComputerToggle;
     AppCompatCheckBox handicapToggle;
     AppCompatCheckBox chess960Toggle;
     AppCompatCheckBox queensAttackToggle;
-    AppCompatCheckBox improvedAIToggle;
     TextView backgroundColorLabel;
     TextView barColorLabel;
     TextView secondaryColorLabel;
@@ -96,7 +96,7 @@ public class SettingsActivity extends AppCompatActivity {
         handicapToggle = (AppCompatCheckBox)findViewById(R.id.handicap_toggle);
         chess960Toggle = (AppCompatCheckBox)findViewById(R.id.chess960_toggle);
         queensAttackToggle = (AppCompatCheckBox)findViewById(R.id.queensAttack_toggle);
-        improvedAIToggle = (AppCompatCheckBox)findViewById(R.id.improvedAI_toggle);
+        smartComputerToggle = (AppCompatCheckBox)findViewById(R.id.smartComputer_toggle);
 
         backgroundColorLabel = (TextView)findViewById(R.id.background_color_label);
         barColorLabel = (TextView)findViewById(R.id.bar_color_label);
@@ -158,8 +158,8 @@ public class SettingsActivity extends AppCompatActivity {
         chess960Toggle.setHighlightColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
         queensAttackToggle.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         queensAttackToggle.setHighlightColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
-        improvedAIToggle.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
-        improvedAIToggle.setHighlightColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
+        smartComputerToggle.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        smartComputerToggle.setHighlightColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
         backgroundColorLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         barColorLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         secondaryColorLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
@@ -196,12 +196,34 @@ public class SettingsActivity extends AppCompatActivity {
         aggressiveComputerToggle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                GameplaySettingsManager.getInstance(view.getContext()).setAggressiveComputer(aggressiveComputerToggle.isChecked());
+                boolean state = aggressiveComputerToggle.isChecked();
+                if (state) {
+                    GameplaySettingsManager.getInstance(view.getContext()).setSmartComputer(false);
+                    smartComputerToggle.setChecked(false);
+                }
+                GameplaySettingsManager.getInstance(view.getContext()).setAggressiveComputer(state);
                 Toast.makeText(view.getContext(), R.string.setting_applied_on_new_game, Toast.LENGTH_SHORT).show();
             }
         });
 
         TextViewCompat.setCompoundDrawableTintList(handicapToggle, colorStateList);
+
+        smartComputerToggle.setChecked(GameplaySettingsManager.getInstance(this).getSmartComputer());
+
+        smartComputerToggle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                boolean state = smartComputerToggle.isChecked();
+                if (state) {
+                    GameplaySettingsManager.getInstance(view.getContext()).setAggressiveComputer(false);
+                    aggressiveComputerToggle.setChecked(false);
+                }
+                GameplaySettingsManager.getInstance(view.getContext()).setSmartComputer(state);
+                Toast.makeText(view.getContext(), R.string.setting_applied_on_new_game, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        TextViewCompat.setCompoundDrawableTintList(smartComputerToggle, colorStateList);
 
         handicapToggle.setChecked(GameplaySettingsManager.getInstance(this).getHandicapOnlyBishopsKnightsEnabled());
 
@@ -233,18 +255,6 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 GameplaySettingsManager.getInstance(view.getContext()).setHandicapQueensAttackEnabled(queensAttackToggle.isChecked());
-                Toast.makeText(view.getContext(), R.string.setting_applied_on_new_game, Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        TextViewCompat.setCompoundDrawableTintList(improvedAIToggle, colorStateList);
-
-        improvedAIToggle.setChecked(GameplaySettingsManager.getInstance(this).getImprovedAI());
-
-        improvedAIToggle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                GameplaySettingsManager.getInstance(view.getContext()).setImprovedAI(improvedAIToggle.isChecked());
                 Toast.makeText(view.getContext(), R.string.setting_applied_on_new_game, Toast.LENGTH_SHORT).show();
             }
         });
