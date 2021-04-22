@@ -1,0 +1,9 @@
+v1.9.0
+
+Additions:
+-Chess960 mode (egorguslyan on Github)
+-Queens Attack handicap mode (egorguslyan on Github)
+-Smart Computer mode (egorguslyan on Github)
+
+Fixes:
+-Fixed playability on screens of various sizes and ratios (partial credit to egorguslyan on Github)
