@@ -146,10 +146,10 @@ public class SinglePlayerBoard extends AppCompatActivity {
         boardSize = 8;
 
         Resources resources = context.getResources();
-        int navbar = 0;
+        int navBarHeight = 0;
         int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
         if (resourceId > 0) {
-            navbar = resources.getDimensionPixelSize(resourceId);
+            navBarHeight = resources.getDimensionPixelSize(resourceId);
         }
 
         Display display;
@@ -161,7 +161,7 @@ public class SinglePlayerBoard extends AppCompatActivity {
         Point size = new Point();
         display.getSize(size);
         int width = size.x;
-        int height = (int)(0.70 * size.y) - navbar;
+        int height = (int)(0.70 * size.y) - navBarHeight;
 
         if (Math.abs(((double) width)/size.y - 1.0) <= RATIO_THRESHOLD || width > size.y) { // ratio not long
             squareSize = height / 8;

@@ -20,6 +20,7 @@
 package dev.corruptedark.openchaoschess;
 
 import android.content.res.ColorStateList;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Build;
@@ -151,6 +152,13 @@ public class MultiPlayerBoard extends AppCompatActivity {
         selected.setPiece(Piece.NONE);
         boardSize = 8;
 
+        Resources resources = context.getResources();
+        int navBarHeight = 0;
+        int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            navBarHeight = resources.getDimensionPixelSize(resourceId);
+        }
+
         Display display;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
             display = getDisplay();
@@ -160,7 +168,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
         Point size = new Point();
         display.getSize(size);
         int width = size.x;
-        int height = (int)(0.70 * size.y);
+        int height = (int)(0.70 * size.y) - navBarHeight;
 
         if (Math.abs(((double) width)/size.y - 1.0) <= RATIO_THRESHOLD || width > size.y) { // ratio not long
             squareSize = height / 8;
@@ -170,7 +178,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
             squareSize = (width - convertDpToPx(30)) / 8;
             xPosition = convertDpToPx(15);
         }
-        yPosition = convertDpToPx(160);
+        yPosition = size.y / 2 - 4 * squareSize;
 
         mover = new Mover(this);
         multiGame = MultiGame.getInstance();
