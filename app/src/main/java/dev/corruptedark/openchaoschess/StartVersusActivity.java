@@ -21,10 +21,13 @@ package dev.corruptedark.openchaoschess;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatCheckBox;
+import androidx.core.widget.CompoundButtonCompat;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
@@ -36,16 +39,18 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class StartClientActivity extends AppCompatActivity {
+public class StartVersusActivity extends AppCompatActivity {
 
-    LinearLayout clientLayout;
-    TextView clientInstructionsLabel;
-    TextView pairedDevicesLabel;
-    ListView pairedDevicesListView;
+    private LinearLayout hostLayout;
+    private TextView hostInstructionLabel;
+    private AppCompatCheckBox knightsOnlyCheckBox;
+    private AppCompatCheckBox bloodthirstyCheckBox;
+    private TextView pairedDevicesLabel;
+    private ListView pairedDevicesListView;
 
-    PairedDeviceAdapter deviceAdapter;
+    private PairedDeviceAdapter deviceAdapter;
 
-    ColorManager colorManager;
+    private ColorManager colorManager;
 
     GameConnectionHandler gameConnectionHandler;
 
@@ -53,24 +58,51 @@ public class StartClientActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_start_client);
+        setContentView(R.layout.activity_start_versus);
+
+        hostLayout = findViewById(R.id.host_layout);
+        hostInstructionLabel = findViewById(R.id.host_instructions);
+        knightsOnlyCheckBox = findViewById(R.id.knights_only_checkbox);
+        bloodthirstyCheckBox = findViewById(R.id.bloodthirsty_checkbox);
+        pairedDevicesLabel = findViewById(R.id.host_paired_devices_label);
+        pairedDevicesListView = findViewById(R.id.host_paired_device_list_view);
 
         colorManager = ColorManager.getInstance(this);
 
-        clientLayout = findViewById(R.id.client_layout);
-        clientInstructionsLabel = findViewById(R.id.client_instructions);
-        pairedDevicesLabel = findViewById(R.id.paired_devices_label);
-        pairedDevicesListView = findViewById(R.id.paired_device_list_view);
-
-        clientLayout.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BACKGROUND_COLOR));
-        clientInstructionsLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        hostLayout.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BACKGROUND_COLOR));
+        hostInstructionLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        knightsOnlyCheckBox.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        bloodthirstyCheckBox.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         pairedDevicesLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         pairedDevicesListView.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BACKGROUND_COLOR));
 
+        int[][] states = {{android.R.attr.state_checked}, {}};
+        int[] colors = {colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1), colorManager.getColorFromFile(ColorManager.TEXT_COLOR)};
+
+        CompoundButtonCompat.setButtonTintList(knightsOnlyCheckBox, new ColorStateList(states, colors));
+        CompoundButtonCompat.setButtonTintList(bloodthirstyCheckBox, new ColorStateList(states, colors));
+
+        bloodthirstyCheckBox.setChecked(GameplaySettingsManager.getInstance(this).getBloodThirstByDefault());
+
+        knightsOnlyCheckBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startHosting(hostLayout);
+            }
+        });
+
+        bloodthirstyCheckBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startHosting(hostLayout);
+            }
+        });
+
         gameConnectionHandler = GameConnectionHandler.getInstance();
         gameConnectionHandler.startBluetooth(this);
-
         pairedDevicesListView.setSelector(new ColorDrawable(colorManager.getColorFromFile(ColorManager.SELECTION_COLOR)));
+        startHosting(hostLayout);
+
         if(gameConnectionHandler.bluetoothIsOn())
         {
             ArrayList<BluetoothDevice> bluetoothDevices = gameConnectionHandler.getAndListPairedDevices(this);
@@ -87,21 +119,32 @@ public class StartClientActivity extends AppCompatActivity {
         }
     }
 
-
     public void connectToHost(BluetoothDevice device) {
         Toast.makeText(this, "Starting connection to host", Toast.LENGTH_SHORT).show();
         gameConnectionHandler.connectToHost(device, this);
     }
 
-    public void stopClient()
+    public void startHosting(View view)
     {
-        Toast.makeText(this, "Stopping client", Toast.LENGTH_SHORT).show();
-        gameConnectionHandler.stopClient();
+        Toast.makeText(this,"Starting host", Toast.LENGTH_SHORT).show();
+        gameConnectionHandler.startHost(knightsOnlyCheckBox.isChecked(), bloodthirstyCheckBox.isChecked(), this);
+    }
+
+
+    public void stopHosting(View view)
+    {
+        Toast.makeText(this,"Stopping host", Toast.LENGTH_SHORT).show();
+        gameConnectionHandler.stopHost();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override
     public void onBackPressed() {
-
+        stopHosting(hostLayout);
         gameConnectionHandler.stopClient();
 
         super.onBackPressed();
@@ -128,10 +171,8 @@ public class StartClientActivity extends AppCompatActivity {
                         }
                     });
                 }
-                else if (resultCode == Activity.RESULT_CANCELED)
-                {
+                else if(resultCode == Activity.RESULT_CANCELED)
                     onBackPressed();
-                }
                 break;
         }
     }

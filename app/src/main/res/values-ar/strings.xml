@@ -76,7 +76,7 @@
     <string name="text_color">لون النص</string>
     <string name="settings_file">settings.txt</string>
     <string name="BT_UUID">fc0ebdde–e425–4123–92a8–17bd8a90a769</string>
-    <string name="host_game">استضافة لعبة جماعية</string>
+    <string name="host_game">ضد</string>
     <string name="join_game">دخول لعبة جماعية</string>
     <string name="multiplayer_guide">اذا لم تقم بالاقتران مع جهاز العدو، اذهب الى اعدادات البلوتوث وافعل ذلك الان!</string>
     <string name="knights_only">فرسان فقط؟</string>

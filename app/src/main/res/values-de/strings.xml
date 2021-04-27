@@ -76,7 +76,7 @@
     <string name="text_color">Textfarbe:</string>
     <string name="settings_file">settings.txt</string>
     <string name="BT_UUID">fc0ebdde–e425–4123–92a8–17bd8a90a769</string>
-    <string name="host_game">Spiel hosten</string>
+    <string name="host_game">Gegen</string>
     <string name="join_game">Spiel beitreten</string>
     <string name="multiplayer_guide">Wenn du noch nicht per Bluetooth mit deinem Gegner verbunden bist, musst du das tun, bevor du ein Spiel startest.</string>
     <string name="knights_only">Nur Springer?</string>

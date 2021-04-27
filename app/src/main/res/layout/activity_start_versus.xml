@@ -24,7 +24,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".StartHostActivity">
+    tools:context=".StartVersusActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -43,14 +43,6 @@
                 android:layout_margin="10dp"
                 android:ellipsize="none"
                 android:text="@string/multiplayer_guide"
-                android:textSize="25sp" />
-
-            <TextView
-                android:id="@+id/host_status"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:text="@string/host_status"
                 android:textSize="25sp" />
 
 
@@ -75,23 +67,22 @@
                 android:textSize="25sp" />
 
 
-            <Button
-                android:id="@+id/start_host_button"
+            <TextView
+                android:id="@+id/host_paired_devices_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_gravity="left|center_vertical"
                 android:layout_margin="10dp"
-                android:onClick="startHosting"
-                android:text="@string/start_host" />
+                android:text="@string/paired_devices"
+                android:textSize="25sp" />
 
-            <Button
-                android:id="@+id/stop_host_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
+            <ListView
+                android:id="@+id/host_paired_device_list_view"
+                android:layout_width="match_parent"
+                android:layout_height="197dp"
                 android:layout_margin="10dp"
-                android:onClick="stopHosting"
-                android:text="@string/stop_host" />
+                android:divider="@color/materialcolorpicker__grey"
+                android:dividerHeight="1dp" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

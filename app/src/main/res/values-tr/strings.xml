@@ -73,7 +73,7 @@
     <string name="text_color">Yazı Rengi:</string>
     <string name="settings_file">settings.txt</string>
     <string name="BT_UUID">fc0ebdde–e425–4123–92a8–17bd8a90a769</string>
-    <string name="host_game">Oyun Kur</string>
+    <string name="host_game">E karşı</string>
     <string name="join_game">Oyuna Katıl</string>
     <string name="multiplayer_guide">Eğer rakibinle eşleşmediysen bağlnamadan önce ayarlardan eşleş.</string>
     <string name="knights_only">Sadece atlar?</string>
