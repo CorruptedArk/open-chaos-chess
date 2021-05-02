@@ -506,6 +506,7 @@ public class MultiPlayerBoard extends AppCompatActivity {
         gameOverLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         thatSucksLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         plusOneLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        plusOneLabel.setVisibility(View.GONE);
 
         newGameAlertFragment = new NewGameAlertFragment(MultiPlayerBoard.this, TAG, isHost);
 
