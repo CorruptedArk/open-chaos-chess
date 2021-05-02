@@ -22,7 +22,9 @@ package dev.corruptedark.openchaoschess;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.ColorFilter;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Display;
@@ -51,7 +53,9 @@ public class AboutActivity extends AppCompatActivity {
     TextView aboutDescript;
     TextView aboutContact;
 
-    ImageView aboutImage;
+    ImageView aboutImageBoard1;
+    ImageView aboutImageBoard2;
+    ImageView aboutImagePiece;
 
     Context context;
 
@@ -78,12 +82,16 @@ public class AboutActivity extends AppCompatActivity {
         aboutContact = (TextView)findViewById(R.id.about_contact);
 
 
-        aboutImage = (ImageView)findViewById(R.id.about_image);
+        aboutImageBoard1 = (ImageView)findViewById(R.id.about_image_board1);
+        aboutImageBoard2 = (ImageView)findViewById(R.id.about_image_board2);
+        aboutImagePiece = (ImageView)findViewById(R.id.about_image_piece);
+
+
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        aboutImage.setOnClickListener(new View.OnClickListener() {
+        aboutImagePiece.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(++knockCount == KNOCK){
@@ -125,11 +133,16 @@ public class AboutActivity extends AppCompatActivity {
         iconParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         iconParams.addRule(RelativeLayout.BELOW, R.id.about_toolbar);
         iconParams.setMargins(0, buttonGap,0,buttonGap);
-        aboutImage.setLayoutParams(iconParams);
+        aboutImageBoard1.setLayoutParams(iconParams);
+        aboutImageBoard2.setLayoutParams(iconParams);
+        aboutImagePiece.setLayoutParams(iconParams);
 
         toolbar.setTitleTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         toolbar.setBackgroundColor(colorManager.getColorFromFile(ColorManager.SECONDARY_COLOR));
         aboutLayout.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BACKGROUND_COLOR));
+        aboutImageBoard1.getDrawable().setColorFilter(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1), PorterDuff.Mode.MULTIPLY);
+        aboutImageBoard2.getDrawable().setColorFilter(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_2), PorterDuff.Mode.MULTIPLY);
+        aboutImagePiece.getDrawable().setColorFilter(colorManager.getColorFromFile(ColorManager.PIECE_COLOR), PorterDuff.Mode.MULTIPLY);
         aboutTitle.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         aboutCredits.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         aboutDescript.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
