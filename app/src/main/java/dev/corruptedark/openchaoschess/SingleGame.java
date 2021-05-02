@@ -36,10 +36,8 @@ public class SingleGame {
     private int computerPoints;
     private int moveCount;
     private int turn;
+    private boolean knightsOnly;
     private static int gameCount;
-    private boolean canPlayerMove;
-    private boolean canComputerMove;
-    private boolean knightsOnly = false;
     private static boolean hasBoard = false;
 
 
@@ -131,88 +129,42 @@ public class SingleGame {
     }
 
     public boolean getCanPlayerMove(Mover mover, Square[][] board){
-        canPlayerMove = true;
-        List<Square> playerPieces = new ArrayList<>();
-        Square picked;
-        for (int i = 0; i < board.length; i++)
-            for (int j = 0; j < board[i].length; j++)
-                if (board[i][ j].getTeam() == YOU)
-                    playerPieces.add(board[i][ j]);
-
-        if (playerPieces.size() > 0) {
-            picked = playerPieces.get(playerPieces.size() - 1);
-            while (!mover.canPieceMove(board, picked, this)) {
-                playerPieces.remove(picked);
-                if (playerPieces.size() == 0) {
-                    canPlayerMove = false;
-                    break;
-                }
-                picked = playerPieces.get(playerPieces.size() - 1);
-            }
-        }
-        else
-            canPlayerMove = false;
-
-        return canPlayerMove;
+        return !movablePlayers(mover, board).isEmpty();
     }
 
     public boolean getCanComputerMove(Mover mover, Square[][] board){
-        canComputerMove = true;
-        List<Square> computerPieces = new ArrayList<>();
-        Square picked;
-        for (int i = 0; i < board.length; i++)
-            for (int j = 0; j < board[i].length; j++)
-                if (board[i][ j].getTeam() == OPPONENT)
-                    computerPieces.add(board[i][ j]);
-
-        if(computerPieces.size() > 0) {
-            picked = computerPieces.get(computerPieces.size() - 1);
-            while (!mover.canPieceMove(board, picked, this)) {
-                computerPieces.remove(picked);
-                if (computerPieces.size() == 0) {
-                    canComputerMove = false;
-                    break;
-                }
-                picked = computerPieces.get(computerPieces.size() - 1);
-            }
-        }
-        else
-            canComputerMove = false;
-
-        return canComputerMove;
+        return !movableComputers(mover, board).isEmpty();
     }
 
     public List<Square> movablePlayers(Mover mover, Square[][] board){
         List<Square> playerPieces = new ArrayList<>();
         List<Square> movablePieces = new ArrayList<>();
-        Square picked;
-        for (int i = 0; i < board.length; i++)
-            for (int j = 0; j < board[i].length; j++)
-                if (board[i][ j].getTeam() == YOU)
-                    playerPieces.add(board[i][ j]);
 
-        for(int i =0; i < playerPieces.size(); i++) {
-            picked = playerPieces.get(i);
-            if(mover.canPieceMove(board,picked,this))
-                movablePieces.add(picked);
-        }
+        for(Square[] line : board)
+            for(Square piece : line)
+                if (piece.getTeam() == YOU)
+                    playerPieces.add(piece);
+
+        for(Square piece : playerPieces)
+            if(mover.canPieceMove(board, piece, this))
+                movablePieces.add(piece);
+
         return  movablePieces;
     }
 
     public List<Square> movableComputers(Mover mover, Square[][] board){
         List<Square> computerPieces = new ArrayList<>();
         List<Square> movablePieces = new ArrayList<>();
-        Square picked;
-        for (int i = 0; i < board.length; i++)
-            for (int j = 0; j < board[i].length; j++)
-                if (board[i][ j].getTeam() == OPPONENT)
-                    computerPieces.add(board[i][ j]);
 
-        for(int i =0; i < computerPieces.size(); i++) {
-            picked = computerPieces.get(i);
-            if(mover.canPieceMove(board,picked,this))
-                movablePieces.add(picked);
-        }
+        for(Square[] line : board)
+            for(Square piece : line)
+                if (piece.getTeam() == OPPONENT)
+                    computerPieces.add(piece);
+
+        for(Square piece : computerPieces)
+            if(mover.canPieceMove(board, piece, this))
+                movablePieces.add(piece);
+
         return  movablePieces;
     }
 

@@ -56,12 +56,42 @@
         android:layout_below="@+id/main_title"
         android:layout_centerHorizontal="true" />
 
-    <ImageView
+    <!--<ImageView
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:id="@+id/mainImage"
         android:contentDescription="@string/app_name"
         app:srcCompat="@drawable/ic_icon"
+        android:layout_marginTop="17dp"
+        android:layout_below="@+id/main_slogan"
+        android:layout_centerHorizontal="true" /> -->
+
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:id="@+id/mainImage_board1"
+        android:contentDescription="@string/app_name"
+        app:srcCompat="@drawable/ic_icon_board1"
+        android:layout_marginTop="17dp"
+        android:layout_below="@+id/main_slogan"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:id="@+id/mainImage_board2"
+        android:contentDescription="@string/app_name"
+        app:srcCompat="@drawable/ic_icon_board2"
+        android:layout_marginTop="17dp"
+        android:layout_below="@+id/main_slogan"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:id="@+id/mainImage_piece"
+        android:contentDescription="@string/app_name"
+        app:srcCompat="@drawable/ic_icon_piece"
         android:layout_marginTop="17dp"
         android:layout_below="@+id/main_slogan"
         android:layout_centerHorizontal="true" />
@@ -77,7 +107,7 @@
         android:paddingRight="10dp"
         android:background="@color/colorAccent"
         android:onClick="playButtonClicked"
-        android:layout_below="@+id/mainImage"
+        android:layout_below="@+id/mainImage_board1"
         android:layout_centerHorizontal="true"/>
 
     <Button

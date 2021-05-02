@@ -80,7 +80,9 @@ public class MainActivity extends AppCompatActivity {
     ImageButton settingsButton;
     ImageButton achievementsButton;
     ImageButton knightButton;
-    ImageView mainImage;
+    ImageView mainImage_board1;
+    ImageView mainImage_board2;
+    ImageView mainImage_piece;
 
     Handler knightHandler;
 
@@ -121,7 +123,9 @@ public class MainActivity extends AppCompatActivity {
         settingsButton = (ImageButton)findViewById(R.id.settings_button);
         achievementsButton = (ImageButton)findViewById(R.id.achievements_button);
         knightButton = (ImageButton)findViewById(R.id.knight_button);
-        mainImage = (ImageView)findViewById(R.id.mainImage);
+        mainImage_board1 = (ImageView)findViewById(R.id.mainImage_board1);
+        mainImage_board2 = (ImageView)findViewById(R.id.mainImage_board2);
+        mainImage_piece = (ImageView)findViewById(R.id.mainImage_piece);
 
         mainLayout = (RelativeLayout)findViewById(R.id.activity_main);
 
@@ -218,12 +222,14 @@ public class MainActivity extends AppCompatActivity {
         iconParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         iconParams.addRule(RelativeLayout.BELOW, R.id.main_slogan);
         iconParams.setMargins(0, buttonGap,0,0);
-        mainImage.setLayoutParams(iconParams);
+        mainImage_board1.setLayoutParams(iconParams);
+        mainImage_board2.setLayoutParams(iconParams);
+        mainImage_piece.setLayoutParams(iconParams);
 
         playButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, buttonText);
         RelativeLayout.LayoutParams playButtonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, buttonHeight);
         playButtonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        playButtonParams.addRule(RelativeLayout.BELOW, R.id.mainImage);
+        playButtonParams.addRule(RelativeLayout.BELOW, R.id.mainImage_board1);
         playButtonParams.setMargins(0, buttonGap,0,0);
         playButton.setPadding(horizontalPadding, 0, horizontalPadding, 0);
         playButton.setLayoutParams(playButtonParams);
@@ -281,6 +287,9 @@ public class MainActivity extends AppCompatActivity {
         achievementsButton.setLayoutParams(achievementButtonParams);
 
         knightButton.getDrawable().setColorFilter(colorManager.getColorFromFile(ColorManager.PIECE_COLOR), PorterDuff.Mode.MULTIPLY);
+        mainImage_piece.getDrawable().setColorFilter(colorManager.getColorFromFile(ColorManager.PIECE_COLOR), PorterDuff.Mode.MULTIPLY);
+        mainImage_board1.getDrawable().setColorFilter(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1), PorterDuff.Mode.MULTIPLY);
+        mainImage_board2.getDrawable().setColorFilter(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_2), PorterDuff.Mode.MULTIPLY);
         mainLayout.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BACKGROUND_COLOR));
         mainTitle.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         mainSlogan.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
@@ -382,12 +391,14 @@ public class MainActivity extends AppCompatActivity {
         iconParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         iconParams.addRule(RelativeLayout.BELOW, R.id.main_slogan);
         iconParams.setMargins(0, buttonGap,0,0);
-        mainImage.setLayoutParams(iconParams);
+        mainImage_board1.setLayoutParams(iconParams);
+        mainImage_board2.setLayoutParams(iconParams);
+        mainImage_piece.setLayoutParams(iconParams);
 
         playButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, buttonText);
         RelativeLayout.LayoutParams playButtonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, buttonHeight);
         playButtonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        playButtonParams.addRule(RelativeLayout.BELOW, R.id.mainImage);
+        playButtonParams.addRule(RelativeLayout.BELOW, R.id.mainImage_board1);
         playButtonParams.setMargins(0, buttonGap,0,0);
         playButton.setPadding(horizontalPadding, 0, horizontalPadding, 0);
         playButton.setLayoutParams(playButtonParams);
@@ -447,6 +458,9 @@ public class MainActivity extends AppCompatActivity {
         colorManager = ColorManager.getInstance(this);
 
         knightButton.getDrawable().setColorFilter(colorManager.getColorFromFile(ColorManager.PIECE_COLOR), PorterDuff.Mode.MULTIPLY);
+        mainImage_piece.getDrawable().setColorFilter(colorManager.getColorFromFile(ColorManager.PIECE_COLOR), PorterDuff.Mode.MULTIPLY);
+        mainImage_board1.getDrawable().setColorFilter(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1), PorterDuff.Mode.MULTIPLY);
+        mainImage_board2.getDrawable().setColorFilter(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_2), PorterDuff.Mode.MULTIPLY);
         mainLayout.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BACKGROUND_COLOR));
         mainTitle.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         mainSlogan.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
