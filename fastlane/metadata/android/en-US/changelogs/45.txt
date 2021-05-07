@@ -1,0 +1,6 @@
+v1.9.1
+Change:
+-In-app logo icons now change color based on color settings (partial credit to egorguslyan on Github)
+
+Fix:
+-Make +1 invisible on start of MultiPlayerBoard activity
