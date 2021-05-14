@@ -23,6 +23,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -132,6 +133,8 @@ public class SettingsActivity extends AppCompatActivity {
 
         toolbar.setTitleTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         toolbar.setBackgroundColor(colorManager.getColorFromFile(ColorManager.SECONDARY_COLOR));
+        toolbar.getNavigationIcon().setColorFilter(colorManager.getColorFromFile(ColorManager.TEXT_COLOR), PorterDuff.Mode.MULTIPLY);
+        toolbar.getOverflowIcon().setColorFilter(colorManager.getColorFromFile(ColorManager.TEXT_COLOR), PorterDuff.Mode.MULTIPLY);
 
         backgroundColorButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BACKGROUND_COLOR));
         barColorButton.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BAR_COLOR));
@@ -311,10 +314,17 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
         layout.setBackgroundColor(colorManager.getColorFromFile(ColorManager.BACKGROUND_COLOR));
+        toolbar.setTitleTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        toolbar.setBackgroundColor(colorManager.getColorFromFile(ColorManager.SECONDARY_COLOR));
+        toolbar.getNavigationIcon().setColorFilter(colorManager.getColorFromFile(ColorManager.TEXT_COLOR), PorterDuff.Mode.MULTIPLY);
+        toolbar.getOverflowIcon().setColorFilter(colorManager.getColorFromFile(ColorManager.TEXT_COLOR), PorterDuff.Mode.MULTIPLY);
+
         bloodthirstDefaultToggle.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
-        bloodthirstDefaultToggle.setHighlightColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
         aggressiveComputerToggle.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
-        aggressiveComputerToggle.setHighlightColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
+        smartComputerToggle.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        handicapToggle.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        chess960Toggle.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        queensAttackToggle.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         backgroundColorLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         barColorLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         secondaryColorLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
@@ -334,6 +344,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         TextViewCompat.setCompoundDrawableTintList(bloodthirstDefaultToggle, colorStateList);
         TextViewCompat.setCompoundDrawableTintList(aggressiveComputerToggle, colorStateList);
+        TextViewCompat.setCompoundDrawableTintList(smartComputerToggle, colorStateList);
         TextViewCompat.setCompoundDrawableTintList(handicapToggle, colorStateList);
         TextViewCompat.setCompoundDrawableTintList(chess960Toggle, colorStateList);
         TextViewCompat.setCompoundDrawableTintList(queensAttackToggle, colorStateList);

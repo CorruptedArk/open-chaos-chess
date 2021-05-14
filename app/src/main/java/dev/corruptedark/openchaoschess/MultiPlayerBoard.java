@@ -23,6 +23,7 @@ import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -495,6 +496,8 @@ public class MultiPlayerBoard extends AppCompatActivity {
         toolbar.setTitle(string.versus);
         toolbar.setBackgroundColor(colorManager.getColorFromFile(ColorManager.SECONDARY_COLOR));
         toolbar.setTitleTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        toolbar.getNavigationIcon().setColorFilter(colorManager.getColorFromFile(ColorManager.TEXT_COLOR), PorterDuff.Mode.MULTIPLY);
+        toolbar.getOverflowIcon().setColorFilter(colorManager.getColorFromFile(ColorManager.TEXT_COLOR), PorterDuff.Mode.MULTIPLY);
         wonLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         lostLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         tieLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
