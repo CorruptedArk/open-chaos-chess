@@ -106,4 +106,5 @@
     <string name="multiplayer_guide">Нужно произвести сопряжение с устройством оппонента до начала подключения.</string>
     <string name="queensAttack">Атака ферзей</string>
     <string name="smartComputer">Умный компьютер</string>
+    <string name="move_second">Move second (Solo)</string>
 </resources>

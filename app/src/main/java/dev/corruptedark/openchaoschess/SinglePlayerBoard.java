@@ -118,6 +118,8 @@ public class SinglePlayerBoard extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        mover = new Mover(this);
+        singleGame = SingleGame.getInstance();
 
         boardMain = (ViewGroup) findViewById(R.id.board_layout);
         boardLayout = (RelativeLayout) findViewById(R.id.board_layout);
@@ -174,20 +176,6 @@ public class SinglePlayerBoard extends AppCompatActivity {
         }
         yPosition = size.y / 2 - 4 * squareSize;
 
-
-        mover = new Mover(this);
-        singleGame = SingleGame.getInstance();
-
-        squaresAdded = false;
-        if (singleGame.hasBoard()) {
-            board = singleGame.restoreBoard();
-            createSquares(boardSize);
-        } else {
-            aggressiveComputer = GameplaySettingsManager.getInstance(this).getAggressiveComputers();
-            smartComputer = GameplaySettingsManager.getInstance(this).getSmartComputer();
-            startNewGame(singleGame.isKnightsOnly());
-        }
-
         animatedSquare = new Square(this, pieceColor);
         animatedSquare.setPiece(Piece.NONE);
         animatedSquare.setVisibility(View.GONE);
@@ -203,6 +191,16 @@ public class SinglePlayerBoard extends AppCompatActivity {
         playerPointLabel.setText(getResources().getText(R.string.player_points).toString() + " " + singleGame.getPlayerPoints());
         computerPointLabel.setText(getResources().getText(R.string.computer_points).toString() + " " + singleGame.getComputerPoints());
 
+        squaresAdded = false;
+        if (singleGame.hasBoard()) {
+            board = singleGame.restoreBoard();
+            createSquares(boardSize);
+        } else {
+            aggressiveComputer = GameplaySettingsManager.getInstance(this).getAggressiveComputers();
+            smartComputer = GameplaySettingsManager.getInstance(this).getSmartComputer();
+            startNewGame(singleGame.isKnightsOnly());
+        }
+
         wonLabel.bringToFront();
         lostLabel.bringToFront();
         tieLabel.bringToFront();
@@ -213,7 +211,6 @@ public class SinglePlayerBoard extends AppCompatActivity {
         animatedSquare.bringToFront();
         plusOneLabel.bringToFront();
         boardMain.invalidate();
-
     }
 
     @Override
@@ -478,7 +475,15 @@ public class SinglePlayerBoard extends AppCompatActivity {
 
     void startNewGame(boolean knightsOnly) {
         drawBoard(knightsOnly, boardSize);
-        return;
+        if (GameplaySettingsManager.getInstance(this).getMoveSecond()) {
+            singleGame.setTurn(OPPONENT);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    moveComputer();
+                }
+            }).start();
+        }
     }
 
     public boolean bishopTie() {

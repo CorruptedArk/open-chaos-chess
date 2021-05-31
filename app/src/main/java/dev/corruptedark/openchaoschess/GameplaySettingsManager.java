@@ -20,12 +20,14 @@ public class GameplaySettingsManager {
     private byte[] bytes;
     private ArrayList<String> contentArray;
 
-    private final int BLOODTHIRST_BY_DEFAULT = 0;
-    private final int AGGRESSIVE_COMPUTER = 1;
-    private final int SMART_COMPUTER = 5;
-    private final int HANDICAP_ENABLED = 2;
-    private final int CHESS960 = 3;
-    private final int QUEENS_ATTACK = 4;
+    private int settingsCount = 0;
+    private final int BLOODTHIRST_BY_DEFAULT = settingsCount++;
+    private final int AGGRESSIVE_COMPUTER = settingsCount++;
+    private final int HANDICAP_ENABLED = settingsCount++;
+    private final int CHESS960 = settingsCount++;
+    private final int QUEENS_ATTACK = settingsCount++;
+    private final int SMART_COMPUTER = settingsCount++;
+    private final int MOVE_SECOND = settingsCount++;
 
     private final String DELIMITER = " ";
 
@@ -47,7 +49,14 @@ public class GameplaySettingsManager {
         else {
             try {
                 fileWriter = new FileOutputStream(settingsFile,false);
-                String contents = "false false false";
+                StringBuilder contentsBuilder = new StringBuilder();
+                for (int i = 0; i < settingsCount; i++) {
+                    if (i == 0)
+                        contentsBuilder.append("false");
+                    else
+                        contentsBuilder.append(" false");
+                }
+                String contents = contentsBuilder.toString();
                 contentArray = new ArrayList<>(Arrays.asList(contents.split(DELIMITER)));
                 fileWriter.write(contents.getBytes());
                 fileWriter.close();
@@ -216,6 +225,36 @@ public class GameplaySettingsManager {
         }
 
         contentArray.set(SMART_COMPUTER, Boolean.toString(smartComputer));
+        saveChangesToFile();
+    }
+
+    public boolean getMoveSecond() {
+        boolean moveSecond;
+
+        if (contentArray.size() < MOVE_SECOND + 1) {
+            int sizeDiff = MOVE_SECOND + 1 - contentArray.size();
+            for (int i = 0; i < sizeDiff; i++) {
+                contentArray.add("false");
+            }
+            saveChangesToFile();
+            moveSecond = false;
+        }
+        else {
+            moveSecond = Boolean.parseBoolean(contentArray.get(MOVE_SECOND));
+        }
+
+        return moveSecond;
+    }
+
+    public void setMoveSecond(boolean moveSecond) {
+        if (contentArray.size() < MOVE_SECOND + 1) {
+            int sizeDiff = MOVE_SECOND + 1 - contentArray.size();
+            for (int i = 0; i < sizeDiff; i++) {
+                contentArray.add("false");
+            }
+        }
+
+        contentArray.set(MOVE_SECOND, Boolean.toString(moveSecond));
         saveChangesToFile();
     }
 

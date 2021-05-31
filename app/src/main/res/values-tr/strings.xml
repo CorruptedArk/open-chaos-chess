@@ -103,4 +103,5 @@
     <string name="chess960">Chess960 mode</string>
     <string name="queensAttack">Queens attack</string>
     <string name="smartComputer">Smart computer</string>
+    <string name="move_second">Move second (Solo)</string>
 </resources>

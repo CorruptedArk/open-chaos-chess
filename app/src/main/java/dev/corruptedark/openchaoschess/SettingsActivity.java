@@ -57,6 +57,7 @@ public class SettingsActivity extends AppCompatActivity {
     AppCompatCheckBox handicapToggle;
     AppCompatCheckBox chess960Toggle;
     AppCompatCheckBox queensAttackToggle;
+    AppCompatCheckBox moveSecondToggle;
     TextView backgroundColorLabel;
     TextView barColorLabel;
     TextView secondaryColorLabel;
@@ -98,6 +99,7 @@ public class SettingsActivity extends AppCompatActivity {
         chess960Toggle = (AppCompatCheckBox)findViewById(R.id.chess960_toggle);
         queensAttackToggle = (AppCompatCheckBox)findViewById(R.id.queensAttack_toggle);
         smartComputerToggle = (AppCompatCheckBox)findViewById(R.id.smartComputer_toggle);
+        moveSecondToggle = (AppCompatCheckBox)findViewById(R.id.move_second_toggle);
 
         backgroundColorLabel = (TextView)findViewById(R.id.background_color_label);
         barColorLabel = (TextView)findViewById(R.id.bar_color_label);
@@ -163,6 +165,8 @@ public class SettingsActivity extends AppCompatActivity {
         queensAttackToggle.setHighlightColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
         smartComputerToggle.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         smartComputerToggle.setHighlightColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
+        moveSecondToggle.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        moveSecondToggle.setHighlightColor(colorManager.getColorFromFile(ColorManager.BOARD_COLOR_1));
         backgroundColorLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         barColorLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         secondaryColorLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
@@ -262,6 +266,18 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+        TextViewCompat.setCompoundDrawableTintList(moveSecondToggle, colorStateList);
+
+        moveSecondToggle.setChecked(GameplaySettingsManager.getInstance(this).getMoveSecond());
+
+        moveSecondToggle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GameplaySettingsManager.getInstance(view.getContext()).setMoveSecond(moveSecondToggle.isChecked());
+                Toast.makeText(view.getContext(), R.string.setting_applied_on_new_game, Toast.LENGTH_SHORT).show();
+            }
+        });
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -325,6 +341,7 @@ public class SettingsActivity extends AppCompatActivity {
         handicapToggle.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         chess960Toggle.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         queensAttackToggle.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
+        moveSecondToggle.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         backgroundColorLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         barColorLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
         secondaryColorLabel.setTextColor(colorManager.getColorFromFile(ColorManager.TEXT_COLOR));
@@ -348,6 +365,7 @@ public class SettingsActivity extends AppCompatActivity {
         TextViewCompat.setCompoundDrawableTintList(handicapToggle, colorStateList);
         TextViewCompat.setCompoundDrawableTintList(chess960Toggle, colorStateList);
         TextViewCompat.setCompoundDrawableTintList(queensAttackToggle, colorStateList);
+        TextViewCompat.setCompoundDrawableTintList(moveSecondToggle, colorStateList);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
