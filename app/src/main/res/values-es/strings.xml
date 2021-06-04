@@ -1,0 +1,110 @@
+<!--
+  Open Chaos Chess is a free as in speech version of Chaos Chess
+  Chaos Chess is a chess game where you control the piece that moves, but not how it moves
+      Copyright (C) 2019  Noah Stanford <noahstandingford@gmail.com>
+
+      Open Chaos Chess is free software: you can redistribute it and/or modify
+      it under the terms of the GNU General Public License as published by
+      the Free Software Foundation, either version 3 of the License, or
+      (at your option) any later version.
+
+      Open Chaos Chess is distributed in the hope that it will be fun,
+      but WITHOUT ANY WARRANTY; without even the implied warranty of
+      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+      GNU General Public License for more details.
+
+      You should have received a copy of the GNU General Public License
+      along with this program.  If not, see <https://www.gnu.org/licenses/>.
+      -->
+<resources>
+    <string name="app_name">Open Chaos Chess</string>
+    <string name="new_game">Nuevo juego</string>
+    <string name="player_points">Puntos del jugador:   </string>
+    <string name="computer_points">Puntos del ordenador:   </string>
+    <string name="you_won">¡Genial amigo! ¡Ganaste!</string>
+    <string name="you_lost">Probre amigo, ¡Perdiste!</string>
+    <string name="cant_move_that_bruh">No puedes mover, ¡así no es!</string>
+    <string name="not_your_turn_stupid">No es tu turno, ¡vaya!</string>
+    <string name="game_over_bruh">Se acabó el juego ¡vaya!</string>
+    <string name="that_sucks">Diantres amigo, ¡esto no va bien!</string>
+    <string name="about">Acerca de</string>
+    <string name="credits">v%1$s by Noah Stanford (aka CorruptedArk)
+                            \n originally for CIS 175 Fall 2016 at MCCC as Chaos Chess
+                            \n Credit for the color picker dialog goes to Simone Pessotto (aka Pes8)
+                            \n Credit for the idea of color settings goes to Jonas Lowe
+                            \n Credit for Chess960 mode, Queens Attack Handicap, Smart Computer, and other small changes goes to egorguslyan on Github
+                            \n Credit for Russian translations goes to LibreHacker on GitHub
+                            \n Credit for German translations goes to Lian C. Begett/RedsickleDE on Github
+                            \n Credit for Turkish translations goes to berkaygunduzz on Github
+                            \n Credit for Arabic translations and a quality of life improvement on captures goes to Vulldozer on Github
+                            \n The concept for Bloodthirst was suggested by czarkoff on Github
+                            \n The Bloodthirst by default toggle was suggested by itsanogo on Github
+                            \n The aggressive computer option was suggested by vi on Github
+                            </string>
+    <string name="descript">Open Chaos Chess es una versión libre de Chaos Chess.
+                            El Chaos Chess es una variante del ajedrez en la que puedes elegir la pieza que se mueve, pero los movimientos son aleatorios. Como tal, ya no se gana por jaque mate. En su lugar, ganas eliminando las piezas de tu oponente. Diviértete, y que el RNG esté siempre a tu favor.
+                           \n\nOpen Chaos Chess  Copyright © 2019 Noah Stanford
+                            \nEste programa viene con ABSOLUTAMENTE NINGUNA GARANTÍA.
+                            \nEste es un software libre, y eres bienvenido a redistribuirlo bajo ciertas condiciones.
+                            \nPara la licencia pública general de GNU completa visita: https://www.gnu.org/licenses/gpl-3.0.txt
+                            \n
+                            \nPor defecto, las piezas no tienen tendencia a atacar. Sin embargo, mientras esté activo la partida sanguinaria, las piezas siempre atacarán si es posible.
+                            </string>
+    <string name="contact">Facebook: Noah James Stanford\nTwitter: @CorruptedArk\nGithub: CorruptedArk\n\nMy Website: corruptedark.wordpress.com\n\nEmail: noahstandingford@gmail.com\n\n</string>
+    <string name="tied_bro">PERO ES UN EMPATE, ¡AMIGO!</string>
+    <string name="noice">¡Impresionante!</string>
+    <string name="quit">Salir</string>
+    <string name="play">Partida solitaria</string>
+    <string name="quick_match">Partida rápida</string>
+    <string name="create_game">Envíar invitación</string>
+    <string name="check_invites">Revisar invitaciones</string>
+    <string name="opponent_points">Puntaje del rival:   </string>
+    <string name="your_points">Tu puntaje:   </string>
+    <string name="sign_out">Cerrar sesión</string>
+    <string name="slogan">Tú eliges la pieza, no el movimiento</string>
+    <string name="new_slogan">Tú eliges la pieza, no el movimiento... ¡Ahora con más libertad!</string>
+    <string name="secret_hello">Hola, no estoy seguro de cómo has llegado hasta aquí. Pero, ya que estás aquí, ¿puedo preguntar tu nombre?</string>
+    <string name="background_color">Color de fondo:</string>
+    <string name="bar_color">Color de marco:</string>
+    <string name="secondary_color">Color secundario:</string>
+    <string name="board_color_1">Color de tablero 1:</string>
+    <string name="board_color_2">Color de tablero 2:</string>
+    <string name="piece_color">Color de pieza:</string>
+    <string name="selection_color">Selección de color:</string>
+    <string name="set_to_defaults">Establecer por defecto</string>
+    <string name="save_colors">Guardar colores</string>
+    <string name="text_color">Color de texto:</string>
+    <string name="settings_file">settings.txt</string>
+    <string name="BT_UUID">fc0ebdde–e425–4123–92a8–17bd8a90a769</string>
+    <string name="host_game">Hospedar juego</string>
+    <string name="join_game">Unir juego</string>
+    <string name="multiplayer_guide">Si no has emparejado con el dispositivo de tu oponente, entra en la configuración de tu dispositivo y hazlo antes de empezar a conectarte.</string>
+    <string name="knights_only">¿Solo con reyes?</string>
+    <string name="start_host">Iniciar hospedaje</string>
+    <string name="stop_host">Detener hospedaje</string>
+    <string name="paired_devices">Dispositivos emparejados:</string>
+    <string name="host_status">Estado de huésped:</string>
+    <string name="import_file">Importar desde archivo</string>
+    <string name="export_file">Exportar hacia archivo</string>
+    <string name="bloodthirst">Partida sanguinaria </string>
+    <string name="bloodthirst_notification">Partida sanguinaria será selecciona en la siguiente</string>
+    <string name="solo">Solo</string>
+    <string name="versus">Versus</string>
+    <string name="settings">Ajustes</string>
+    <string name="colors_saved">Colores guardados</string>
+    <string name="color_save_failed">Error al guardar colores</string>
+    <string name="gameplay_settings_file">gameplaysettings.txt</string>
+    <string name="bloodthirsty_by_default">Partida sanguinaria por defecto</string>
+    <string name="wait_for_move">Espera a que el movimiento se concrete</string>
+    <string name="bloodthirst_toggle_cancelled">Selección sanguinaria cancelada</string>
+    <string name="issues">Reportes</string>
+    <string name="issues_url">https://github.com/CorruptedArk/open-chaos-chess/issues</string>
+    <string name="aggressive_computer">Computadora agresiva</string>
+    <string name="setting_applied_on_new_game">Setting will be applied on new game</string>
+    <string name="plus_one">+1</string>
+    <string name="enable_handicap">Activar handicap</string>
+    <string name="chess960">Modo Chess960</string>
+    <string name="queensAttack">Ataque de reinas</string>
+    <string name="smartComputer">Computadora inteligente</string>
+    <string name="move_second">Move second (Solo)</string>
+</resources>
