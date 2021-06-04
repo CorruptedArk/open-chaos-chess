@@ -52,6 +52,8 @@ As of the most recent commit to the master branch, achievements and single playe
 
 [Vulldozer](https://github.com/Vulldozer) - Arabic Translations and suggested a quality of life improvement on capturing pieces
 
+[sguinetti](https://github.com/sguinetti) - Spanish Translations
+
 [czarkoff](https://github.com/czarkoff) - Suggested idea for feature: Bloodthirst
 
 [itsanogo](https://github.com/itsanogo) - Suggested Bloodthirst by default toggle
