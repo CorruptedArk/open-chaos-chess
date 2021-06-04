@@ -1,0 +1,5 @@
+v1.9.3
+
+Additions:
+-Option to move second in solo play
+-Spanish translations by sguinetti on Github
