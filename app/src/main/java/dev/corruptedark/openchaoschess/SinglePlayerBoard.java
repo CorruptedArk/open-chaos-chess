@@ -80,6 +80,7 @@ public class SinglePlayerBoard extends AppCompatActivity {
     ViewGroup boardMain;
     SinglePlayerBoard context;
     MoveThread moveThread;
+    Thread computerStartThread;
     RelativeLayout boardLayout;
     private Square animatedSquare;
 
@@ -398,7 +399,7 @@ public class SinglePlayerBoard extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (moveThread == null || !moveThread.isAlive()) {
+        if ((moveThread == null || !moveThread.isAlive()) && (computerStartThread == null || !computerStartThread.isAlive())) {
             switch (item.getItemId()) {
                 case R.id.new_game:
                     newGameButton_Click();
@@ -433,33 +434,37 @@ public class SinglePlayerBoard extends AppCompatActivity {
     }
 
     private void newGameButton_Click() {
-        tieLabel.setVisibility(View.INVISIBLE);
-        wonLabel.setVisibility(View.INVISIBLE);
-        lostLabel.setVisibility(View.INVISIBLE);
-        cantMoveThatLabel.setVisibility(View.INVISIBLE);
-        notYourTurnLabel.setVisibility(View.INVISIBLE);
-        gameOverLabel.setVisibility(View.INVISIBLE);
-        thatSucksLabel.setVisibility(View.INVISIBLE);
-        noiceLabel.setVisibility(View.INVISIBLE);
-
-        if (bloodThirstQueued) {
-            bloodThirsty = !bloodThirsty;
-            bloodThirstQueued = false;
+        if (computerStartThread != null && computerStartThread.isAlive()) {
+            Toast.makeText(this, R.string.wait_for_move, Toast.LENGTH_SHORT).show();
         }
+        else {
+            tieLabel.setVisibility(View.INVISIBLE);
+            wonLabel.setVisibility(View.INVISIBLE);
+            lostLabel.setVisibility(View.INVISIBLE);
+            cantMoveThatLabel.setVisibility(View.INVISIBLE);
+            notYourTurnLabel.setVisibility(View.INVISIBLE);
+            gameOverLabel.setVisibility(View.INVISIBLE);
+            thatSucksLabel.setVisibility(View.INVISIBLE);
+            noiceLabel.setVisibility(View.INVISIBLE);
 
-        aggressiveComputer = GameplaySettingsManager.getInstance(this).getAggressiveComputers();
-        smartComputer = GameplaySettingsManager.getInstance(this).getSmartComputer();
+            if (bloodThirstQueued) {
+                bloodThirsty = !bloodThirsty;
+                bloodThirstQueued = false;
+            }
 
-        selected = defaultSquare;
-        while (moveThread != null && moveThread.isAlive()) {
-            moveThread.interrupt();
+            aggressiveComputer = GameplaySettingsManager.getInstance(this).getAggressiveComputers();
+            smartComputer = GameplaySettingsManager.getInstance(this).getSmartComputer();
+
+            selected = defaultSquare;
+            while (moveThread != null && moveThread.isAlive()) {
+                moveThread.interrupt();
+            }
+            clearPieces();
+            singleGame.newGame();
+            startNewGame(singleGame.isKnightsOnly());
+            playerPointLabel.setText(getResources().getText(R.string.player_points).toString() + " " + singleGame.getPlayerPoints());
+            computerPointLabel.setText(getResources().getText(R.string.computer_points).toString() + " " + singleGame.getComputerPoints());
         }
-        clearPieces();
-        singleGame.newGame();
-        startNewGame(singleGame.isKnightsOnly());
-        playerPointLabel.setText(getResources().getText(R.string.player_points).toString() + " " + singleGame.getPlayerPoints());
-        computerPointLabel.setText(getResources().getText(R.string.computer_points).toString() + " " + singleGame.getComputerPoints());
-        return;
     }
 
     void clearPieces() {
@@ -469,20 +474,19 @@ public class SinglePlayerBoard extends AppCompatActivity {
                 board[i][j].setPiece(Piece.NONE);
                 board[i][j].setPieceCount(0);
             }
-
-        return;
     }
 
     void startNewGame(boolean knightsOnly) {
         drawBoard(knightsOnly, boardSize);
         if (GameplaySettingsManager.getInstance(this).getMoveSecond()) {
             singleGame.setTurn(OPPONENT);
-            new Thread(new Runnable() {
+            computerStartThread = new Thread(new Runnable() {
                 @Override
                 public void run() {
                     moveComputer();
                 }
-            }).start();
+            });
+            computerStartThread.start();
         }
     }
 
