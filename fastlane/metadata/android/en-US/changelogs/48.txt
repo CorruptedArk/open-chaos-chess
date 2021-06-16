@@ -1,0 +1,4 @@
+v1.9.4
+
+Fix:
+-Fix pieces duplicating when starting new game while computer makes first move
