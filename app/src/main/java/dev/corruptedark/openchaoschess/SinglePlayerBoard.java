@@ -1147,8 +1147,8 @@ public class SinglePlayerBoard extends AppCompatActivity {
             int knight2 = 6;
             int bishop1 = 2;
             int bishop2 = 5;
-            int queen = 3;
-            int king = 4;
+            int queen = GameplaySettingsManager.getInstance(this).getMoveSecond() ? 4 : 3;
+            int king = GameplaySettingsManager.getInstance(this).getMoveSecond() ? 3 : 4;
 
             // Generate Chess960
             if(GameplaySettingsManager.getInstance(this).getChess960()) {
