@@ -54,6 +54,8 @@ As of the most recent commit to the master branch, achievements and single playe
 
 [sguinetti](https://github.com/sguinetti) - Spanish Translations
 
+[the7thNightmare](https://github.com/the7thNightmare) - Indonesian Translations
+
 [czarkoff](https://github.com/czarkoff) - Suggested idea for feature: Bloodthirst
 
 [itsanogo](https://github.com/itsanogo) - Suggested Bloodthirst by default toggle
