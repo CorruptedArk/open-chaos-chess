@@ -32,15 +32,15 @@
                             \n originally for CIS 175 Fall 2016 at MCCC as Chaos Chess
                             \n Credit for the color picker dialog goes to Simone Pessotto (aka Pes8)
                             \n Credit for the idea of color settings goes to Jonas Lowe
-                            \n Credit for Chess960 mode, Queens Attack Handicap, Smart Computer, and other small changes goes to egorguslyan on Github
+                            \n Credit for Chess960 mode, Queens Attack Handicap, Smart Computer, and other small changes goes to egorguslyan on GitHub
                             \n Credit for Russian translations goes to LibreHacker on GitHub
-                            \n Credit for German translations goes to Lian C. Begett/RedsickleDE on Github
-                            \n Credit for Turkish translations goes to berkaygunduzz on Github
-                            \n Credit for Arabic translations and a quality of life improvement on captures goes to Vulldozer on Github
-                            \n Credit for Spanish translations goes to sguinetti on Github
-                            \n The concept for Bloodthirst was suggested by czarkoff on Github
-                            \n The Bloodthirst by default toggle was suggested by itsanogo on Github
-                            \n The aggressive computer option was suggested by vi on Github
+                            \n Credit for German translations goes to Lian C. Begett/RedsickleDE on GitHub
+                            \n Credit for Turkish translations goes to berkaygunduzz on GitHub
+                            \n Credit for Arabic translations and a quality of life improvement on captures goes to Vulldozer on GitHub
+                            \n Credit for Spanish translations goes to sguinetti on GitHub
+                            \n The concept for Bloodthirst was suggested by czarkoff on GitHub
+                            \n The Bloodthirst by default toggle was suggested by itsanogo on GitHub
+                            \n The aggressive computer option was suggested by vi on GitHub
                             </string>
     <string name="descript">Open Chaos Chess is a free as in speech version of Chaos Chess.
                             Chaos Chess is a variation of chess where you can pick the piece that moves, but the moves are random. As such, you no longer win by checkmates. Instead, you win by eliminating your opponent\'s pieces. Have fun, and may the RNG be ever in your favor.
@@ -51,7 +51,7 @@
                             \n
                             \nBy default, pieces have no bias to attack. However, while Bloodthirst is active, pieces will always attack if possible.
                             </string>
-    <string name="contact">Facebook: Noah James Stanford\nTwitter: @CorruptedArk\nGithub: CorruptedArk\n\nMy Website: corruptedark.wordpress.com\n\nEmail: noahstandingford@gmail.com\n\n</string>
+    <string name="contact">Facebook: Noah James Stanford\nTwitter: @CorruptedArk\nGitHub: CorruptedArk\n\nMy Website: corruptedark.wordpress.com\n\nEmail: noahstandingford@gmail.com\n\n</string>
     <string name="tied_bro">Oooh! Seri!</string>
     <string name="noice">Bagus!</string>
     <string name="quit">Keluar</string>

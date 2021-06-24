@@ -29,15 +29,15 @@
                             \n originally for CIS 175 Fall 2016 at MCCC as Chaos Chess
                             \n Simone Pessotto\'ya (diğer adıyla Pes8) renk seçme ekranı için teşekkürler
                             \n Jonas Lowe\'a renk seçme ayarı fikri için teşekkürler
-                            \n Credit for Chess960 mode, Queens Attack Handicap, Smart Computer, and other small changes goes to egorguslyan on Github
+                            \n Credit for Chess960 mode, Queens Attack Handicap, Smart Computer, and other small changes goes to egorguslyan on GitHub
                             \n GitHub\'dan LibreHacker\'a Rusça çeviri için teşekkürler
                             \n GitHub\'dan Lian C. Begett/RedsickleDE\'ye Almanca çeviri için teşekkürler
                             \n GitHub\'dan berkaygunduzz\'a Türkçe çeviri için teşekkürler
-                            \n Credit for Arabic translations and a quality of life improvement on captures goes to Vulldozer on Github
-                            \n Credit for Spanish translations goes to sguinetti on Github
+                            \n Credit for Arabic translations and a quality of life improvement on captures goes to Vulldozer on GitHub
+                            \n Credit for Spanish translations goes to sguinetti on GitHub
                             \n GitHub\'dan czarkoff\'a \'Kana Susamış\' fikrini önerdiği için teşekkürler
-                            \n Varsayılan geçiş tarafından Kana Susamış Github itsanogo tarafından önerildi
-                            \n The aggressive computer option was suggested by vi on Github
+                            \n Varsayılan geçiş tarafından Kana Susamış GitHub itsanogo tarafından önerildi
+                            \n The aggressive computer option was suggested by vi on GitHub
                             </string>
     <string name="descript">Open Chaos Chess, Chaos Chess\'in bir çeşidi olarak özgür bir yazılımdır.
                             Chaos Chess bir çeşit satrançtır. Bu satrançta hamle yapacak taşı sen seçersin fakat taş rasgele bir şekilde hareket eder. Tabi maçlar da \'şah mat\' ederek değil rakibin taşlarını eleyerek kazanılır. İyi eğlenceler, şans seninle olsun!
@@ -48,7 +48,7 @@
                             \n
                             \nVarsayılan olarak taşlar herhangi bir şeyi gözeterek hamle yapmaz. Fakat \'Kana Susamış\' modu etkinken taşlar mümkün olduğunca her zaman saldıracaktır.
                             </string>
-    <string name="contact">Facebook: Noah James Stanford\nTwitter: @CorruptedArk\nGithub: CorruptedArk\n\nSitem: corruptedark.wordpress.com\n\nEmail: noahstandingford@gmail.com\n\n</string>
+    <string name="contact">Facebook: Noah James Stanford\nTwitter: @CorruptedArk\nGitHub: CorruptedArk\n\nSitem: corruptedark.wordpress.com\n\nEmail: noahstandingford@gmail.com\n\n</string>
     <string name="tied_bro">HAYDA, OYUN KİTLENDİ!</string>
     <string name="noice">Harika!</string>
     <string name="quit">Çık</string>
