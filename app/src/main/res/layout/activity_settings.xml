@@ -61,7 +61,8 @@
                     android:button="@null"
                     android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
                     android:text="@string/bloodthirsty_by_default"
-                    android:textSize="30sp" />
+                    android:textSize="30dp"
+                    android:autoSizeTextType="uniform"/>
 
 
             </LinearLayout>
@@ -80,7 +81,8 @@
                     android:button="@null"
                     android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
                     android:text="@string/aggressive_computer"
-                    android:textSize="30sp" />
+                    android:textSize="30dp"
+                    android:autoSizeTextType="uniform"/>
 
             </LinearLayout>
 
@@ -98,7 +100,8 @@
                     android:button="@null"
                     android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
                     android:text="@string/smartComputer"
-                    android:textSize="30sp" />
+                    android:textSize="30dp"
+                    android:autoSizeTextType="uniform"/>
 
 
             </LinearLayout>
@@ -117,7 +120,8 @@
                     android:button="@null"
                     android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
                     android:text="@string/enable_handicap"
-                    android:textSize="30sp" />
+                    android:textSize="30dp"
+                    android:autoSizeTextType="uniform"/>
 
 
             </LinearLayout>
@@ -136,7 +140,8 @@
                     android:button="@null"
                     android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
                     android:text="@string/chess960"
-                    android:textSize="30sp" />
+                    android:textSize="30dp"
+                    android:autoSizeTextType="uniform"/>
 
 
             </LinearLayout>
@@ -155,7 +160,8 @@
                     android:button="@null"
                     android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
                     android:text="@string/queensAttack"
-                    android:textSize="30sp" />
+                    android:textSize="30dp"
+                    android:autoSizeTextType="uniform"/>
 
 
             </LinearLayout>
@@ -174,7 +180,8 @@
                     android:button="@null"
                     android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
                     android:text="@string/move_second"
-                    android:textSize="30sp" />
+                    android:textSize="30dp"
+                    android:autoSizeTextType="uniform"/>
 
 
             </LinearLayout>
@@ -193,7 +200,8 @@
                     android:layout_weight=".99"
                     android:text="@string/background_color"
                     android:textColor="?android:attr/textColorPrimary"
-                    android:textSize="30sp" />
+                    android:textSize="30dp"
+                    android:autoSizeTextType="uniform"/>
 
                 <FrameLayout
                     android:layout_width="wrap_content"
@@ -227,7 +235,8 @@
                     android:layout_weight=".99"
                     android:text="@string/bar_color"
                     android:textColor="?android:attr/textColorPrimary"
-                    android:textSize="30sp" />
+                    android:textSize="30dp"
+                    android:autoSizeTextType="uniform"/>
 
                 <FrameLayout
                     android:layout_width="wrap_content"
@@ -262,7 +271,8 @@
                     android:layout_weight=".99"
                     android:text="@string/secondary_color"
                     android:textColor="?android:attr/textColorPrimary"
-                    android:textSize="30sp" />
+                    android:textSize="30dp"
+                    android:autoSizeTextType="uniform"/>
 
                 <FrameLayout
                     android:layout_width="wrap_content"
@@ -294,7 +304,8 @@
                     android:layout_weight=".99"
                     android:text="@string/board_color_1"
                     android:textColor="?android:attr/textColorPrimary"
-                    android:textSize="30sp" />
+                    android:textSize="30dp"
+                    android:autoSizeTextType="uniform"/>
 
                 <FrameLayout
                     android:layout_width="wrap_content"
@@ -327,7 +338,8 @@
                     android:layout_weight=".99"
                     android:text="@string/board_color_2"
                     android:textColor="?android:attr/textColorPrimary"
-                    android:textSize="30sp" />
+                    android:textSize="30dp"
+                    android:autoSizeTextType="uniform"/>
 
                 <FrameLayout
                     android:layout_width="wrap_content"
@@ -360,7 +372,8 @@
                     android:layout_weight=".99"
                     android:text="@string/piece_color"
                     android:textColor="?android:attr/textColorPrimary"
-                    android:textSize="30sp" />
+                    android:textSize="30dp"
+                    android:autoSizeTextType="uniform"/>
 
                 <FrameLayout
                     android:layout_width="wrap_content"
@@ -393,7 +406,8 @@
                     android:layout_weight=".99"
                     android:text="@string/selection_color"
                     android:textColor="?android:attr/textColorPrimary"
-                    android:textSize="30sp" />
+                    android:textSize="30dp"
+                    android:autoSizeTextType="uniform"/>
 
                 <FrameLayout
                     android:layout_width="wrap_content"
@@ -426,7 +440,8 @@
                     android:layout_weight=".99"
                     android:text="@string/text_color"
                     android:textColor="?android:attr/textColorPrimary"
-                    android:textSize="30sp" />
+                    android:textSize="30dp"
+                    android:autoSizeTextType="uniform"/>
 
                 <FrameLayout
                     android:layout_width="wrap_content"
@@ -452,8 +467,6 @@
         android:id="@+id/bottom_buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
@@ -462,22 +475,24 @@
         <Button
             android:id="@+id/set_defaults_button"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:layout_marginRight="5dp"
             android:layout_weight=".5"
             android:background="@color/colorAccent"
             android:onClick="setDefaultsButtonClicked"
-            android:text="@string/set_to_defaults" />
+            android:text="@string/set_to_defaults"
+            />
 
         <Button
             android:id="@+id/save_color_button"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:layout_marginLeft="5dp"
             android:layout_weight=".5"
             android:background="@color/colorAccent"
             android:onClick="saveColorsButtonClicked"
-            android:text="@string/save_colors" />
+            android:text="@string/save_colors"
+            />
     </LinearLayout>
 
 </RelativeLayout>
