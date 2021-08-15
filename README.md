@@ -44,6 +44,8 @@ As of the most recent commit to the master branch, achievements and single playe
 
 [egorguslyan](https://github.com/egorguslyan) - Added Chess960 mode, Queens Attack Handicap, Smart Computer mode, plus other small improvements to logic of building and drawing the board
 
+[yuhuitech](https://github.com/yuhuitech) - Fixed text not showing properly in the settings activity for some display sizes
+
 [LibreHacker](https://github.com/LibreHacker) - Russian Translations
 
 [Lian C. Begett/RedsickleDE](https://github.com/RedsickleDE) - German Translations
