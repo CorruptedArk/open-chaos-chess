@@ -1,0 +1,4 @@
+v1.9.6
+
+Fixes:
+- Fix for text not displaying properly in the settings activity on some display sizes by yuhuitech on GitHub
