@@ -191,7 +191,7 @@
                 <TextView
                     android:id="@+id/background_color_label"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:layout_weight=".99"
                     android:text="@string/background_color"
@@ -229,7 +229,7 @@
                 <TextView
                     android:id="@+id/bar_color_label"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:layout_weight=".99"
                     android:text="@string/bar_color"
@@ -268,7 +268,7 @@
                 <TextView
                     android:id="@+id/secondary_color_label"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:layout_weight=".99"
                     android:text="@string/secondary_color"
@@ -493,7 +493,7 @@
         <Button
             android:id="@+id/set_defaults_button"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginRight="5dp"
             android:layout_weight=".5"
             android:background="@color/colorAccent"
@@ -504,7 +504,7 @@
         <Button
             android:id="@+id/save_color_button"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_weight=".5"
             android:background="@color/colorAccent"
