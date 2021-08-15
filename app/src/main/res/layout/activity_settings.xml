@@ -174,30 +174,35 @@
                     android:button="@null"
                     android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
                     android:text="@string/move_second"
-                    android:textSize="30sp" />
+                    android:textSize="30sp"
+                    android:autoSizeTextType="uniform"/>
 
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:weightSum="1">
 
                 <TextView
                     android:id="@+id/background_color_label"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
                     android:layout_weight=".99"
                     android:text="@string/background_color"
                     android:textColor="?android:attr/textColorPrimary"
-                    android:textSize="30sp" />
+                    android:textSize="30sp"
+                    />
 
                 <FrameLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:background="#000000"
                     android:padding="1sp">
 
@@ -215,23 +220,27 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:weightSum="1">
 
                 <TextView
                     android:id="@+id/bar_color_label"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
                     android:layout_weight=".99"
                     android:text="@string/bar_color"
                     android:textColor="?android:attr/textColorPrimary"
-                    android:textSize="30sp" />
+                    android:textSize="30sp"
+                    />
 
                 <FrameLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:background="#000000"
                     android:padding="1sp">
 
@@ -250,7 +259,9 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:orientation="horizontal"
                 android:weightSum="1">
 
@@ -258,15 +269,17 @@
                     android:id="@+id/secondary_color_label"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
                     android:layout_weight=".99"
                     android:text="@string/secondary_color"
                     android:textColor="?android:attr/textColorPrimary"
-                    android:textSize="30sp" />
+                    android:textSize="30sp"
+                    />
 
                 <FrameLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:background="#000000"
                     android:padding="1sp">
 
@@ -282,7 +295,9 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:orientation="horizontal"
                 android:weightSum="1">
 
@@ -290,15 +305,17 @@
                     android:id="@+id/board_color1_label"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
                     android:layout_weight=".99"
                     android:text="@string/board_color_1"
                     android:textColor="?android:attr/textColorPrimary"
-                    android:textSize="30sp" />
+                    android:textSize="30sp"
+                    />
 
                 <FrameLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:background="#000000"
                     android:padding="1sp">
 
@@ -315,7 +332,9 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:orientation="horizontal"
                 android:weightSum="1">
 
@@ -323,15 +342,17 @@
                     android:id="@+id/board_color2_label"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
                     android:layout_weight=".99"
                     android:text="@string/board_color_2"
                     android:textColor="?android:attr/textColorPrimary"
-                    android:textSize="30sp" />
+                    android:textSize="30sp"
+                    />
 
                 <FrameLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:background="#000000"
                     android:padding="1sp">
 
@@ -348,7 +369,9 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:orientation="horizontal"
                 android:weightSum="1">
 
@@ -356,15 +379,17 @@
                     android:id="@+id/piece_color_label"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
                     android:layout_weight=".99"
                     android:text="@string/piece_color"
                     android:textColor="?android:attr/textColorPrimary"
-                    android:textSize="30sp" />
+                    android:textSize="30sp"
+                    />
 
                 <FrameLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:background="#000000"
                     android:padding="1sp">
 
@@ -381,7 +406,9 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:orientation="horizontal"
                 android:weightSum="1">
 
@@ -389,15 +416,17 @@
                     android:id="@+id/selection_color_label"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
                     android:layout_weight=".99"
                     android:text="@string/selection_color"
                     android:textColor="?android:attr/textColorPrimary"
-                    android:textSize="30sp" />
+                    android:textSize="30sp"
+                    />
 
                 <FrameLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:background="#000000"
                     android:padding="1sp">
 
@@ -414,7 +443,9 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:orientation="horizontal"
                 android:weightSum="1">
 
@@ -422,15 +453,17 @@
                     android:id="@+id/text_color_label"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
                     android:layout_weight=".99"
                     android:text="@string/text_color"
                     android:textColor="?android:attr/textColorPrimary"
-                    android:textSize="30sp" />
+                    android:textSize="30sp"
+                    />
 
                 <FrameLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:background="#000000"
                     android:padding="1sp">
 
@@ -452,8 +485,6 @@
         android:id="@+id/bottom_buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
@@ -467,7 +498,8 @@
             android:layout_weight=".5"
             android:background="@color/colorAccent"
             android:onClick="setDefaultsButtonClicked"
-            android:text="@string/set_to_defaults" />
+            android:text="@string/set_to_defaults"
+            />
 
         <Button
             android:id="@+id/save_color_button"
@@ -477,7 +509,8 @@
             android:layout_weight=".5"
             android:background="@color/colorAccent"
             android:onClick="saveColorsButtonClicked"
-            android:text="@string/save_colors" />
+            android:text="@string/save_colors"
+            />
     </LinearLayout>
 
 </RelativeLayout>
