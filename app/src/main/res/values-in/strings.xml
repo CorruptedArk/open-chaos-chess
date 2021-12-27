@@ -1,0 +1,113 @@
+<!--
+  Open Chaos Chess is a free as in speech version of Chaos Chess
+  Chaos Chess is a chess game where you control the piece that moves, but not how it moves
+      Copyright (C) 2019  Noah Stanford <noahstandingford@gmail.com>
+
+      Open Chaos Chess is free software: you can redistribute it and/or modify
+      it under the terms of the GNU General Public License as published by
+      the Free Software Foundation, either version 3 of the License, or
+      (at your option) any later version.
+
+      Open Chaos Chess is distributed in the hope that it will be fun,
+      but WITHOUT ANY WARRANTY; without even the implied warranty of
+      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+      GNU General Public License for more details.
+
+      You should have received a copy of the GNU General Public License
+      along with this program.  If not, see <https://www.gnu.org/licenses/>.
+      -->
+<resources>
+    <string name="app_name">Open Chaos Chess</string>
+    <string name="new_game">Permainan Baru</string>
+    <string name="player_points">Poin Pemain:   </string>
+    <string name="computer_points">Poin Komputer:   </string>
+    <string name="you_won">Bagus kawan! Kau menang!</string>
+    <string name="you_lost">Aw kawan, kau kalah!</string>
+    <string name="cant_move_that_bruh">Tidak bisa gerakin itu, bruh!</string>
+    <string name="not_your_turn_stupid">Bukan giliranmu, bruh!</string>
+    <string name="game_over_bruh">Tamat, bruh!</string>
+    <string name="that_sucks">Aw kawan, kasihan sekali!</string>
+    <string name="about">Tentang</string>
+    <string name="credits">v%1$s by Noah Stanford (aka CorruptedArk)
+                            \n originally for CIS 175 Fall 2016 at MCCC as Chaos Chess
+                            \n Credit for the color picker dialog goes to Simone Pessotto (aka Pes8)
+                            \n Credit for the idea of color settings goes to Jonas Lowe
+                            \n Credit for Chess960 mode, Queens Attack Handicap, Smart Computer, and other small changes goes to egorguslyan on GitHub
+                            \n Credit for fixing text not showing properly in the settings activity for some display sizes
+                            \n Credit for Russian translations goes to LibreHacker on GitHub
+                            \n Credit for German translations goes to Lian C. Begett/RedsickleDE on GitHub
+                            \n Credit for Turkish translations goes to berkaygunduzz on GitHub
+                            \n Credit for Arabic translations and a quality of life improvement on captures goes to Vulldozer on GitHub
+                            \n Credit for Spanish translations goes to sguinetti on GitHub
+                            \n Credit for Indonesian translations goes to the7thNightmare on GitHub
+                            \n The concept for Bloodthirst was suggested by czarkoff on GitHub
+                            \n The Bloodthirst by default toggle was suggested by itsanogo on GitHub
+                            \n The aggressive computer option was suggested by vi on GitHub
+                            </string>
+    <string name="descript">Open Chaos Chess is a free as in speech version of Chaos Chess.
+                            Chaos Chess is a variation of chess where you can pick the piece that moves, but the moves are random. As such, you no longer win by checkmates. Instead, you win by eliminating your opponent\'s pieces. Have fun, and may the RNG be ever in your favor.
+                            \n\nOpen Chaos Chess  Copyright © 2019 Noah Stanford
+                            \nThis program comes with ABSOLUTELY NO WARRANTY.
+                            \nThis is free software, and you are welcome to redistribute it under certain conditions.
+                            \nFor the full GNU General Public License visit: https://www.gnu.org/licenses/gpl-3.0.txt
+                            \n
+                            \nBy default, pieces have no bias to attack. However, while Bloodthirst is active, pieces will always attack if possible.
+                            </string>
+    <string name="contact">Facebook: Noah James Stanford\nTwitter: @CorruptedArk\nGitHub: CorruptedArk\n\nMy Website: corruptedark.wordpress.com\n\nEmail: noahstandingford@gmail.com\n\n</string>
+    <string name="tied_bro">Oooh! Seri!</string>
+    <string name="noice">Bagus!</string>
+    <string name="quit">Keluar</string>
+    <string name="play">Permainan Solo</string>
+    <string name="quick_match">Babak Cepat</string>
+    <string name="create_game">Kirim Undangan</string>
+    <string name="check_invites">Cek Undangan</string>
+    <string name="opponent_points">Poin Lawan:   </string>
+    <string name="your_points">Poinmu:   </string>
+    <string name="sign_out">Keluar</string>
+    <string name="slogan">Kau pilih bidak, bukan langkah</string>
+    <string name="new_slogan">Kau pilih bidak, bukan langkah\nSekarang dengan lebih banyak kebebasan!</string>
+    <string name="secret_hello">Halo, aku tidak yakin bagaimana kau bisa ke sini. Tapi, karena kau sudah disini, bolehkah aku tanya namamu?</string>
+    <string name="background_color">Warna Latar Belakang:</string>
+    <string name="bar_color">Warna Bilah:</string>
+    <string name="secondary_color">Warna Sekunder:</string>
+    <string name="board_color_1">Warna Papan 1:</string>
+    <string name="board_color_2">Warna Papan 2:</string>
+    <string name="piece_color">Warna Bidak:</string>
+    <string name="selection_color">Warna Seleksi:</string>
+    <string name="set_to_defaults">Atur ke baku</string>
+    <string name="save_colors">Simpan Warna</string>
+    <string name="text_color">Warna Teks:</string>
+    <string name="settings_file">pengaturan.txt</string>
+    <string name="BT_UUID">fc0ebdde–e425–4123–92a8–17bd8a90a769</string>
+    <string name="host_game">Menghos Permainan</string>
+    <string name="join_game">Gabung Permainan</string>
+    <string name="multiplayer_guide">Jika kau belum tersambung dengan perangkat lawanmu, pergi ke pengaturan perangkatmu dan lakukan hal berikut sebelum kau mulai menyambungkan.</string>
+    <string name="knights_only">Hanya Kuda?</string>
+    <string name="start_host">Mulai Menghos</string>
+    <string name="stop_host">Berhenti Menghos</string>
+    <string name="paired_devices">Perangkat Yang Tersambung:</string>
+    <string name="host_status">Status Hos:</string>
+    <string name="import_file">Impor Dari Berkas</string>
+    <string name="export_file">Ekspor Ke Berkas</string>
+    <string name="bloodthirst">Haus darah  </string>
+    <string name="bloodthirst_notification">Haus Darah akan diaktifkan di permainan baru</string>
+    <string name="solo">Solo</string>
+    <string name="versus">Versus</string>
+    <string name="settings">Pengaturan</string>
+    <string name="colors_saved">Warna disimpan</string>
+    <string name="color_save_failed">Warna gagal disimpan</string>
+    <string name="gameplay_settings_file">pengaturanpermainan.txt</string>
+    <string name="bloodthirsty_by_default">Haus Darah secara baku</string>
+    <string name="wait_for_move">Tunggu hingga langkahnya selesai</string>
+    <string name="bloodthirst_toggle_cancelled">Haus Darah dinonaktifkan</string>
+    <string name="issues">Masalah</string>
+    <string name="issues_url">https://github.com/CorruptedArk/open-chaos-chess/issues</string>
+    <string name="aggressive_computer">Komputer Agresif</string>
+    <string name="setting_applied_on_new_game">Pengaturan akan diterapkan di permainan baru</string>
+    <string name="plus_one">+1</string>
+    <string name="enable_handicap">Aktifkan Pemberatan</string>
+    <string name="chess960">Mode Chess960</string>
+    <string name="queensAttack">Ratu Menyerang</string>
+    <string name="smartComputer">Komputer Cerdas</string>
+    <string name="move_second">Giliran Kedua (Solo)</string>
+</resources>
