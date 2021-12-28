@@ -1,0 +1,4 @@
+v1.9.7
+
+Addition:
+- Add "in" language code for Indonesian strings on some devices
