@@ -27,13 +27,12 @@
    version="1.1"
    id="svg1385"
    inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
-   sodipodi:docname="icon.svg"
+   sodipodi:docname="icon_foreground.svg"
    inkscape:export-filename="C:\Users\Noah\Documents\chaoschess\iconexperiments\icon.png"
    inkscape:export-xdpi="255.99989"
    inkscape:export-ydpi="255.99989"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -49,18 +48,18 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="4.5370347"
-     inkscape:cx="54.000027"
-     inkscape:cy="54.000027"
+     inkscape:cx="54.000028"
+     inkscape:cy="54.000028"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      showgrid="false"
      units="in"
      inkscape:pagecheckerboard="true"
-     inkscape:window-width="1366"
+     inkscape:window-width="1006"
      inkscape:window-height="699"
-     inkscape:window-x="0"
+     inkscape:window-x="683"
      inkscape:window-y="32"
-     inkscape:window-maximized="1"
+     inkscape:window-maximized="0"
      showguides="true"
      inkscape:guide-bbox="true"
      fit-margin-top="0"
@@ -87,208 +86,11 @@
     </rdf:RDF>
   </metadata>
   <g
-     inkscape:label="Layer 1"
-     inkscape:groupmode="layer"
-     id="layer1"
-     transform="translate(2.3162842e-8,-246.2)"
-     style="opacity:0.98"
-     sodipodi:insensitive="true">
-    <g
-       id="g5495"
-       transform="matrix(0.5625,0,0,0.5625,-1.0133743e-8,107.7125)">
-      <g
-         id="g6871"
-         inkscape:tile-cx="6.35"
-         inkscape:tile-cy="6.3500094"
-         inkscape:tile-w="12.7"
-         inkscape:tile-h="12.700006"
-         inkscape:tile-x0="-2.316284e-08"
-         inkscape:tile-y0="6.448242e-06">
-        <rect
-           inkscape:tile-y0="4.444847e-06"
-           inkscape:tile-x0="0"
-           inkscape:tile-h="6.35"
-           inkscape:tile-w="6.35"
-           inkscape:tile-cy="3.1750045"
-           inkscape:tile-cx="3.175"
-           y="246.2"
-           x="6.8918894e-07"
-           height="6.349999"
-           width="6.349999"
-           id="rect5807"
-           style="opacity:1;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers" />
-        <rect
-           y="246.2"
-           x="6.3500004"
-           height="6.349999"
-           width="6.349999"
-           id="rect6204"
-           style="opacity:1;fill:#800000;fill-opacity:1;fill-rule:nonzero;stroke:#800000;stroke-width:0;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke" />
-        <rect
-           transform="scale(-1,1)"
-           style="opacity:1;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
-           id="rect6817"
-           width="6.349999"
-           height="6.349999"
-           x="-12.7"
-           y="252.55"
-           inkscape:tile-cx="3.175"
-           inkscape:tile-cy="3.1750045"
-           inkscape:tile-w="6.35"
-           inkscape:tile-h="6.35"
-           inkscape:tile-x0="0"
-           inkscape:tile-y0="4.444847e-06" />
-        <rect
-           transform="scale(-1,1)"
-           style="opacity:1;fill:#800000;fill-opacity:1;fill-rule:nonzero;stroke:#800000;stroke-width:0;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
-           id="rect6819"
-           width="6.349999"
-           height="6.349999"
-           x="-6.3499994"
-           y="252.55" />
-      </g>
-      <use
-         x="0"
-         y="0"
-         inkscape:tiled-clone-of="#g6871"
-         xlink:href="#g6871"
-         transform="translate(0,12.700006)"
-         id="use6875"
-         width="100%"
-         height="100%" />
-      <use
-         x="0"
-         y="0"
-         inkscape:tiled-clone-of="#g6871"
-         xlink:href="#g6871"
-         transform="translate(0,25.400012)"
-         id="use6877"
-         width="100%"
-         height="100%" />
-      <use
-         x="0"
-         y="0"
-         inkscape:tiled-clone-of="#g6871"
-         xlink:href="#g6871"
-         transform="translate(0,38.099987)"
-         id="use6879"
-         width="100%"
-         height="100%" />
-      <use
-         x="0"
-         y="0"
-         inkscape:tiled-clone-of="#g6871"
-         xlink:href="#g6871"
-         transform="translate(12.7)"
-         id="use6881"
-         width="100%"
-         height="100%" />
-      <use
-         x="0"
-         y="0"
-         inkscape:tiled-clone-of="#g6871"
-         xlink:href="#g6871"
-         transform="translate(12.7,12.700006)"
-         id="use6883"
-         width="100%"
-         height="100%" />
-      <use
-         x="0"
-         y="0"
-         inkscape:tiled-clone-of="#g6871"
-         xlink:href="#g6871"
-         transform="translate(12.7,25.400012)"
-         id="use6885"
-         width="100%"
-         height="100%" />
-      <use
-         x="0"
-         y="0"
-         inkscape:tiled-clone-of="#g6871"
-         xlink:href="#g6871"
-         transform="translate(12.7,38.099987)"
-         id="use6887"
-         width="100%"
-         height="100%" />
-      <use
-         x="0"
-         y="0"
-         inkscape:tiled-clone-of="#g6871"
-         xlink:href="#g6871"
-         transform="translate(25.4)"
-         id="use6889"
-         width="100%"
-         height="100%" />
-      <use
-         x="0"
-         y="0"
-         inkscape:tiled-clone-of="#g6871"
-         xlink:href="#g6871"
-         transform="translate(25.4,12.700006)"
-         id="use6891"
-         width="100%"
-         height="100%" />
-      <use
-         x="0"
-         y="0"
-         inkscape:tiled-clone-of="#g6871"
-         xlink:href="#g6871"
-         transform="translate(25.4,25.400012)"
-         id="use6893"
-         width="100%"
-         height="100%" />
-      <use
-         x="0"
-         y="0"
-         inkscape:tiled-clone-of="#g6871"
-         xlink:href="#g6871"
-         transform="translate(25.4,38.100017)"
-         id="use6895"
-         width="100%"
-         height="100%" />
-      <use
-         x="0"
-         y="0"
-         inkscape:tiled-clone-of="#g6871"
-         xlink:href="#g6871"
-         transform="translate(38.1)"
-         id="use6897"
-         width="100%"
-         height="100%" />
-      <use
-         x="0"
-         y="0"
-         inkscape:tiled-clone-of="#g6871"
-         xlink:href="#g6871"
-         transform="translate(38.1,12.700006)"
-         id="use6899"
-         width="100%"
-         height="100%" />
-      <use
-         x="0"
-         y="0"
-         inkscape:tiled-clone-of="#g6871"
-         xlink:href="#g6871"
-         transform="translate(38.1,25.400012)"
-         id="use6901"
-         width="100%"
-         height="100%" />
-      <use
-         x="0"
-         y="0"
-         inkscape:tiled-clone-of="#g6871"
-         xlink:href="#g6871"
-         transform="translate(38.1,38.100017)"
-         id="use6903"
-         width="100%"
-         height="100%" />
-    </g>
-  </g>
-  <g
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="Layer 2"
-     style="display:inline">
+     style="display:inline"
+     sodipodi:insensitive="true">
     <g
        id="g5540"
        transform="matrix(0.37512084,0,0,0.37512084,4.75987,4.759467)">
