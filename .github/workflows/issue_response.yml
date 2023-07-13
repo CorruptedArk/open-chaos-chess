@@ -11,5 +11,4 @@ jobs:
         uses: peter-evans/create-or-update-comment@v3.0.2
         with:
           issue-number: ${{ github.event.issue.number }}
-          comment_author: 'github-actions[bot]'
-          template: .github/ISSUE_REPLY_TEMPLATE.md
+          body-file: "ISSUE_REPLY_TEMPLATE.md"
