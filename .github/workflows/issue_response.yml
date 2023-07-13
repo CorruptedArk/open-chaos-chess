@@ -13,7 +13,7 @@ jobs:
         uses: n0npax/crystal-ball@v1.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CRYSTAL_MATCH_REGEX_BAR: '(.*?)'
+          CRYSTAL_NOMATCH_REGEX_BAR: '(.*?)'
           COMMENT_MSG: "![THE ROOK!!!!](https://media.tenor.com/_NhXToxqMsAAAAAC/the-rook-gothamchess.gif)"
         with:
           repoName: ${{ github.repository	}}
