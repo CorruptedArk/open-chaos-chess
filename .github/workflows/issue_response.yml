@@ -12,4 +12,4 @@ jobs:
         with:
           issue-number: ${{ github.event.issue.number }}
           comment_author: 'github-actions[bot]'
-          body-path: '.github/ISSUE_REPLY_TEMPLATE.md'
+          template: .github/ISSUE_REPLY_TEMPLATE.md
