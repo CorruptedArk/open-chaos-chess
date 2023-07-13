@@ -7,8 +7,6 @@ jobs:
     runs-on: ubuntu-latest
     name: Fortune teller
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
       - name: Crystal Ball
         # rm line below if you want to apply same rules for PR description
         if: ${{ !github.event.issue.pull_request }}
