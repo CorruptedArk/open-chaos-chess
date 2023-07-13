@@ -1,14 +1,14 @@
 name: Autorespond
 on:
   issues:
-    types: [opened]
+    types: [opened, edited]
 jobs:
-  fortune_teller:
+  issue_response:
     runs-on: ubuntu-latest
-    name: Fortune teller
+    name: Issue Response
     steps:
       - name: Create or Update Comment
         uses: peter-evans/create-or-update-comment@v3.0.2
         with:
           issue-number: ${{ github.event.issue.number }}
-          body-file: "ISSUE_REPLY_TEMPLATE.md"
+          body-path: 'ISSUE_REPLY_TEMPLATE.md'
