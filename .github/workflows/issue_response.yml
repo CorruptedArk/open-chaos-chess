@@ -1,20 +1,15 @@
 name: Autorespond
 on:
   issues:
-    types: [opened, edited]
+    types: [opened]
 jobs:
   fortune_teller:
     runs-on: ubuntu-latest
     name: Fortune teller
     steps:
-      - name: Crystal Ball
-        # rm line below if you want to apply same rules for PR description
-        if: ${{ !github.event.issue.pull_request }}
-        uses: n0npax/crystal-ball@v1.0.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CRYSTAL_NOMATCH_REGEX_BAR: '(.*?)'
-          COMMENT_MSG: "![THE ROOK!!!!](https://media.tenor.com/_NhXToxqMsAAAAAC/the-rook-gothamchess.gif)"
+      - name: Create or Update Comment
+        uses: peter-evans/create-or-update-comment@v3.0.2
         with:
-          repoName: ${{ github.repository	}}
-          issueNum: ${{ github.event.issue.number }}
+          issue-number: ${{ github.event.issue.number }}
+          comment_author: 'github-actions[bot]'
+          body-path: '.github/ISSUE_REPLY_TEMPLATE.md'
